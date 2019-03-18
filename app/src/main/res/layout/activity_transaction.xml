@@ -14,6 +14,7 @@
 
     </com.example.t2m.moneytracker.pinnedlistview.PinnedHeaderListView>
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add_transaction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/list_view_transaction"
@@ -22,8 +23,8 @@
         android:layout_marginBottom="8dp"
         android:src="@drawable/ic_add_circle_green"
         app:backgroundTint="@null"
-        app:fabSize="normal"
-        app:maxImageSize="56dp"
+        app:fabSize="mini"
+        app:maxImageSize="46dp"
          />
 
 </RelativeLayout>

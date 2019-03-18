@@ -1,6 +1,8 @@
 package com.example.t2m.moneytracker.transaction;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -142,5 +144,14 @@ public class TransactionAdapter extends SectionedBaseAdapter {
         public TextView item_label;
         public TextView item_note;
         public TextView item_money_trading;
+    }
+
+    public static class AddTransaction extends AppCompatActivity {
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_add_transaction);
+        }
     }
 }
