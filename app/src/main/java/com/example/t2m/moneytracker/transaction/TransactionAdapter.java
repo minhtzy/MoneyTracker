@@ -152,6 +152,18 @@ public class TransactionAdapter extends SectionedBaseAdapter {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_add_transaction);
+
+            addControls();
+            addEvents();
+        }
+
+        private void addControls() {
+            ImageView image_money_type = (ImageView)findViewById(R.id.image_money_type);
+
+        }
+
+        private void addEvents() {
+
         }
     }
 }

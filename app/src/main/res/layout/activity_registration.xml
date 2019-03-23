@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#607d8b"
+    tools:context=".account.Registration">
+
+    <ImageView
+        android:id="@+id/imgUserLoginRe"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/userlogin"
+        android:layout_marginTop="5dp"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtEmailRe"
+        android:hint="Email"
+        android:layout_marginTop="30dp"/>
+    <EditText
+        android:id="@+id/txtPassWordRe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Mật khẩu"
+        android:password="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtConfirmPassWordRe"
+        android:hint="Nhập lại mật khẩu"
+        android:password="true"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSignupRe"
+        android:text="Đăng ký"
+        android:textSize="20dp"
+        android:textColor="#ffffff"
+        android:background="#ff8800"
+        android:layout_marginTop="20dp"
+        />
+
+    <!--<Button-->
+        <!--android:id="@+id/btnForgotPasswordRe"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:background="@null"-->
+        <!--android:capitalize="characters"-->
+        <!--android:textColor="#ffffff"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:text="Quên mật khẩu?" />-->
+    <Button
+        android:id="@+id/btnSigninRe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:capitalize="characters"
+        android:textColor="#ffffff"
+        android:textAllCaps="false"
+        android:text="Đã có tài khoản. Đăng nhập ngay!" />
+</LinearLayout>

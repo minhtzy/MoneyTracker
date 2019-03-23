@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#607d8b"
+    tools:context=".account.Login">
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/userlogin"
+        android:layout_marginTop="30dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtEmailLo"
+        android:hint="Email"
+        android:layout_marginTop="30dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtPassWordLo"
+        android:password="true"
+        android:hint="Mật khẩu"/>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSiginpLo"
+        android:text="Đăng nhập"
+        android:textSize="20dp"
+        android:textColor="#ffffff"
+        android:background="#ff8800"
+        android:layout_marginTop="20dp"
+        />
+
+    <Button
+        android:id="@+id/btnForgotPasswordLo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:capitalize="characters"
+        android:textAllCaps="false"
+        android:text="Quên mật khẩu?"
+        android:textColor="#ffffff"/>
+    <Button
+        android:id="@+id/btnSingupLo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:textAllCaps="false"
+        android:text="Chưa có tài khoản. Tạo ngay!"
+        android:textColor="#ffffff"/>
+
+</LinearLayout>
