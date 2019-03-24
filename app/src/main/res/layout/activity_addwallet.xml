@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <Button
             android:id="@+id/btnCancel"
@@ -42,44 +43,170 @@
             android:textAllCaps="false"
             android:background="null" />
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#44474c"/>
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="2dp"-->
+        <!--android:background="#44474c"/>-->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="#babdc2"
-        android:text=""/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#44474c"/>
+        android:background="@drawable/vien"
+        android:text=""
+
+        />
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="2dp"-->
+        <!--android:background="#44474c"/>-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/wallett" />
+            app:srcCompat="@drawable/wallett"
+            android:background="@drawable/vien3"
+            android:layout_gravity="center"
+            />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/txtTen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text=""
+            android:hint="Tên"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+
+            />
+    </LinearLayout>
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="2dp"-->
+        <!--android:background="#44474c"/>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/vien2"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:src="@drawable/luongt"
+            android:layout_gravity="center"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Việt Nam Đồng"
+            android:background="null"
+            android:gravity="left"
+            android:padding="15dp"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:src="@drawable/cubest" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="3">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Số tiền hiện có"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numeric="integer"
+                android:hint="0"
+                android:id="@+id/txtSotien"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nhóm"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnNhom"
+                android:text="Nhóm tiêu chuẩn"
+                android:background="null"
+                android:gravity="left"
+                android:paddingTop="15dp"
+                android:textAllCaps="false"/>
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/vien"
+        android:text=""
+
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Liên kết dịch vụ"
+        android:textSize="20dp"
+        android:padding="10dp"
+        android:textColor="#00bb27"
+        android:gravity="center"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kết nối các dịch vụ ngay trong MoneyTracher"
+        android:textSize="15dp"
+        android:padding="15dp"
+
+        android:gravity="left"
+        android:background="@drawable/vien"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Không tích vào tổng"
+            android:textSize="20dp"
+            android:padding="10dp"
+            android:textColor="#000000"/>
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/swtTichtong"
+            android:padding="10dp"
+            android:layout_marginRight="20dp"
             />
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#44474c"/>
+        android:layout_height="match_parent"
+        android:background="@drawable/vien"
+        android:text="Bỏ qua ví này và số dư khỏi Tổng. "
+        android:paddingTop="10dp"/>
 </LinearLayout>

@@ -3,6 +3,7 @@ package com.example.t2m.moneytracker.account;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -25,12 +26,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public class Login extends AppCompatActivity {
 
     EditText txtEmailLo,txtPassWordLo;
     Button btnSignupLo,btnForgotPasswordLo,btnSingInLo;
     private FirebaseAuth mAuth;
     ProgressDialog progressDialog;
+
+    public static String DATABASE_NAME = "listchoose.sqlite";
+    public static final String DB_PATH_SUFFIX = "/databases/";
+    public static SQLiteDatabase database = null;
 
 
     @Override
@@ -42,9 +53,58 @@ public class Login extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 // [END initialize_auth]
+
+        CopySqlitetoSystemMobile();
         addControls();
         addEvents();
     }
+
+    private void CopySqlitetoSystemMobile() {
+        File dbFile = getDatabasePath(DATABASE_NAME);
+        if (!dbFile.exists()){
+            try {
+                CopyDatabasefromAssetToSystem();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void CopyDatabasefromAssetToSystem() {
+        try {
+            // luồng đọc file
+            InputStream inputStream = getAssets().open(DATABASE_NAME);
+            String outFilename = LayDuongDan();
+            // if the path doesn't exist first, create it
+            File f = new File(getApplicationInfo().dataDir + DB_PATH_SUFFIX);
+            if (!f.exists()){
+                f.mkdir();
+            }
+            // Open the empty db as the output stream
+            // Tạo một luồng ký tự đầu ra với mục đích ghi thông tin vào file
+            OutputStream outputStream = new FileOutputStream(outFilename);
+            // transfer bytes from the inputfile to the outputfile
+            // Tạo một mảng byte ,ta sẽ ghi các byte này vào file nói trên .
+            byte[] buffer = new byte[1024];
+            int length;
+            // Ghi lần lượt các ký tự vào luồng
+            while ((length = inputStream.read(buffer)) > 0){
+                outputStream.write(buffer,0,length);
+            }
+            // Close the streams
+            outputStream.flush();// những cái gì còn lại cta tống ra hết
+            outputStream.close();
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String LayDuongDan() {
+
+        return getApplicationInfo().dataDir + DB_PATH_SUFFIX + DATABASE_NAME ;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
