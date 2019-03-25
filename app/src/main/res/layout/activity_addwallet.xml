@@ -20,7 +20,7 @@
             android:text="Hủy"
             android:textAllCaps="false"
             android:textColor="#00bb27"
-            android:textSize="20dp" />
+             />
 
         <TextView
             android:id="@+id/textView"
@@ -30,7 +30,7 @@
             android:text="Thêm Ví"
             android:textAlignment="center"
             android:textColor="#000000"
-            android:textSize="25dp" />
+             />
 
         <Button
             android:id="@+id/btnSave"
@@ -40,7 +40,7 @@
             android:text="Lưu"
             android:textAllCaps="false"
             android:textColor="#00bb27"
-            android:textSize="20dp" />
+             />
     </LinearLayout>
     <!--<TextView-->
     <!--android:layout_width="match_parent"-->
@@ -61,18 +61,19 @@
             android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/vien"
                 android:text="" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@drawable/vien2">
 
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:background="@drawable/vien3"
@@ -87,7 +88,6 @@
                     android:hint="Tên"
                     android:inputType="textPersonName"
                     android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
 
                     />
             </LinearLayout>
@@ -103,7 +103,7 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:src="@drawable/luongt" />
@@ -113,21 +113,22 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:background="@null"
-                    android:gravity="left"
-                    android:padding="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:text="Việt Nam Đồng"
-                    android:textSize="20dp" />
+                     />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@drawable/vien2">
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_weight="1"
                     android:src="@drawable/cubest" />
@@ -161,7 +162,7 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="left"
-                        android:paddingTop="15dp"
+                        android:paddingTop="10dp"
                         android:text="Nhóm tiêu chuẩn"
                         android:textAllCaps="false" />
                 </LinearLayout>
@@ -169,7 +170,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/vien"
                 android:text=""
 
@@ -182,6 +183,7 @@
                 android:padding="10dp"
                 android:text="Liên kết dịch vụ"
                 android:textColor="#00bb27"
+                android:background="@drawable/vien2"
                 android:textSize="20dp" />
 
             <TextView
@@ -196,7 +198,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@drawable/vien2">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -219,7 +222,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/vien"
-                android:paddingTop="10dp"
+                android:padding="10dp"
                 android:text="Bỏ qua ví này và số dư khỏi Tổng. " />
         </LinearLayout>
     </ScrollView>

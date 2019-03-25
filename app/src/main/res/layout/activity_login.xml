@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#607d8b"
+
     tools:context=".account.Login">
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         app:srcCompat="@drawable/userlogin"
         android:layout_marginTop="30dp"/>
     <EditText
@@ -42,18 +42,17 @@
         android:id="@+id/btnForgotPasswordLo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textAllCaps="false"
+        android:background="@null"
         android:text="Quên mật khẩu?"
-        android:textColor="#ffffff"/>
+        android:textAllCaps="false"
+        android:textColor="#000000"/>
     <Button
         android:id="@+id/btnSingupLo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:background="@null"
         android:textAllCaps="false"
         android:text="Chưa có tài khoản. Tạo ngay!"
-        android:textColor="#ffffff"/>
+        android:textColor="#000000"/>
 
 </LinearLayout>

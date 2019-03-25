@@ -14,9 +14,7 @@ import com.example.t2m.moneytracker.model.TransactionType;
 
 import java.util.List;
 
-/**
- * Created by minhthuanht on 24,March,2019
- */
+
 public class AdapterListCategory extends ArrayAdapter<TransactionType> {
     Activity context;
     int resource;
