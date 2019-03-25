@@ -1,12 +1,22 @@
 package com.example.t2m.moneytracker.model;
 
-public class TransactionType {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class TransactionType implements Serializable {
     private int id;
     private int type;
     private String icon;
     private String category;
     private TransactionType parentType;
 
+
+    public static final int TRANSACTION_TYPE_EXPENSE = 1;
+    public static final int TRANSACTION_TYPE_INCOME = 2;
+    public static final int TRANSACTION_TYPE_DEBIT = 3;
+    public static final int TRANSACTION_TYPE_LOAN = 4;
     public TransactionType() {
     }
 
@@ -57,4 +67,5 @@ public class TransactionType {
     public void setParentType(TransactionType parentType) {
         this.parentType = parentType;
     }
+
 }

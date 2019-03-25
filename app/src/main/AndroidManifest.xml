@@ -13,8 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".wallet.listchoose"></activity>
-        <activity android:name=".wallet.Addwallet" />
+        <activity android:name=".wallet.SelectCategoryActivity" />
+        <activity android:name=".wallet.Addwallet">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
         <activity android:name=".account.ForgotPassword" />
         <activity android:name=".account.Registration">
 
@@ -26,14 +32,6 @@
             <!-- </intent-filter> -->
         </activity>
         <activity android:name=".account.Login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".transaction.TransactionActivity">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -42,7 +40,28 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".transaction.TransactionAdapter$AddTransaction" />
+        <activity
+            android:name=".MainActivity"
+            android:label="Main Activity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".transaction.AddTransactionActivity"
+            android:label="Add Transaction">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".WelcomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

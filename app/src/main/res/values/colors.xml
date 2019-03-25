@@ -3,6 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="colorBackgroundPrimary">#2db84c</color>
     <color name="colorBackgroundWhite">#FFF</color>
     <color name="colorBackgroundGray">#808080</color>
     <color name="colorMoneyTradingNegative">#F00</color>

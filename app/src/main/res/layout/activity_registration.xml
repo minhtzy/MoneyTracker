@@ -26,14 +26,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Mật khẩu"
-        android:password="true" />
+        android:inputType="textPassword" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtConfirmPassWordRe"
         android:hint="Nhập lại mật khẩu"
-        android:password="true"/>
+        android:inputType="textPassword"/>
 
     <Button
         android:layout_width="match_parent"
@@ -61,7 +61,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:capitalize="characters"
         android:textColor="#ffffff"
         android:textAllCaps="false"
         android:text="Đã có tài khoản. Đăng nhập ngay!" />

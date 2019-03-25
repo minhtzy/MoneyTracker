@@ -34,7 +34,7 @@ public class Addwallet extends AppCompatActivity {
         btnNhom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Addwallet.this,listchoose.class);
+                Intent intent = new Intent(Addwallet.this,SelectCategoryActivity.class);
                 startActivity(intent);
             }
         });

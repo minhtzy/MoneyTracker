@@ -1,19 +1,20 @@
 package com.example.t2m.moneytracker.model;
 
+import java.io.Serializable;
 import java.util.Currency;
 
-public class Wallet {
-    public enum WalletType {
-        BASIC_WALLET,
-        CREDIT_WALLET,
-        GOAL_WALLET,
-        LINKED_WALLET
-    }
+public class Wallet implements Serializable {
+
+    public static final int BASIC_WALLET = 1;
+    public static final int CREDIT_WALLET = 2;
+    public static final int GOAL_WALLET = 3;
+    public static final int LINKED_WALLET = 4;
+
     private int walletId;
     private int walletType;
     private String walletName;
     private float currentBalance;
-    private int currencyCode;
+    private String currencyCode;
     private String imageSrc;
     private String userUID;
 
@@ -28,11 +29,11 @@ public class Wallet {
     public Wallet() {
     }
 
-    public Wallet(int walletId, String walletName, float currentBalance, int currency, int walletType, String imageSrc,String userUID) {
+    public Wallet(int walletId, String walletName, float currentBalance, String currencyCode, int walletType, String imageSrc,String userUID) {
         this.walletId = walletId;
         this.walletName = walletName;
         this.currentBalance = currentBalance;
-        this.currencyCode = currency;
+        this.currencyCode = currencyCode;
         this.walletType = walletType;
         this.imageSrc = imageSrc;
         this.userUID = userUID;
@@ -72,11 +73,11 @@ public class Wallet {
         this.currentBalance = currentBalance;
     }
 
-    public int getCurrencyCode() {
+    public String getCurrencyCode() {
         return currencyCode;
     }
 
-    public void setCurrencyCode(int currency) {
+    public void setCurrencyCode(String currency) {
         this.currencyCode = currency;
     }
 
@@ -100,7 +101,7 @@ public class Wallet {
         private int walletId;
         private String walletName;
         private float currentBalance;
-        private int currencyCode;
+        private String currencyCode;
         private int walletType;
         private String imageSrc;
         private String userUID;
@@ -123,7 +124,7 @@ public class Wallet {
             return this;
         }
 
-        public WalletBuilder setCurrencyCode(int currency) {
+        public WalletBuilder setCurrencyCode(String currency) {
             this.currencyCode = currency;
             return this;
         }

@@ -1,4 +1,4 @@
-package com.example.t2m.moneytracker.transaction;
+package com.example.t2m.moneytracker.adpter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +12,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.t2m.moneytracker.R;
+import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.pinnedlistview.SectionedBaseAdapter;
+import com.example.t2m.moneytracker.utilities.DateUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +26,27 @@ public class TransactionAdapter extends SectionedBaseAdapter {
 
     private Context mContext;
     private List<Pair<Date,List<Transaction>>> mItems;
+
+    public void add(Transaction transaction) {
+        int index = 0;
+        for (int i = 0; i < mItems.size(); ++i) {
+
+            if(DateUtils.compareDate(mItems.get(i).first,transaction.getTransactionDate()) < 0) {
+                index = i;
+                break;
+            }
+        }
+        if(index < mItems.size() && DateUtils.compareDate(mItems.get(index).first,transaction.getTransactionDate()) == 0) {
+            mItems.get(index).second.add(0,transaction);
+        }
+        else {
+            ArrayList<Transaction> transactions = new ArrayList<>();
+            transactions.add(transaction);
+            mItems.add(index, new Pair<Date, List<Transaction>>(transaction.getTransactionDate(), transactions));
+
+        }
+        super.notifyDataSetChanged();
+    }
 
     public void add(Date date,List<Transaction> list_item) {
         mItems.add(new Pair<Date, List<Transaction>>(date,list_item));
@@ -78,11 +101,11 @@ public class TransactionAdapter extends SectionedBaseAdapter {
             holder.item_money_trading = layout.findViewById(R.id.text_item_money_trading);
 
             Transaction transaction = mItems.get(section).second.get(position);
-            holder.item_label.setText(transaction.getmTransactionType());
-            holder.item_note.setText(transaction.getmTransactionNote());
-            holder.item_money_trading.setText(String.format("%.2f",transaction.getmMoneyTrading()));
+            holder.item_label.setText(transaction.getTransactionType().getCategory());
+            holder.item_note.setText(transaction.getTransactionNote());
+            holder.item_money_trading.setText(String.format("%.2f",transaction.getMoneyTrading()));
 
-            if (transaction.getmMoneyTrading() >= 0)
+            if (transaction.getMoneyTrading() >= 0)
                 holder.item_money_trading.setTextColor(parent.getResources().getColor(R.color.colorMoneyTradingPositive));
             else holder.item_money_trading.setTextColor(parent.getResources().getColor(R.color.colorMoneyTradingNegative));
         } else {
@@ -116,7 +139,7 @@ public class TransactionAdapter extends SectionedBaseAdapter {
             float moneyTrading = 0;
             List<Transaction> transactions = mItems.get(section).second;
             for(Transaction tran : transactions) {
-                moneyTrading += tran.getmMoneyTrading();
+                moneyTrading += tran.getMoneyTrading();
             }
 
             holder.header_money_trading.setText(String.format("%.2f",moneyTrading));
@@ -128,6 +151,7 @@ public class TransactionAdapter extends SectionedBaseAdapter {
         } else {
             layout = (RelativeLayout) convertView;
         }
+
         return layout;
     }
 
@@ -146,24 +170,4 @@ public class TransactionAdapter extends SectionedBaseAdapter {
         public TextView item_money_trading;
     }
 
-    public static class AddTransaction extends AppCompatActivity {
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_add_transaction);
-
-            addControls();
-            addEvents();
-        }
-
-        private void addControls() {
-            ImageView image_money_type = (ImageView)findViewById(R.id.image_money_type);
-
-        }
-
-        private void addEvents() {
-
-        }
-    }
 }

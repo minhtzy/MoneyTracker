@@ -2,6 +2,7 @@ package com.example.t2m.moneytracker.dataaccess;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,18 +10,23 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.model.TransactionType;
 import com.example.t2m.moneytracker.model.Wallet;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 
+
+
 public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
+
 
     public static final String DB_FILE_NAME = "money_tracker.db";
     public static final int DB_VERSION = 1;
-
+    public static final String DB_PREFS = "MoneyTrackerSharedPrefs";
+    public static final String KEY_IS_FIRST_TIME_INIT_DATABASE = "moneytracker.db.sharedprefs.key.is_first_time";
     /**
      * TransactionType table
      * int transactionTypeId
@@ -72,7 +78,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
      * String userUID;
      */
 
-    public static final String TABLE_WALLET_NAME = "tbl_transaction";
+    public static final String TABLE_WALLET_NAME = "tbl_wallet";
     public static final String COLUMN_WALLET_ID = "_id";
     public static final String COLUMN_WALLET_NAME = "name";
     public static final String COLUMN_WALLET_BALANCE = "balance";
@@ -87,11 +93,75 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
      */
     public MoneyTrackerDBHelper(Context context) {
         super(context, DB_FILE_NAME, null, DB_VERSION);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(DB_PREFS,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Kiểm tra lần đầu khởi tạo
+        if(sharedPreferences.getBoolean(KEY_IS_FIRST_TIME_INIT_DATABASE,true)) {
+            insertSampleData();
+            editor.putBoolean(KEY_IS_FIRST_TIME_INIT_DATABASE,false);
+            editor.commit();
+        }
+
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         createDatabase(db);
+    }
+
+    private void insertSampleData() {
+        insertWallet();
+        insertTransactionType();
+    }
+
+    private void  insertWallet() {
+        String currency = Currency.getInstance("VND").getCurrencyCode();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId;
+        if(user != null) {
+            userId = user.getUid();
+        }
+        else {
+            userId = "local_user";
+        }
+        Wallet wallet = new Wallet(1,"MyWallet",1000000,currency,Wallet.BASIC_WALLET,"wallet",userId);
+        insertWallet(wallet);
+    }
+
+    private void  insertTransactionType() {
+        TransactionType type1 = new TransactionType(1,TransactionType.TRANSACTION_TYPE_EXPENSE,"Ăn uống","fastfoodt",null);
+        TransactionType type2 = new TransactionType(2,TransactionType.TRANSACTION_TYPE_EXPENSE,"Coffee","cafet",null);
+        TransactionType type3 = new TransactionType(3,TransactionType.TRANSACTION_TYPE_EXPENSE,"Y tế","doctort",null);
+        TransactionType type4 = new TransactionType(4,TransactionType.TRANSACTION_TYPE_EXPENSE,"Điện","electrict",null);
+        TransactionType type5 = new TransactionType(5,TransactionType.TRANSACTION_TYPE_EXPENSE,"Gia đình","familyt",null);
+        TransactionType type6 = new TransactionType(6,TransactionType.TRANSACTION_TYPE_EXPENSE,"Trò chơi","gamet",null);
+        TransactionType type7 = new TransactionType(7,TransactionType.TRANSACTION_TYPE_EXPENSE,"Gas","gast",null);
+        TransactionType type8 = new TransactionType(8,TransactionType.TRANSACTION_TYPE_EXPENSE,"Nhà hàng","restaurantt",null);
+        TransactionType type9 = new TransactionType(9,TransactionType.TRANSACTION_TYPE_EXPENSE,"Cưới","wedding",null);
+        TransactionType type10 = new TransactionType(10,TransactionType.TRANSACTION_TYPE_EXPENSE,"Mạng","wifit",null);
+        TransactionType type11 = new TransactionType(11,TransactionType.TRANSACTION_TYPE_EXPENSE,"Nước","watert",null);
+        TransactionType type12 = new TransactionType(12,TransactionType.TRANSACTION_TYPE_EXPENSE,"Điện thoại","mobilet",null);
+        TransactionType type13 = new TransactionType(13,TransactionType.TRANSACTION_TYPE_LOAN,"Cho vay","chovay",null);
+        TransactionType type14 = new TransactionType(14,TransactionType.TRANSACTION_TYPE_DEBIT,"Nợ","trano",null);
+        TransactionType type15 = new TransactionType(15,TransactionType.TRANSACTION_TYPE_INCOME,"Lương","luongt",null);
+        TransactionType type16 = new TransactionType(16,TransactionType.TRANSACTION_TYPE_INCOME,"Thưởng","reward",null);
+        insertTransactionType(type1);
+        insertTransactionType(type2);
+        insertTransactionType(type3);
+        insertTransactionType(type4);
+        insertTransactionType(type5);
+        insertTransactionType(type6);
+        insertTransactionType(type7);
+        insertTransactionType(type8);
+        insertTransactionType(type9);
+        insertTransactionType(type10);
+        insertTransactionType(type11);
+        insertTransactionType(type12);
+        insertTransactionType(type13);
+        insertTransactionType(type14);
+        insertTransactionType(type15);
+        insertTransactionType(type16);
     }
 
     @Override
@@ -111,46 +181,46 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
     private void createDatabase(SQLiteDatabase db) {
         String CREATE_WALLET_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_WALLET_NAME +
                 "(" +
-                COLUMN_WALLET_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COLUMN_WALLET_NAME + " TEXT NOT NULL," +
-                COLUMN_WALLET_BALANCE + " REAL NOT NULL," +
-                COLUMN_WALLET_CURRENCY + " INTEGER NOT NULL," +
-                COLUMN_WALLET_TYPE + " INTEGER," +
-                COLUMN_WALLET_ICON + " INTEGER," +
+                COLUMN_WALLET_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_WALLET_NAME + " TEXT NOT NULL, " +
+                COLUMN_WALLET_BALANCE + " REAL NOT NULL, " +
+                COLUMN_WALLET_CURRENCY + " TEXT NOT NULL, " +
+                COLUMN_WALLET_TYPE + " INTEGER, " +
+                COLUMN_WALLET_ICON + " INTEGER, " +
                 COLUMN_WALLET_USER_ID + " TEXT " +
-                ")";
+                ");";
         String CREATE_TRANSACTION_TYPE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_TRANSACTION_TYPE_NAME +
                 "(" +
-                COLUMN_TRANSACTION_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COLUMN_TRANSACTION_TYPE_TYPE + " INTEGER NOT NULL," +
-                COLUMN_TRANSACTION_TYPE_CATEGORY + " TEXT NOT NULL," +
-                COLUMN_TRANSACTION_TYPE_ICON + " TEXT NOT NULL," +
-                COLUMN_TRANSACTION_TYPE_PARENT_ID + " INTEGER," +
+                COLUMN_TRANSACTION_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_TRANSACTION_TYPE_TYPE + " INTEGER NOT NULL, " +
+                COLUMN_TRANSACTION_TYPE_CATEGORY + " TEXT NOT NULL, " +
+                COLUMN_TRANSACTION_TYPE_ICON + " TEXT NOT NULL, " +
+                COLUMN_TRANSACTION_TYPE_PARENT_ID + " INTEGER, " +
                 "CONSTRAINT fk_transaction_parent_id " +
                 "FOREIGN KEY (" + COLUMN_TRANSACTION_TYPE_PARENT_ID + ")" +
                 "REFERENCES " + TABLE_TRANSACTION_TYPE_NAME + "(" + COLUMN_TRANSACTION_TYPE_ID + ")" +
                 " ON UPDATE CASCADE ON DELETE CASCADE" +
-                ")";
+                ");";
 
         String CREATE_TRANSACTION_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_TRANSACTION_NAME +
                 "(" +
-                COLUMN_TRANSACTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COLUMN_TRANSACTION_CURRENCY + " INTEGER NOT NULL," +
-                COLUMN_TRANSACTION_TRADING + " REAL NOT NULL," +
-                COLUMN_TRANSACTION_DATE + " INTEGER NOT NULL," +
-                COLUMN_TRANSACTION_NOTE + " TEXT," +
-                COLUMN_TRANSACTION_LOCATION + " TEXT," +
-                COLUMN_TRANSACTION_TYPE_ID_FK + " INTEGER NOT NULL," +
-                COLUMN_WALLET_ID_FK + " INTEGER NOT NULL," +
+                COLUMN_TRANSACTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_TRANSACTION_CURRENCY + " TEXT NOT NULL, " +
+                COLUMN_TRANSACTION_TRADING + " REAL NOT NULL, " +
+                COLUMN_TRANSACTION_DATE + " INTEGER NOT NULL, " +
+                COLUMN_TRANSACTION_NOTE + " TEXT, " +
+                COLUMN_TRANSACTION_LOCATION + " TEXT, " +
+                COLUMN_TRANSACTION_TYPE_ID_FK + " INTEGER NOT NULL, " +
+                COLUMN_WALLET_ID_FK + " INTEGER NOT NULL, " +
                 "CONSTRAINT fk_transaction_type_id " +
                 "FOREIGN KEY (" + COLUMN_TRANSACTION_TYPE_ID_FK + ")" +
                 "REFERENCES " + TABLE_TRANSACTION_TYPE_NAME + "(" + COLUMN_TRANSACTION_TYPE_ID + ")" +
-                " ON UPDATE CASCADE ON DELETE CASCADE ," +
+                " ON UPDATE CASCADE ON DELETE CASCADE , " +
                 "CONSTRAINT fk_transaction_wallet_id " +
                 "FOREIGN KEY (" + COLUMN_WALLET_ID_FK + ")" +
                 "REFERENCES " + TABLE_WALLET_NAME + "(" + COLUMN_WALLET_ID + ")" +
                 " ON UPDATE CASCADE ON DELETE CASCADE" +
-                ")";
+                ");";
         db.execSQL(CREATE_WALLET_TABLE);
         db.execSQL(CREATE_TRANSACTION_TYPE_TABLE);
         db.execSQL(CREATE_TRANSACTION_TABLE);
@@ -247,7 +317,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
         int id = data.getInt(data.getColumnIndex(COLUMN_WALLET_ID));
         String name = data.getString(data.getColumnIndex(COLUMN_WALLET_NAME));
         float balance = data.getFloat(data.getColumnIndex(COLUMN_WALLET_BALANCE));
-        int currency = data.getInt(data.getColumnIndex(COLUMN_WALLET_CURRENCY));
+        String currency = data.getString(data.getColumnIndex(COLUMN_WALLET_CURRENCY));
         int type = data.getInt(data.getColumnIndex(COLUMN_WALLET_TYPE));
         String icon = data.getString(data.getColumnIndex(COLUMN_WALLET_ICON));
         String userId = data.getString(data.getColumnIndex(COLUMN_WALLET_USER_ID));
@@ -289,7 +359,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
 
     public TransactionType getTransactionTypeById(int id) {
         Cursor data = getTransactionTypeDataById(id);
-        if (data != null) {
+        if (data != null && data.getCount() > 0) {
             data.moveToFirst();
             TransactionType transactionType = getTransactionTypeFromData(data);
             return transactionType;
@@ -301,7 +371,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
     public List<TransactionType> getAllTransactionType() {
         Cursor data = getAllTransactionTypeData();
         List<TransactionType> list_result = new ArrayList<>();
-        if (data != null) {
+        if (data != null && data.getCount() > 0) {
             data.moveToFirst();
             do {
                 TransactionType transactionType = getTransactionTypeFromData(data);
@@ -345,7 +415,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
     public boolean insertTransaction(Transaction transaction) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_TRANSACTION_CURRENCY, transaction.getCurrencyId());
+        values.put(COLUMN_TRANSACTION_CURRENCY, transaction.getCurrencyCode());
         values.put(COLUMN_TRANSACTION_TRADING, transaction.getMoneyTrading());
         values.put(COLUMN_TRANSACTION_DATE, transaction.getTransactionDate().getTime());
         values.put(COLUMN_TRANSACTION_NOTE, transaction.getTransactionNote());
@@ -363,7 +433,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_TRANSACTION_CURRENCY, transaction.getCurrencyId());
+        values.put(COLUMN_TRANSACTION_CURRENCY, transaction.getCurrencyCode());
         values.put(COLUMN_TRANSACTION_TRADING, transaction.getMoneyTrading());
         values.put(COLUMN_TRANSACTION_DATE, transaction.getTransactionDate().getTime());
         values.put(COLUMN_TRANSACTION_NOTE, transaction.getTransactionNote());
@@ -377,7 +447,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
 
     public Transaction getTransactionById(int transactionId) {
         Cursor data = getTransactionDataById(transactionId);
-        if(data != null) {
+        if(data != null && data.getCount() > 0) {
             data.moveToFirst();
             Transaction transaction = getTransactionFromData(data);
             return transaction;
@@ -388,7 +458,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
     public List<Transaction> getAllTransactionByWalletId(int walletId) {
         Cursor data = getAllTransactionDataByWalletId(walletId);
         List<Transaction> list_result = new ArrayList<>();
-        if (data != null) {
+        if (data != null && data.getCount() > 0) {
             data.moveToFirst();
             do {
                 Transaction transaction = getTransactionFromData(data);
@@ -410,7 +480,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
     public List<Transaction> getAllTransaction() {
         Cursor data = getAllTransactionData();
         List<Transaction> list_result = new ArrayList<>();
-        if (data != null) {
+        if (data != null && data.getCount() > 0) {
             data.moveToFirst();
             do {
                 Transaction transaction = getTransactionFromData(data);
@@ -434,7 +504,8 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
                 .setTransactionId(data.getInt(data.getColumnIndex(COLUMN_TRANSACTION_ID)))
                 .setMoneyTrading(data.getFloat(data.getColumnIndex(COLUMN_TRANSACTION_TRADING)))
                 .setTransactionDate(new Date(data.getLong(data.getColumnIndex(COLUMN_TRANSACTION_DATE))))
-                .setTransactionNote(data.getString(data.getColumnIndex(COLUMN_TRANSACTION_NOTE)));
+                .setTransactionNote(data.getString(data.getColumnIndex(COLUMN_TRANSACTION_NOTE)))
+                .setCurrencyCode(data.getString(data.getColumnIndex(COLUMN_TRANSACTION_CURRENCY)));
         //String location = data.getString(data.getColumnIndex(COLUMN_TRANSACTION_NOTE));
         int typeId = data.getInt(data.getColumnIndex(COLUMN_TRANSACTION_TYPE_ID_FK));
         int walletId = data.getInt(data.getColumnIndex(COLUMN_WALLET_ID_FK));

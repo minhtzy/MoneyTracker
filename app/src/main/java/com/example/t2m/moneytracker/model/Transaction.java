@@ -1,16 +1,17 @@
 package com.example.t2m.moneytracker.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
 
-public class Transaction {
+public class Transaction implements Serializable {
 
     private int transactionId;
     private Date transactionDate;
     private String transactionNote;
     private float moneyTrading;
-    private int currencyId;
+    private String currencyCode;
     private String location;
     private TransactionType transactionType;
     Wallet wallet;
@@ -27,7 +28,7 @@ public class Transaction {
         this.transactionDate = builder.transactionDate;
         this.transactionNote = builder.transactionNote;
         this.moneyTrading = builder.moneyTrading;
-        this.currencyId = builder.currencyId;
+        this.currencyCode = builder.currencyCode;
         this.location = builder.location;
         this.transactionType = builder.transactionType;
         this.wallet = builder.wallet;
@@ -88,12 +89,12 @@ public class Transaction {
         this.moneyTrading = moneyTrading;
     }
 
-    public int getCurrencyId() {
-        return currencyId;
+    public String getCurrencyCode() {
+        return currencyCode;
     }
 
-    public void setCurrencyId(int currencyId) {
-        this.currencyId = currencyId;
+    public void setCurrencyId(String currencyCode) {
+        this.currencyCode = currencyCode;
     }
 
     public static class TransactionBuilder {
@@ -101,7 +102,7 @@ public class Transaction {
         private Date transactionDate;
         private String transactionNote;
         private float moneyTrading;
-        private int currencyId;
+        private String currencyCode;
         private String location;
         private TransactionType transactionType;
         Wallet wallet;
@@ -128,8 +129,8 @@ public class Transaction {
             return this;
         }
 
-        public TransactionBuilder setCurrencyId(int currencyId) {
-            this.currencyId = currencyId;
+        public TransactionBuilder setCurrencyCode(String currencyCode) {
+            this.currencyCode = currencyCode;
             return this;
         }
 

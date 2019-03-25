@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtPassWordLo"
-        android:password="true"
+        android:inputType="textPassword"
         android:hint="Mật khẩu"/>
 
 
@@ -43,8 +43,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@null"
-        android:capitalize="characters"
         android:textAllCaps="false"
         android:text="Quên mật khẩu?"
         android:textColor="#ffffff"/>

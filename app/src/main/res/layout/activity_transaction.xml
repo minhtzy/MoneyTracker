@@ -5,26 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackgroundGray"
-    tools:context=".transaction.TransactionActivity">
+    tools:context=".transaction.TransactionListFragment">
 
     <com.example.t2m.moneytracker.pinnedlistview.PinnedHeaderListView
         android:id="@+id/list_view_transaction"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="50dp"
+        android:clipToPadding="false">
 
     </com.example.t2m.moneytracker.pinnedlistview.PinnedHeaderListView>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_transaction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/list_view_transaction"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_add_circle_green"
-        app:backgroundTint="@null"
-        app:fabSize="mini"
-        app:maxImageSize="46dp"
-         />
 
 </RelativeLayout>
