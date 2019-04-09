@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
-import com.example.t2m.moneytracker.transaction.TransactionTab;
+import com.example.t2m.moneytracker.transaction.TransactionTabFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -23,8 +23,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_transaction));
+
 
     }
 
@@ -43,10 +42,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_transaction));
 
         MoneyTrackerDBHelper dbHelper = new MoneyTrackerDBHelper(this);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         dbHelper.getAllWalletByUser(user.getUid());
+
     }
 
     @Override
@@ -85,11 +86,14 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        //NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        //int checkedId = navigationView.getCheckedItem().getItemId();
+        //if(checkedId == id) ;
         Fragment fragment = null;
         Class fragmentClass = null;
         if (id == R.id.nav_transaction) {
             Log.d(MainActivity.class.getSimpleName(),"Start Transaction Activity");
-            fragmentClass = TransactionTab.class;
+            fragmentClass = TransactionTabFragment.class;
         } else if (id == R.id.nav_chart) {
 
         } else if (id == R.id.nav_plan) {
@@ -110,7 +114,7 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        getSupportFragmentManager().beginTransaction().add(R.id.main_frame_layout,fragment).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,fragment).addToBackStack(null).commit();
 
         // Highlight the selected item has been done by NavigationView
         item.setChecked(true);

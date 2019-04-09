@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="colorBackgroundPrimary">#2db84c</color>
-    <color name="colorBackgroundWhite">#FFF</color>
-    <color name="colorBackgroundGray">#808080</color>
+    <color name="colorPrimary">@color/colorAppBar</color>
+    <color name="colorPrimaryDark">@color/colorStatusBar</color>
+    <color name="colorAccent">#009688</color>
+
+    <color name="colorBackgroundPrimary">#EEEEEE</color>
+    <color name="colorAppBar">#E0E0E0</color>
+    <color name="colorBackgroundItem">#FAFAFA</color>
+    <color name="colorStatusBar">#757575</color>
+    <color name="colorTextPrimary">#de000000</color>
+    <color name="colorTextSecondary">#89000000</color>
+    <color name="colorTextDisabled">#61000000</color>
+
+    <color name="colorBackgroundPrimaryDark">#303030</color>
+    <color name="colorAppBarDark">#212121</color>
+    <color name="colorBackgroundItemDark">#424242</color>
+    <color name="colorStatusBarDark">#000000</color>
+    <color name="colorTextPrimaryDark">#FFFFFF</color>
+    <color name="colorTextSecondaryDark">#b3ffffff</color>
+    <color name="colorTextDisabledDark">#4c734646</color>
+
     <color name="colorMoneyTradingNegative">#F00</color>
     <color name="colorMoneyTradingPositive">#0F0</color>
 </resources>

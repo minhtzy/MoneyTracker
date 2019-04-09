@@ -82,7 +82,14 @@ public class Transaction implements Serializable {
     }
 
     public float getMoneyTrading() {
-        return moneyTrading;
+        int type = transactionType.getType();
+        if(type == 1 || type == 3) {
+            return -1 * Math.abs(moneyTrading);
+        }
+        else {
+            return Math.abs(moneyTrading);
+        }
+
     }
 
     public void setMoneyTrading(float moneyTrading) {

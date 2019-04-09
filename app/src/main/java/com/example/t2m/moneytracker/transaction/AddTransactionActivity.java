@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.t2m.moneytracker.R;
-import com.example.t2m.moneytracker.adpter.AdapterListWallet;
+import com.example.t2m.moneytracker.adpter.ListWalletAdapter;
 import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.model.TransactionType;
@@ -156,7 +156,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         builderSingle.setIcon(R.drawable.ic_account_balance_wallet_black_24dp);
         builderSingle.setTitle("Chọn ví của bạn");
 
-        final ArrayAdapter arrayAdapter = new AdapterListWallet(this, R.layout.custom_item_category,mListWallet);
+        final ArrayAdapter arrayAdapter = new ListWalletAdapter(this, R.layout.custom_item_category,mListWallet);
 
 
         builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {

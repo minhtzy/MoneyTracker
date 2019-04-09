@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".account.Registration">
+    android:background="#607d8b"
+    tools:context=".account.RegistrationActivity">
 
     <ImageView
         android:id="@+id/imgUserLoginRe"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         app:srcCompat="@drawable/userlogin"
         android:layout_marginTop="5dp"
         />
@@ -19,7 +20,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/txtEmailRe"
         android:hint="Email"
-        />
+        android:layout_marginTop="30dp"/>
     <EditText
         android:id="@+id/txtPassWordRe"
         android:layout_width="match_parent"
@@ -59,8 +60,7 @@
         android:id="@+id/btnSigninRe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@null"
-        android:textColor="#000000"
+        android:textColor="#ffffff"
         android:textAllCaps="false"
         android:text="Đã có tài khoản. Đăng nhập ngay!" />
 </LinearLayout>

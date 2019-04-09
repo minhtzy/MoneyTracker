@@ -2,7 +2,6 @@ package com.example.t2m.moneytracker.dataaccess;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -10,11 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.model.TransactionType;
 import com.example.t2m.moneytracker.model.Wallet;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 
@@ -25,8 +22,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
 
     public static final String DB_FILE_NAME = "money_tracker.db";
     public static final int DB_VERSION = 1;
-    public static final String DB_PREFS = "MoneyTrackerSharedPrefs";
-    public static final String KEY_IS_FIRST_TIME_INIT_DATABASE = "moneytracker.db.sharedprefs.key.is_first_time";
+
     /**
      * TransactionType table
      * int transactionTypeId
@@ -93,75 +89,11 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
      */
     public MoneyTrackerDBHelper(Context context) {
         super(context, DB_FILE_NAME, null, DB_VERSION);
-        SharedPreferences sharedPreferences = context.getSharedPreferences(DB_PREFS,Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        // Kiểm tra lần đầu khởi tạo
-        if(sharedPreferences.getBoolean(KEY_IS_FIRST_TIME_INIT_DATABASE,true)) {
-            insertSampleData();
-            editor.putBoolean(KEY_IS_FIRST_TIME_INIT_DATABASE,false);
-            editor.commit();
-        }
-
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         createDatabase(db);
-    }
-
-    private void insertSampleData() {
-        insertWallet();
-        insertTransactionType();
-    }
-
-    private void  insertWallet() {
-        String currency = Currency.getInstance("VND").getCurrencyCode();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String userId;
-        if(user != null) {
-            userId = user.getUid();
-        }
-        else {
-            userId = "local_user";
-        }
-        Wallet wallet = new Wallet(1,"MyWallet",1000000,currency,Wallet.BASIC_WALLET,"wallet",userId);
-        insertWallet(wallet);
-    }
-
-    private void  insertTransactionType() {
-        TransactionType type1 = new TransactionType(1,TransactionType.TRANSACTION_TYPE_EXPENSE,"Ăn uống","fastfoodt",null);
-        TransactionType type2 = new TransactionType(2,TransactionType.TRANSACTION_TYPE_EXPENSE,"Coffee","cafet",null);
-        TransactionType type3 = new TransactionType(3,TransactionType.TRANSACTION_TYPE_EXPENSE,"Y tế","doctort",null);
-        TransactionType type4 = new TransactionType(4,TransactionType.TRANSACTION_TYPE_EXPENSE,"Điện","electrict",null);
-        TransactionType type5 = new TransactionType(5,TransactionType.TRANSACTION_TYPE_EXPENSE,"Gia đình","familyt",null);
-        TransactionType type6 = new TransactionType(6,TransactionType.TRANSACTION_TYPE_EXPENSE,"Trò chơi","gamet",null);
-        TransactionType type7 = new TransactionType(7,TransactionType.TRANSACTION_TYPE_EXPENSE,"Gas","gast",null);
-        TransactionType type8 = new TransactionType(8,TransactionType.TRANSACTION_TYPE_EXPENSE,"Nhà hàng","restaurantt",null);
-        TransactionType type9 = new TransactionType(9,TransactionType.TRANSACTION_TYPE_EXPENSE,"Cưới","wedding",null);
-        TransactionType type10 = new TransactionType(10,TransactionType.TRANSACTION_TYPE_EXPENSE,"Mạng","wifit",null);
-        TransactionType type11 = new TransactionType(11,TransactionType.TRANSACTION_TYPE_EXPENSE,"Nước","watert",null);
-        TransactionType type12 = new TransactionType(12,TransactionType.TRANSACTION_TYPE_EXPENSE,"Điện thoại","mobilet",null);
-        TransactionType type13 = new TransactionType(13,TransactionType.TRANSACTION_TYPE_LOAN,"Cho vay","chovay",null);
-        TransactionType type14 = new TransactionType(14,TransactionType.TRANSACTION_TYPE_DEBIT,"Nợ","trano",null);
-        TransactionType type15 = new TransactionType(15,TransactionType.TRANSACTION_TYPE_INCOME,"Lương","luongt",null);
-        TransactionType type16 = new TransactionType(16,TransactionType.TRANSACTION_TYPE_INCOME,"Thưởng","reward",null);
-        insertTransactionType(type1);
-        insertTransactionType(type2);
-        insertTransactionType(type3);
-        insertTransactionType(type4);
-        insertTransactionType(type5);
-        insertTransactionType(type6);
-        insertTransactionType(type7);
-        insertTransactionType(type8);
-        insertTransactionType(type9);
-        insertTransactionType(type10);
-        insertTransactionType(type11);
-        insertTransactionType(type12);
-        insertTransactionType(type13);
-        insertTransactionType(type14);
-        insertTransactionType(type15);
-        insertTransactionType(type16);
     }
 
     @Override
@@ -239,7 +171,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
 
     public Wallet getWalletById(int id) {
         Cursor data = getWalletDataById(id);
-        if (data != null) {
+        if (data != null && data.getCount() > 0) {
             data.moveToFirst();
             Wallet wallet = getWalletFromData(data);
             return wallet;
@@ -251,7 +183,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
     public List<Wallet> getAllWalletByUser(String userId) {
         Cursor data = getWalletDataByUser(userId);
         List<Wallet> list_wallet = new ArrayList<>();
-        if (data != null) {
+        if (data != null && data.getCount() > 0) {
             data.moveToFirst();
             do {
                 Wallet wallet = getWalletFromData(data);

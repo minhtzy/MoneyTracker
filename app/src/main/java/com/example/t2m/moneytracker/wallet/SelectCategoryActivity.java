@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.t2m.moneytracker.R;
-import com.example.t2m.moneytracker.adpter.AdapterListCategory;
+import com.example.t2m.moneytracker.adpter.ListCategoryAdapter;
 import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
 import com.example.t2m.moneytracker.model.TransactionType;
 
@@ -26,7 +26,7 @@ public class SelectCategoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listchoose);
+        setContentView(R.layout.activity_choose_category);
         
         addControls();
         addEvents();
@@ -35,8 +35,8 @@ public class SelectCategoryActivity extends AppCompatActivity {
     }
 
     private void ShowAllListChoose() {
-//        Login.database = openOrCreateDatabase(Login.DATABASE_NAME,MODE_PRIVATE,null);
-//        Cursor cursor = Login.database.rawQuery("SELECT * FROM listchoose",null);
+//        LoginActivity.database = openOrCreateDatabase(LoginActivity.DATABASE_NAME,MODE_PRIVATE,null);
+//        Cursor cursor = LoginActivity.database.rawQuery("SELECT * FROM listchoose",null);
 //        arrayListListchoose.clear();
 //        while (cursor.moveToNext()){
 //            String ten = cursor.getString(1);
@@ -68,7 +68,7 @@ public class SelectCategoryActivity extends AppCompatActivity {
         btnBacktoaddwallet = (Button)findViewById(R.id.btnBacktoaddwallet);
         lvListchoose = (ListView)findViewById(R.id.lvListchoose);
         arrayListListchoose = new ArrayList<>();
-        arrayAdapterListchoose = new AdapterListCategory(
+        arrayAdapterListchoose = new ListCategoryAdapter(
                 SelectCategoryActivity.this,
                 R.layout.custom_item_category,
                 arrayListListchoose
