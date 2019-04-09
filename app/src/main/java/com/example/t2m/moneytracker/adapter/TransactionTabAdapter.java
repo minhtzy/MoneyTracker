@@ -1,4 +1,4 @@
-package com.example.t2m.moneytracker.adpter;
+package com.example.t2m.moneytracker.adapter;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

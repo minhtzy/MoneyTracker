@@ -16,10 +16,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.t2m.moneytracker.R;
-import com.example.t2m.moneytracker.adpter.ListWalletAdapter;
+import com.example.t2m.moneytracker.adapter.ListWalletAdapter;
 import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
 import com.example.t2m.moneytracker.model.Transaction;
-import com.example.t2m.moneytracker.model.TransactionType;
+import com.example.t2m.moneytracker.model.Category;
 import com.example.t2m.moneytracker.model.Wallet;
 import com.example.t2m.moneytracker.wallet.SelectCategoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,7 +46,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     private FirebaseUser mCurrentUser;
     private MoneyTrackerDBHelper dbHelper;
     private List<Wallet> mListWallet;
-    private TransactionType mCurrentTransactionType =null;
+    private Category mCurrentCategory =null;
     private Wallet mCurrentWallet = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +106,7 @@ public class AddTransactionActivity extends AppCompatActivity {
             mTextWallet.requestFocus();
             return;
         }
-        if(mCurrentTransactionType == null) {
+        if(mCurrentCategory == null) {
             mTextCategory.setError("Chọn kiểu giao dịch");
             mTextCategory.requestFocus();
             return;
@@ -116,7 +116,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         Date date = mCalendar.getTime();
         Transaction transaction = new Transaction.TransactionBuilder()
                 .setTransactionDate(date)
-                .setTransactionType(mCurrentTransactionType)
+                .setCategory(mCurrentCategory)
                 .setWallet(mCurrentWallet)
                 .setCurrencyCode(mCurrentWallet.getCurrencyCode())
                 .setMoneyTrading(money)
@@ -193,18 +193,18 @@ public class AddTransactionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == REQUEST_CODE_CATEGORY) {
             if(resultCode == RESULT_OK) {
-                mCurrentTransactionType =(TransactionType) data.getSerializableExtra("transaction_type");
+                mCurrentCategory =(Category) data.getSerializableExtra("transaction_type");
                 updateUI();
             }
         }
     }
 
     private void updateUI() {
-        if(mCurrentTransactionType != null) {
-            mTextCategory.setText(mCurrentTransactionType.getCategory());
+        if(mCurrentCategory != null) {
+            mTextCategory.setText(mCurrentCategory.getCategory());
             ImageView imageView = findViewById(R.id.image_transaction_category);
             int resourceId = getResources().getIdentifier(
-                    mCurrentTransactionType.getIcon(),
+                    mCurrentCategory.getIcon(),
                     "drawable",
                     "com.example.t2m.moneytracker"
             );

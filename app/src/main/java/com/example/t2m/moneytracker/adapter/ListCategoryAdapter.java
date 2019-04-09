@@ -1,8 +1,7 @@
-package com.example.t2m.moneytracker.adpter;
+package com.example.t2m.moneytracker.adapter;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.t2m.moneytracker.R;
-import com.example.t2m.moneytracker.model.TransactionType;
+import com.example.t2m.moneytracker.model.Category;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,11 +18,11 @@ import java.util.List;
 /**
  * Created by minhthuanht on 24,March,2019
  */
-public class ListCategoryAdapter extends ArrayAdapter<TransactionType> {
+public class ListCategoryAdapter extends ArrayAdapter<Category> {
     Activity context;
     int resource;
-    List<TransactionType> objects;
-    public ListCategoryAdapter(Activity context, int resource, List<TransactionType> objects) {
+    List<Category> objects;
+    public ListCategoryAdapter(Activity context, int resource, List<Category> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -40,13 +39,13 @@ public class ListCategoryAdapter extends ArrayAdapter<TransactionType> {
         ImageView imganhItem = (ImageView)convertView.findViewById(R.id.imganhItem);
         TextView txtTenitem = (TextView)convertView.findViewById(R.id.txtTenitem);
 
-        TransactionType transactionType = this.objects.get(position);
-        txtTenitem.setText(transactionType.getCategory());
+        Category category = this.objects.get(position);
+        txtTenitem.setText(category.getCategory());
 
         // lấy ảnh từ asset
         String base_path = "category/";
         try {
-            Drawable img = Drawable.createFromStream(context.getAssets().open(base_path + transactionType.getIcon()),null);
+            Drawable img = Drawable.createFromStream(context.getAssets().open(base_path + category.getIcon()),null);
             imganhItem.setImageDrawable(img);
         } catch (IOException e) {
             e.printStackTrace();

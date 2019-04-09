@@ -7,8 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Pair;
@@ -17,19 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.t2m.moneytracker.R;
-import com.example.t2m.moneytracker.adpter.TransactionTabAdapter;
+import com.example.t2m.moneytracker.adapter.TransactionTabAdapter;
 import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.model.Wallet;
-import com.example.t2m.moneytracker.transaction.AddTransactionActivity;
-import com.example.t2m.moneytracker.transaction.TransactionListFragment;
 import com.example.t2m.moneytracker.utilities.TransactionsManager;
-import com.google.firebase.auth.FirebaseAuth;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 public class TransactionTabFragment extends Fragment {

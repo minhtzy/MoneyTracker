@@ -9,12 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.t2m.moneytracker.R;
-import com.example.t2m.moneytracker.adpter.ListTransactionAdapter;
+import com.example.t2m.moneytracker.adapter.ListTransactionAdapter;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.pinnedlistview.PinnedHeaderListView;
 import com.example.t2m.moneytracker.utilities.DateUtils;
 import com.example.t2m.moneytracker.utilities.TransactionsManager;
-import com.example.t2m.moneytracker.utilities.WalletsManager;
 
 import java.util.ArrayList;
 import java.util.Date;

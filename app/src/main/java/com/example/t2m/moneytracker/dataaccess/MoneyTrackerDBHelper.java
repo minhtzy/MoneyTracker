@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.t2m.moneytracker.model.Transaction;
-import com.example.t2m.moneytracker.model.TransactionType;
+import com.example.t2m.moneytracker.model.Category;
 import com.example.t2m.moneytracker.model.Wallet;
 
 
@@ -24,7 +24,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
     public static final int DB_VERSION = 1;
 
     /**
-     * TransactionType table
+     * Category table
      * int transactionTypeId
      * int type
      * String logo
@@ -261,70 +261,70 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
 
     // Transaction Type DataAccess
 
-    public boolean insertTransactionType(TransactionType transactionType) {
-        if (transactionType == null) return false;
+    public boolean insertTransactionType(Category category) {
+        if (category == null) return false;
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_TRANSACTION_TYPE_TYPE, transactionType.getType());
-        values.put(COLUMN_TRANSACTION_TYPE_CATEGORY, transactionType.getCategory());
-        values.put(COLUMN_TRANSACTION_TYPE_ICON, transactionType.getIcon());
-        if (transactionType.getParentType() != null) {
-            values.put(COLUMN_TRANSACTION_TYPE_PARENT_ID, transactionType.getParentType().getId());
+        values.put(COLUMN_TRANSACTION_TYPE_TYPE, category.getType());
+        values.put(COLUMN_TRANSACTION_TYPE_CATEGORY, category.getCategory());
+        values.put(COLUMN_TRANSACTION_TYPE_ICON, category.getIcon());
+        if (category.getParentType() != null) {
+            values.put(COLUMN_TRANSACTION_TYPE_PARENT_ID, category.getParentType().getId());
         }
         int id = (int) db.insert(TABLE_TRANSACTION_TYPE_NAME, COLUMN_TRANSACTION_TYPE_PARENT_ID, values);
         db.close();
-        transactionType.setId(id);
+        category.setId(id);
         return id != -1;
     }
 
-    public void updateTransactionType(TransactionType transactionType) {
-        if (transactionType == null) return;
+    public void updateTransactionType(Category category) {
+        if (category == null) return;
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_TRANSACTION_TYPE_TYPE, transactionType.getType());
-        values.put(COLUMN_TRANSACTION_TYPE_CATEGORY, transactionType.getCategory());
-        values.put(COLUMN_TRANSACTION_TYPE_ICON, transactionType.getIcon());
-        values.put(COLUMN_TRANSACTION_TYPE_PARENT_ID, transactionType.getParentType().getId());
-        db.update(TABLE_TRANSACTION_TYPE_NAME, values, COLUMN_TRANSACTION_TYPE_ID + " = ?", new String[]{String.valueOf(transactionType.getId())});
+        values.put(COLUMN_TRANSACTION_TYPE_TYPE, category.getType());
+        values.put(COLUMN_TRANSACTION_TYPE_CATEGORY, category.getCategory());
+        values.put(COLUMN_TRANSACTION_TYPE_ICON, category.getIcon());
+        values.put(COLUMN_TRANSACTION_TYPE_PARENT_ID, category.getParentType().getId());
+        db.update(TABLE_TRANSACTION_TYPE_NAME, values, COLUMN_TRANSACTION_TYPE_ID + " = ?", new String[]{String.valueOf(category.getId())});
         db.close();
     }
 
-    public TransactionType getTransactionTypeById(int id) {
+    public Category getTransactionTypeById(int id) {
         Cursor data = getTransactionTypeDataById(id);
         if (data != null && data.getCount() > 0) {
             data.moveToFirst();
-            TransactionType transactionType = getTransactionTypeFromData(data);
-            return transactionType;
+            Category category = getTransactionTypeFromData(data);
+            return category;
         } else {
             return null;
         }
     }
 
-    public List<TransactionType> getAllTransactionType() {
+    public List<Category> getAllTransactionType() {
         Cursor data = getAllTransactionTypeData();
-        List<TransactionType> list_result = new ArrayList<>();
+        List<Category> list_result = new ArrayList<>();
         if (data != null && data.getCount() > 0) {
             data.moveToFirst();
             do {
-                TransactionType transactionType = getTransactionTypeFromData(data);
-                list_result.add(transactionType);
+                Category category = getTransactionTypeFromData(data);
+                list_result.add(category);
             }
             while (data.moveToNext());
         }
         return list_result;
     }
 
-    private TransactionType getTransactionTypeFromData(Cursor data) {
+    private Category getTransactionTypeFromData(Cursor data) {
         int id = data.getInt(data.getColumnIndex(COLUMN_TRANSACTION_TYPE_ID));
         int type = data.getInt(data.getColumnIndex(COLUMN_TRANSACTION_TYPE_TYPE));
         String category = data.getString(data.getColumnIndex(COLUMN_TRANSACTION_TYPE_CATEGORY));
         String icon = data.getString(data.getColumnIndex(COLUMN_TRANSACTION_TYPE_ICON));
-        TransactionType parent = null;
+        Category parent = null;
         if (!data.isNull(data.getColumnIndex(COLUMN_TRANSACTION_TYPE_PARENT_ID))) {
             int parentId = data.getInt(data.getColumnIndex(COLUMN_TRANSACTION_TYPE_PARENT_ID));
             parent = getTransactionTypeById(parentId);
         }
-        return new TransactionType(id, type, category, icon, parent);
+        return new Category(id, type, category, icon, parent);
     }
 
     private Cursor getTransactionTypeDataById(int id) {
@@ -352,7 +352,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
         values.put(COLUMN_TRANSACTION_DATE, transaction.getTransactionDate().getTime());
         values.put(COLUMN_TRANSACTION_NOTE, transaction.getTransactionNote());
         //values.put(COLUMN_TRANSACTION_LOCATION,transaction.getLocation());
-        values.put(COLUMN_TRANSACTION_TYPE_ID_FK, transaction.getTransactionType().getId());
+        values.put(COLUMN_TRANSACTION_TYPE_ID_FK, transaction.getCategory().getId());
         values.put(COLUMN_WALLET_ID_FK, transaction.getWallet().getWalletId());
         int id = (int) db.insert(TABLE_TRANSACTION_NAME, COLUMN_TRANSACTION_LOCATION, values);
         transaction.setTransactionId(id);
@@ -370,7 +370,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
         values.put(COLUMN_TRANSACTION_DATE, transaction.getTransactionDate().getTime());
         values.put(COLUMN_TRANSACTION_NOTE, transaction.getTransactionNote());
         //values.put(COLUMN_TRANSACTION_LOCATION,transaction.getLocation());
-        values.put(COLUMN_TRANSACTION_TYPE_ID_FK, transaction.getTransactionType().getId());
+        values.put(COLUMN_TRANSACTION_TYPE_ID_FK, transaction.getCategory().getId());
         values.put(COLUMN_WALLET_ID_FK, transaction.getWallet().getWalletId());
         db.update(TABLE_TRANSACTION_NAME,values,COLUMN_TRANSACTION_ID + " = ?" ,new String[]{String.valueOf(transaction.getTransactionId())});
         db.close();
@@ -441,10 +441,10 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
         //String location = data.getString(data.getColumnIndex(COLUMN_TRANSACTION_NOTE));
         int typeId = data.getInt(data.getColumnIndex(COLUMN_TRANSACTION_TYPE_ID_FK));
         int walletId = data.getInt(data.getColumnIndex(COLUMN_WALLET_ID_FK));
-        TransactionType transactionType = this.getTransactionTypeById(typeId);
+        Category category = this.getTransactionTypeById(typeId);
         Wallet wallet = this.getWalletById(walletId);
         builder
-                .setTransactionType(transactionType)
+                .setCategory(category)
                 .setWallet(wallet);
         return builder.build();
     }

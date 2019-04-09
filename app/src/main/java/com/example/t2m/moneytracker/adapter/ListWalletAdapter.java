@@ -1,4 +1,4 @@
-package com.example.t2m.moneytracker.adpter;
+package com.example.t2m.moneytracker.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.t2m.moneytracker.R;
-import com.example.t2m.moneytracker.model.TransactionType;
 import com.example.t2m.moneytracker.model.Wallet;
 
 import java.util.List;

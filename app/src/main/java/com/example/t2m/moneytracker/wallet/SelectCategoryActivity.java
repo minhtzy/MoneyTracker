@@ -10,9 +10,9 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.t2m.moneytracker.R;
-import com.example.t2m.moneytracker.adpter.ListCategoryAdapter;
+import com.example.t2m.moneytracker.adapter.ListCategoryAdapter;
 import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
-import com.example.t2m.moneytracker.model.TransactionType;
+import com.example.t2m.moneytracker.model.Category;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 public class SelectCategoryActivity extends AppCompatActivity {
 
     Button btnBacktoaddwallet;
-    ArrayList<TransactionType> arrayListListchoose;
+    ArrayList<Category> arrayListListchoose;
     ArrayAdapter arrayAdapterListchoose;
     ListView lvListchoose;
     @Override
@@ -49,7 +49,7 @@ public class SelectCategoryActivity extends AppCompatActivity {
 //        }
 //        cursor.close();
         MoneyTrackerDBHelper dbHelper = new MoneyTrackerDBHelper(this);
-        List<TransactionType> types = dbHelper.getAllTransactionType();
+        List<Category> types = dbHelper.getAllTransactionType();
         arrayListListchoose.addAll(types);
         arrayAdapterListchoose.notifyDataSetChanged();
 
@@ -78,9 +78,9 @@ public class SelectCategoryActivity extends AppCompatActivity {
         lvListchoose.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TransactionType transactionType = arrayListListchoose.get(position);
+                Category category = arrayListListchoose.get(position);
                 Intent intent = new Intent();
-                intent.putExtra("transaction_type",transactionType);
+                intent.putExtra("transaction_type", category);
                 setResult(RESULT_OK,intent);
                 finish();
             }
