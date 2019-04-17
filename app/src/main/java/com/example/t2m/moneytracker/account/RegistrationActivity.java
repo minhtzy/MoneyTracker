@@ -32,7 +32,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     ImageView imgUserLogin;
     EditText txtPassWord, txtConfirmPassword, txtEmail;
-    Button btnSignin, btnForgotPassword, btnSignup;
+    Button btnSignin, btnForgotPassword, btnRegistration;
     ProgressDialog progressDialog;
 
     // [START declare_auth]
@@ -54,13 +54,13 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        //updateUI(currentUser);
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        //updateUI(currentUser);
+//    }
 
 
 //    // [START on_start_check_user]
@@ -85,12 +85,12 @@ public class RegistrationActivity extends AppCompatActivity {
                 finish();
             }
         });
-        btnSignup.setOnClickListener(new View.OnClickListener() {
+        btnRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = txtEmail.getText().toString();
                 String password = txtPassWord.getText().toString();
-                String comfirmpassword = txtConfirmPassword.getText().toString();
+
                 View review = null;
 
                 if (!isNetworkConnected()) {
@@ -122,20 +122,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             review = txtPassWord;
                         }
                     }
-                    if (comfirmpassword.isEmpty()) {
-                        txtConfirmPassword.setError("Không được để trống");
-                        if (review ==null){
-                            review = txtConfirmPassword;
-                        }
 
-                    }
-                    else if(!comfirmpassword.equals(password)){
-                        txtConfirmPassword.setError("Mật khẩu không trùng khớp, mật khẩu: "+txtPassWord.getText().toString());
-                        if (review ==null){
-                            review = txtConfirmPassword;
-                        }
-
-                    }
                     if (review!=null){
                         review.requestFocus();
                         return;
@@ -196,11 +183,10 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void addControls() {
-        imgUserLogin = (ImageView) findViewById(R.id.imgUserLoginRe);
+//        imgUserLogin = (ImageView) findViewById(R.id.imgUserLoginRe);
         txtPassWord = (EditText) findViewById(R.id.txtPassWordRe);
-        txtConfirmPassword = (EditText) findViewById(R.id.txtConfirmPassWordRe);
         txtEmail = (EditText) findViewById(R.id.txtEmailRe);
-        btnSignup = (Button) findViewById(R.id.btnSignupRe);
+        btnRegistration = (Button) findViewById(R.id.btnRegistration);
         btnSignin = (Button) findViewById(R.id.btnSigninRe);
        // btnForgotPassword = (Button) findViewById(R.id.btnForgotPasswordRe);
         progressDialog = new ProgressDialog(this);
