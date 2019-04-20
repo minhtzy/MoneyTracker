@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="Tên"
+                    android:hint="@string/name_wallet"
                     android:inputType="textPersonName"
                     android:paddingTop="20dp"
                     android:paddingBottom="20dp"
@@ -80,7 +80,7 @@
                     android:layout_weight="2"
                     android:gravity="left"
                     android:padding="15dp"
-                    android:text="Việt Nam Đồng"
+                    android:text="@string/name_currency"
                     android:textSize="20dp" />
 
             </LinearLayout>
@@ -106,7 +106,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Số tiền hiện có" />
+                        android:text="@string/current_amount" />
 
                     <EditText
                         android:id="@+id/txtSotien"
@@ -118,7 +118,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Nhóm" />
+                        android:text="@string/group" />
 
                     <Button
                         android:id="@+id/btnNhom"
@@ -126,7 +126,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="left"
                         android:paddingTop="15dp"
-                        android:text="Nhóm tiêu chuẩn"
+                        android:text="@string/standard_group"
                         android:textAllCaps="false" />
                 </LinearLayout>
             </LinearLayout>
@@ -144,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Liên kết dịch vụ"
+                android:text="@string/service_link"
                 android:textColor="#00bb27"
                 android:textSize="20dp" />
 
@@ -155,7 +155,7 @@
                 android:gravity="left"
                 android:padding="15dp"
 
-                android:text="Kết nối các dịch vụ ngay trong MoneyTracher"
+                android:text="@string/connect_the_service_right_in_moneytracher"
                 android:textSize="15sp" />
 
             <LinearLayout
@@ -167,7 +167,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:padding="10dp"
-                    android:text="Không tích vào tổng"
+                    android:text="@string/not_total"
                     android:textColor="#000000"
                     android:textSize="20sp" />
 
@@ -184,7 +184,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/vien"
                 android:paddingTop="10dp"
-                android:text="Bỏ qua ví này và số dư khỏi Tổng. " />
+                android:text="@string/ignore_this_wallet_and_the_balance_from_the_total" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

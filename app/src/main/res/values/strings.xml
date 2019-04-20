@@ -1,16 +1,83 @@
 <resources>
     <string name="app_name">MoneyTracker</string>
-    <string name="title_activity_main_drawer">MainDrawerActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_transaction_tab">TransactionTabActivity</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_main_drawer" translatable="false">Main Drawer Activity</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
+    <string name="action_settings">Cài đặt</string>
+    <string name="title_activity_main" translatable="false">Main Activity</string>
+    <string name="title_activity_transaction_tab" translatable="false">Transaction Tab Activity</string>
+    <string name="section_format" translatable="false">Hello World from section: %1$d</string>
 
+
+    <!--text in activity_add_wallet.xml-->
+    <string name="name_wallet">Tên ví</string>
+    <string name="name_currency" translatable="false">Việt Nam Đồng</string>
+    <string name="current_amount">Số tiền hiện tại</string>
+    <string name="group">Nhóm</string>
+    <string name="standard_group">Nhóm tiêu chuẩn</string>
+    <string name="service_link">Liên kết dịch vụ</string>
+    <string name="connect_the_service_right_in_moneytracher">Kết nối  ngay với dịch vụ trong MoneyTracher</string>
+    <string name="not_total">Không tích vào tổng</string>
+    <string name="ignore_this_wallet_and_the_balance_from_the_total">Bỏ qua ví khỏi Tổng </string>
+    <string name="add_wallet">Thêm ví</string>
+    <string name="save">Lưu</string>
+    <!--text in activity_choose_category.xml-->
+    <string name="back">Quay lại</string>
+    <!--text in activity_forgot_password-->
+    <string name="forgot_password">Quên mật khẩu</string>
+    <string name="to_reset_password">Để đặt lại mật khẩu, vui lòng nhập email đã đăng ký tài khoản và nhấn vào nút Đặt lại mật khẩu, Sau đó truy cập vào email và làm theo hướng dẫn</string>
+    <string name="enter_your_email">Nhập email</string>
+    <string name="reset_password">Đặt lại mật khẩu</string>
+    <!--text in activity_setting.xml-->
+    <string name="name_account">Tên tài khoản </string>
+    <string name="change_language">Thay đổi ngôn ngữ</string>
+    <string name="signout">Đăng xuất</string>
+    <!--text in activity_login.xml-->
+    <string name="signin_account">Đăng nhập tài khoản</string>
+    <string name="signin">Đăng nhập</string>
+    <string name="not_account_signup_now">Chưa có tài khoản. Đăng ký ngay!</string>
+    <!--text in activity_registration-->
+    <string name="signup_account">Đăng ký tài khoản</string>
+    <string name="password">Mật khẩu</string>
+    <string name="signup">Đăng ký</string>
+    <string name="account_exist_signin_now">Đã có tài khoản. Đăng nhập ngay!</string>
+    <!--text in activity_main_drawer-->
+    <string name="transaction_ledger">Sổ giao dịch</string>
+    <string name="report">Báo cáo</string>
+    <string name="scheduling">Lập kế hoạch</string>
+    <string name="communicate">Giao tiếp</string>
+    <string name="share">Chia sẻ</string>
+    <string name="send">Gửi</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
+    <!--change language-->
+    <string name="change_language_title">Ngôn ngữ</string>
+
+    <!--untranslatable-->
+    <string name="language_vietnamese" translatable="false">Tiếng Việt</string>
+    <string name="language_english" translatable="false">English</string>
+    <string name="language_japanese" translatable="false">日本の</string>
+
+    <string name="language_vietnamese_code" translatable="false">vi</string>
+    <string name="language_english_code" translatable="false">en</string>
+    <string name="language_japanese_code" translatable="false">ja</string>
+
+
+    <string-array name="language_names">
+        <item>@string/language_vietnamese</item>
+        <item>@string/language_english</item>
+        <item>@string/language_japanese</item>
+    </string-array>
+
+    <string-array name="language_codes">
+        <item>@string/language_vietnamese_code</item>
+        <item>@string/language_english_code</item>
+        <item>@string/language_japanese_code</item>
+
+    </string-array>
+
 </resources>

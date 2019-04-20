@@ -15,9 +15,6 @@ import com.example.t2m.moneytracker.model.Category;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by minhthuanht on 24,March,2019
- */
 public class ListCategoryAdapter extends ArrayAdapter<Category> {
     Activity context;
     int resource;

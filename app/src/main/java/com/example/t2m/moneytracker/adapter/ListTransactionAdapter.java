@@ -72,9 +72,8 @@ public class ListTransactionAdapter extends SectionedBaseAdapter {
             holder.item_label = layout.findViewById(R.id.text_transaction_label);
             holder.item_note = layout.findViewById(R.id.text_transaction_note);
             holder.item_money_trading = layout.findViewById(R.id.text_item_money_trading);
-
             Transaction transaction = mItems.get(section).second.get(position);
-            holder.item_label.setText(transaction.getCategory().getCategory());
+            holder.item_label.setText(transaction.getTransactionType().getCategory());
             holder.item_note.setText(transaction.getTransactionNote());
             holder.item_money_trading.setText(String.format("%.2f",transaction.getMoneyTrading()));
 
@@ -82,7 +81,7 @@ public class ListTransactionAdapter extends SectionedBaseAdapter {
             // lấy ảnh từ asset
             String base_path = "category/";
             try {
-                Drawable img = Drawable.createFromStream(mContext.getAssets().open(base_path + transaction.getCategory().getIcon()),null);
+                Drawable img = Drawable.createFromStream(mContext.getAssets().open(base_path + transaction.getTransactionType().getIcon()),null);
                 holder.item_image.setImageDrawable(img);
             } catch (IOException e) {
                 e.printStackTrace();

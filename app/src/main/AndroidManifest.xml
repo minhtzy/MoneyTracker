@@ -7,19 +7,26 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher_ml"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".setting.Setting"></activity>
+        <activity
+            android:name=".changelanguage.ChangeLanguageActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".wallet.SelectCategoryActivity" />
         <activity android:name=".wallet.AddWalletActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".account.ForgotPasswordActivity" />
         <activity android:name=".account.RegistrationActivity">
@@ -44,7 +51,8 @@
             android:name=".MainActivity"
             android:label="Main Activity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".transaction.AddTransactionActivity"
+        <activity
+            android:name=".transaction.AddTransactionActivity"
             android:label="Add Transaction">
 
             <!-- <intent-filter> -->

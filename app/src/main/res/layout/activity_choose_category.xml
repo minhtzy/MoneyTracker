@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnBacktoaddwallet"
-            android:text="Quay lại"
+            android:text="@string/back"
             android:textAllCaps="false"
             android:textColor="#00bb27"
             android:textSize="20dp"/>
@@ -24,7 +24,7 @@
             android:id="@+id/category_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nhóm tiêu chuẩn"
+            android:text="@string/standard_group"
             android:gravity="center"
             android:textSize="20dp"
             android:textColor="#ff0000"
