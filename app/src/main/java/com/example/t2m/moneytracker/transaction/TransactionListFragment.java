@@ -71,7 +71,7 @@ public class TransactionListFragment extends Fragment {
 
     public void add(Transaction transaction) {
         mItems.add(transaction);
-        getActivity().runOnUiThread(runableUpdateAdapter);
+        new loadTransactions().execute();
     }
 
     private void filterPairTransactions(List<Transaction> transactions) {
@@ -181,8 +181,8 @@ public class TransactionListFragment extends Fragment {
             }
         }
 
-        TextView textChi = headerView.findViewById(R.id.fts_so_du_cuoi);
-        TextView textTieu = headerView.findViewById(R.id.fts_so_du_dau);
+        TextView textChi = headerView.findViewById(R.id.fts_so_du_dau);
+        TextView textTieu = headerView.findViewById(R.id.fts_so_du_cuoi);
         TextView textConLai = headerView.findViewById(R.id.fts_con_lai);
 
         textChi.setText(String.format(Constants.PRICE_FORMAT,tienChi));

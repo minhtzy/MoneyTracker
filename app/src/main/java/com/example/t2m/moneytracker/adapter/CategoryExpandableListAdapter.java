@@ -1,11 +1,13 @@
 package com.example.t2m.moneytracker.adapter;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import com.example.t2m.moneytracker.R;
 import com.example.t2m.moneytracker.model.Category;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
@@ -23,8 +26,10 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
     public CategoryExpandableListAdapter(Context context, List<Category> categories) {
         mContext = context;
-        mExpandableListDetail = categories;
+        mExpandableListDetail = new ArrayList<>();
+        mExpandableListDetail.addAll(categories);
     }
+
 
     @Override
     public int getGroupCount() {
@@ -48,12 +53,12 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public long getGroupId(int groupPosition) {
-        return mExpandableListDetail.get(groupPosition).getId();
+        return groupPosition;
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        return mExpandableListDetail.get(groupPosition).getSubCategories().get(childPosition).getId();
+        return childPosition;
     }
 
     @Override
@@ -64,7 +69,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
-        Category category = mExpandableListDetail.get(groupPosition);
+        Category category = (Category) getGroup(groupPosition);
 
         if(convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext
@@ -91,13 +96,14 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Category category = mExpandableListDetail.get(groupPosition).getSubCategories().get(childPosition);
+        Category category = (Category) getChild(groupPosition,childPosition);
 
         if(convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.custom_item_category, null);
         }
+        convertView.setPadding(30,0,0,0);
 
         ImageView imganhItem = (ImageView)convertView.findViewById(R.id.imgCategoryLogo);
         TextView txtTenitem = (TextView)convertView.findViewById(R.id.txtCategoryTitle);
@@ -105,7 +111,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
         txtTenitem.setText(category.getCategory());
 
         // set lại size cho ảnh
-        imganhItem.setLayoutParams(new RelativeLayout.LayoutParams(R.dimen.item_category_child_size,R.dimen.item_category_child_size));
+        //imganhItem.setLayoutParams(new RelativeLayout.LayoutParams(R.dimen.item_category_child_size,R.dimen.item_category_child_size));
         // lấy ảnh từ asset
         String base_path = "category/";
         try {
@@ -122,4 +128,5 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
 }

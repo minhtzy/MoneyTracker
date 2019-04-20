@@ -33,6 +33,7 @@ public class CategoriesPagerAdapter extends FragmentPagerAdapter {
                 break;
             case 1 :
                 categories.addAll(categoriesDAO.getCategoriesByType(1));
+                //categories = categories.subList(0,5);
                 break;
             case 2 :
                 categories.addAll(categoriesDAO.getCategoriesByType(2));

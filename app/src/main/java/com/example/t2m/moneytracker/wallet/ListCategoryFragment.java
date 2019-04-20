@@ -18,7 +18,7 @@ import java.util.List;
 public class ListCategoryFragment extends Fragment {
 
     private OnCategoryFragmenListener mListener;
-
+    private ExpandableListAdapter mAdapter;
     private ExpandableListView mExpandableListView;
 
     private List<Category> mCategories;
@@ -51,9 +51,9 @@ public class ListCategoryFragment extends Fragment {
     }
 
     private void addControls() {
-        ExpandableListAdapter adapter = new CategoryExpandableListAdapter(this.getContext(),mCategories);
-        mExpandableListView.setAdapter(adapter);
-        mExpandableListView.setGroupIndicator(null);
+        mAdapter = new CategoryExpandableListAdapter(this.getContext(),mCategories);
+        mExpandableListView.setAdapter(mAdapter);
+        //mExpandableListView.setGroupIndicator(null);
         mExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -62,6 +62,7 @@ public class ListCategoryFragment extends Fragment {
                 }
                 else {
                     parent.expandGroup(groupPosition,true);
+
                 }
                 return true;
             }
@@ -74,7 +75,14 @@ public class ListCategoryFragment extends Fragment {
                 return false;
             }
         });
+        expandAll();
 
+    }
+
+    private void expandAll() {
+        for (int i = 0; i < mAdapter.getGroupCount();++i) {
+            mExpandableListView.expandGroup(i);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

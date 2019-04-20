@@ -40,21 +40,24 @@ public class WalletListAdapter extends ArrayAdapter<Wallet> {
         Wallet wallet = this.objects.get(position);
         txtTenitem.setText(wallet.getWalletName());
 
-//        // lấy id của ảnh
-//        int idImg = context.getResources().getIdentifier(
-//                wallet.getImageSrc(),
-//                "drawable",
-//                "com.example.t2m.moneytracker"
-//        );
-//        imganhItem.setImageResource(idImg);
-        // lấy ảnh từ asset
-        String base_path = "category/";
-        try {
-            Drawable img = Drawable.createFromStream(getContext().getAssets().open(base_path + wallet.getImageSrc()),null);
-            imganhItem.setImageDrawable(img);
-        } catch (IOException e) {
-            e.printStackTrace();
+        // lấy id của ảnh
+        int idImg = context.getResources().getIdentifier(
+                wallet.getImageSrc(),
+                "drawable",
+                "com.example.t2m.moneytracker"
+        );
+        if(idImg == 0) {
+            idImg = R.drawable.ic_account_balance_wallet_black_24dp;
         }
+        imganhItem.setImageResource(idImg);
+//         lấy ảnh từ asset
+//        String base_path = "category/";
+//        try {
+//            Drawable img = Drawable.createFromStream(getContext().getAssets().open(base_path + wallet.getImageSrc()),null);
+//            imganhItem.setImageDrawable(img);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         return convertView;
     }
 }
