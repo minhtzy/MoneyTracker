@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        //updateUI(currentUser);
     }
 
     private void updateUI(FirebaseUser currentUser) {
@@ -79,9 +79,9 @@ public class LoginActivity extends AppCompatActivity {
     private void addControls() {
         txtEmailLo =(EditText)findViewById(R.id.txtEmailLo);
         txtPassWordLo = (EditText)findViewById(R.id.txtPassWordLo);
-        btnSingInLo = (Button)findViewById(R.id.btnSiginpLo);
-        btnSignupLo = (Button)findViewById(R.id.btnSingupLo);
-        btnForgotPasswordLo = (Button)findViewById(R.id.btnForgotPasswordLo);
+        btnSingInLo = (Button)findViewById(R.id.btnSigninLo);
+        btnSignupLo = (Button)findViewById(R.id.btnSignupLo);
+        btnForgotPasswordLo = (Button)findViewById(R.id.btnForgotpasswordLo);
 
     }
 
@@ -98,6 +98,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this,RegistrationActivity.class);
                 startActivityForResult(intent,11);
+                txtEmailLo.setError(null);
+                txtPassWordLo.setError(null);
+                txtPassWordLo.setText("");
             }
         });
         btnSingInLo.setOnClickListener(new View.OnClickListener() {
@@ -160,11 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == 11 && resultCode == 11){
                 txtEmailLo.setText(data.getStringExtra("username"));
-                progressDialog = new ProgressDialog(this);
-                progressDialog.setTitle("Thông báo: ");
-                progressDialog.setMessage("Bạn đã đăng ký thành công tài khoản: \n"+data.getStringExtra("username")+"\n"+"Đăng nhập ngay!");
-                progressDialog.setCanceledOnTouchOutside(true);
-                progressDialog.show();
+                Toast.makeText(this, "Bạn đã đăng ký thành công tài khoản "+data.getStringExtra("username"), Toast.LENGTH_LONG).show();
             }
 
     }
