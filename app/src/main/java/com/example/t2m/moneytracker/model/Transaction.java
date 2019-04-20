@@ -2,6 +2,7 @@ package com.example.t2m.moneytracker.model;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 
 public class Transaction implements Serializable {
@@ -12,12 +13,13 @@ public class Transaction implements Serializable {
     private float moneyTrading;
     private String currencyCode;
     private String location;
+    private TransactionType transactionType;
     private Category category;
     Wallet wallet;
 
     public Transaction() {
         this.transactionDate = Calendar.getInstance().getTime();
-        category = new Category();
+        transactionType = new TransactionType();
     }
 
     public Transaction(TransactionBuilder builder) {
@@ -27,7 +29,7 @@ public class Transaction implements Serializable {
         this.moneyTrading = builder.moneyTrading;
         this.currencyCode = builder.currencyCode;
         this.location = builder.location;
-        this.category = builder.category;
+        this.transactionType = builder.transactionType;
         this.wallet = builder.wallet;
     }
 
@@ -46,12 +48,12 @@ public class Transaction implements Serializable {
         this.location = location;
     }
 
-    public Category getCategory() {
-        return category;
+    public TransactionType getTransactionType() {
+        return transactionType;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
     }
 
     public Wallet getWallet() {
@@ -80,6 +82,7 @@ public class Transaction implements Serializable {
 
     public float getMoneyTrading() {
         int type = category.getType().getValue();
+
         if(type == 1 || type == 3) {
             return -1 * Math.abs(moneyTrading);
         }
@@ -108,7 +111,7 @@ public class Transaction implements Serializable {
         private float moneyTrading;
         private String currencyCode;
         private String location;
-        private Category category;
+        private TransactionType transactionType;
         Wallet wallet;
 
         public TransactionBuilder() {
@@ -143,8 +146,8 @@ public class Transaction implements Serializable {
             return this;
         }
 
-        public TransactionBuilder setCategory(Category category) {
-            this.category = category;
+        public TransactionBuilder setTransactionType(TransactionType transactionType) {
+            this.transactionType = transactionType;
             return this;
         }
 

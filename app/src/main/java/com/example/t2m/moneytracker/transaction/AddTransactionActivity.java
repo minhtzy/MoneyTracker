@@ -20,11 +20,11 @@ import com.example.t2m.moneytracker.R;
 import com.example.t2m.moneytracker.adapter.WalletListAdapter;
 import com.example.t2m.moneytracker.dataaccess.ITransactionsDAO;
 import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
-import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
 import com.example.t2m.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
-import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.model.Category;
+import com.example.t2m.moneytracker.model.Transaction;
+import com.example.t2m.moneytracker.model.TransactionType;
 import com.example.t2m.moneytracker.model.Wallet;
 import com.example.t2m.moneytracker.utilities.TransactionsManager;
 import com.example.t2m.moneytracker.wallet.SelectCategoryActivity;
@@ -54,8 +54,10 @@ public class AddTransactionActivity extends AppCompatActivity {
     private IWalletsDAO iWalletsDAO;
     private ITransactionsDAO iTransactionsDAO;
     private List<Wallet> mListWallet;
-    private Category mCurrentCategory =null;
+    private TransactionType mCurrentTransactionType =null;
     private Wallet mCurrentWallet = null;
+    private Category mCurrentCategory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,7 +121,7 @@ public class AddTransactionActivity extends AppCompatActivity {
             mTextWallet.requestFocus();
             return;
         }
-        if(mCurrentCategory == null) {
+        if(mCurrentTransactionType == null) {
             mTextCategory.setError("Chọn kiểu giao dịch");
             mTextCategory.requestFocus();
             return;
@@ -129,7 +131,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         Date date = mCalendar.getTime();
         Transaction transaction = new Transaction.TransactionBuilder()
                 .setTransactionDate(date)
-                .setCategory(mCurrentCategory)
+                .setTransactionType(mCurrentTransactionType)
                 .setWallet(mCurrentWallet)
                 .setCurrencyCode(mCurrentWallet.getCurrencyCode())
                 .setMoneyTrading(money)
@@ -207,16 +209,19 @@ public class AddTransactionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == REQUEST_CODE_CATEGORY) {
             if(resultCode == RESULT_OK) {
+
                 mCurrentCategory =(Category) data.getSerializableExtra(SelectCategoryActivity.EXTRA_CATEGORY);
+
                 updateUI();
             }
         }
     }
 
     private void updateUI() {
-        if(mCurrentCategory != null) {
-            mTextCategory.setText(mCurrentCategory.getCategory());
+        if(mCurrentTransactionType != null) {
+            mTextCategory.setText(mCurrentTransactionType.getCategory());
             ImageView imageView = findViewById(R.id.image_transaction_category);
+
             // lấy ảnh từ asset
             String base_path = "category/";
             try {

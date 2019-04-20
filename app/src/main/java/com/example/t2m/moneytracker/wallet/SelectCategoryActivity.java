@@ -14,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.t2m.moneytracker.R;
+
 import com.example.t2m.moneytracker.adapter.CategoriesPagerAdapter;
 import com.example.t2m.moneytracker.model.Category;
+
 
 public class SelectCategoryActivity extends AppCompatActivity implements ListCategoryFragment.OnCategoryFragmenListener {
 

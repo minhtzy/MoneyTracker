@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,22 +22,29 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.example.t2m.moneytracker.R;
+
 import com.example.t2m.moneytracker.adapter.TransactionPagerAdapter;
 import com.example.t2m.moneytracker.common.Constants;
 import com.example.t2m.moneytracker.dataaccess.ITransactionsDAO;
+
 import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
 import com.example.t2m.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.example.t2m.moneytracker.model.DateRange;
 import com.example.t2m.moneytracker.model.MTDate;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.model.Wallet;
+
 import com.example.t2m.moneytracker.utilities.DateUtils;
 import com.example.t2m.moneytracker.utilities.TransactionsManager;
 import com.example.t2m.moneytracker.utilities.WalletsManager;
 
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 import java.util.Calendar;
 import java.util.Date;
+
 import java.util.List;
 
 public class TransactionTabFragment extends Fragment {

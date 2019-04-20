@@ -11,7 +11,7 @@ import android.util.Log;
 import com.example.t2m.moneytracker.R;
 import com.example.t2m.moneytracker.common.Constants;
 import com.example.t2m.moneytracker.model.Transaction;
-import com.example.t2m.moneytracker.model.Category;
+import com.example.t2m.moneytracker.model.TransactionType;
 import com.example.t2m.moneytracker.model.Wallet;
 import com.google.android.gms.common.util.IOUtils;
 
@@ -30,12 +30,6 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
     public static final String LOG_TAG = "MONEY_TRACKER_DB_HELPER";
     public static final String DB_FILE_NAME = "money_tracker.db";
     public static final int DB_VERSION = 1;
-
-
-
-
-
-
 
     private Context mContext;
 
@@ -104,8 +98,9 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
         }
     }
 
+
     private void dropDatabase(SQLiteDatabase db) {
-        executeRawSql(db,R.raw.drop_money_tracker_database);
+        executeRawSql(db, R.raw.drop_money_tracker_database);
     }
 
 }
