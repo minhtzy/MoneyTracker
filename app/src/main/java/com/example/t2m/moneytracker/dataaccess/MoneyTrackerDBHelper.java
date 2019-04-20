@@ -1,8 +1,6 @@
 package com.example.t2m.moneytracker.dataaccess;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -10,18 +8,11 @@ import android.util.Log;
 
 import com.example.t2m.moneytracker.R;
 import com.example.t2m.moneytracker.common.Constants;
-import com.example.t2m.moneytracker.model.Transaction;
-import com.example.t2m.moneytracker.model.TransactionType;
-import com.example.t2m.moneytracker.model.Wallet;
 import com.google.android.gms.common.util.IOUtils;
 
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 
 
 public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
