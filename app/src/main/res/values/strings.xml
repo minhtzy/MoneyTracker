@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">MoneyTracker</string>
+    <string name="select_category_name">Chọn Nhóm</string>
+    <string name="add_transaction_name">Thêm Giao Dịch</string>
+    <string name="login_name">Đăng nhập</string>
+    <string name="register_name">Đăng ký</string>
+
     <string name="title_activity_main_drawer">MainDrawerActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -13,4 +18,26 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- title category type  -->
+    <string name="income_category_title">Khoản thu</string>
+    <string name="expense_category_title">Khoản chi</string>
+    <string name="debt_loan_category_title">Nợ/Cho vay</string>
+
+    <!-- transaction list periods -->
+    <string name="all_transaction">Tất cả giao dịch</string>
+    <string name="all_time">Tất cả thời gian</string>
+    <string name="today">Hôm nay</string>
+    <string name="last7days">7 ngày trước</string>
+    <string name="last15days">2 tuần trước</string>
+    <string name="last30days">Last 30 Days</string>
+    <string name="last_month">Tháng trước</string>
+    <string name="last3months">3 tháng trước</string>
+    <string name="last6months">6 tháng trước</string>
+    <string name="current_month">Tháng này</string>
+    <string name="last_year">Năm trước</string>
+    <string name="current_year">Năm nay</string>
+    <string name="future_transactions">Tương lai</string>
+
+
 </resources>

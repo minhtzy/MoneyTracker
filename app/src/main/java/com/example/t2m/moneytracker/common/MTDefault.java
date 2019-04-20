@@ -1,29 +1,28 @@
 package com.example.t2m.moneytracker.common;
 
+import android.content.Context;
+import android.preference.Preference;
+
 import com.example.t2m.moneytracker.model.Wallet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MTDefault {
-    private Wallet mWallet;
+    private Context mContext;
     private static final MTDefault ourInstance = new MTDefault();
 
-    public static MTDefault getInstance() {
+    public static MTDefault getInstance(Context context) {
+        ourInstance.mContext = context;
         return ourInstance;
     }
 
+    Preference mPreference;
     private MTDefault() {
+        //mPreference = getSharedPreferences(Constants.AppPreferences,Context.MODE_PRIVATE)
     }
 
-    public FirebaseUser getUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-    public Wallet getCurrentWallet() {
-        return mWallet;
-    }
-
-    public void setCurrentWallet(Wallet wallet) {
-        mWallet = wallet;
+    public String getStringForKey(String key,String defaultValue) {
+        return defaultValue;
     }
 
 }

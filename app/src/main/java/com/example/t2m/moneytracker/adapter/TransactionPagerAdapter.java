@@ -8,12 +8,17 @@ import android.util.Pair;
 
 import java.util.List;
 
-public class TransactionTabAdapter extends FragmentPagerAdapter {
-    private final List<Pair<String,Fragment>> mFragmentList;
+public class TransactionPagerAdapter extends FragmentPagerAdapter {
+    public List<Pair<String,Fragment>> mFragmentList;
 
-    public TransactionTabAdapter(FragmentManager fm,List<Pair<String,Fragment>> fragmentList) {
+    public TransactionPagerAdapter(FragmentManager fm, List<Pair<String,Fragment>> fragmentList) {
         super(fm);
         mFragmentList = fragmentList;
+    }
+
+    public void updateValues( List<Pair<String,Fragment>> fragmentList) {
+        mFragmentList = fragmentList;
+        notifyDataSetChanged();
     }
 
     @Override

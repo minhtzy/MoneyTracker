@@ -20,8 +20,6 @@ public class Transaction implements Serializable {
         category = new Category();
     }
 
-
-
     public Transaction(TransactionBuilder builder) {
         this.transactionId = builder.transactionId;
         this.transactionDate = builder.transactionDate;
@@ -81,7 +79,7 @@ public class Transaction implements Serializable {
     }
 
     public float getMoneyTrading() {
-        int type = category.getType();
+        int type = category.getType().getValue();
         if(type == 1 || type == 3) {
             return -1 * Math.abs(moneyTrading);
         }

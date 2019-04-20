@@ -18,11 +18,11 @@ import java.util.List;
 /**
  * Created by minhthuanht on 24,March,2019
  */
-public class ListCategoryAdapter extends ArrayAdapter<Category> {
+public class CategoryListAdapter extends ArrayAdapter<Category> {
     Activity context;
     int resource;
-    List<Category> objects;
-    public ListCategoryAdapter(Activity context, int resource, List<Category> objects) {
+    public List<Category> objects;
+    public CategoryListAdapter(Activity context, int resource, List<Category> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -36,8 +36,8 @@ public class ListCategoryAdapter extends ArrayAdapter<Category> {
         LayoutInflater inflater = context.getLayoutInflater();
         if(convertView == null)
             convertView= inflater.inflate(this.resource,null);
-        ImageView imganhItem = (ImageView)convertView.findViewById(R.id.imganhItem);
-        TextView txtTenitem = (TextView)convertView.findViewById(R.id.txtTenitem);
+        ImageView imganhItem = (ImageView)convertView.findViewById(R.id.imgCategoryLogo);
+        TextView txtTenitem = (TextView)convertView.findViewById(R.id.txtCategoryTitle);
 
         Category category = this.objects.get(position);
         txtTenitem.setText(category.getCategory());

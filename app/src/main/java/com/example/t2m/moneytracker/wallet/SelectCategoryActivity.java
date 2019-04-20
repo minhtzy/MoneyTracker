@@ -1,89 +1,66 @@
 package com.example.t2m.moneytracker.wallet;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 
 import com.example.t2m.moneytracker.R;
-import com.example.t2m.moneytracker.adapter.ListCategoryAdapter;
-import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
+import com.example.t2m.moneytracker.adapter.CategoriesPagerAdapter;
 import com.example.t2m.moneytracker.model.Category;
 
-import java.util.ArrayList;
-import java.util.List;
+public class SelectCategoryActivity extends AppCompatActivity implements ListCategoryFragment.OnCategoryFragmenListener {
 
-public class SelectCategoryActivity extends AppCompatActivity {
-
-    Button btnBacktoaddwallet;
-    ArrayList<Category> arrayListListchoose;
-    ArrayAdapter arrayAdapterListchoose;
-    ListView lvListchoose;
+    public static final String EXTRA_CATEGORY = "SelectCategoryActivity.Extra.Category";
+    Button btnCancle;
+    TabLayout mTabLayout;
+    ViewPager mViewPager;
+    PagerAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_category);
-        
         addControls();
         addEvents();
-
-        ShowAllListChoose();
     }
 
-    private void ShowAllListChoose() {
-//        LoginActivity.database = openOrCreateDatabase(LoginActivity.DATABASE_NAME,MODE_PRIVATE,null);
-//        Cursor cursor = LoginActivity.database.rawQuery("SELECT * FROM listchoose",null);
-//        arrayListListchoose.clear();
-//        while (cursor.moveToNext()){
-//            String ten = cursor.getString(1);
-//            String anh = cursor.getString(2);
-//
-//            ListChoose listChoose = new ListChoose();
-//            listChoose.setTen(ten);
-//            listChoose.setAnh(anh);
-//            arrayListListchoose.add(listChoose);
-//        }
-//        cursor.close();
-        MoneyTrackerDBHelper dbHelper = new MoneyTrackerDBHelper(this);
-        List<Category> types = dbHelper.getAllTransactionType();
-        arrayListListchoose.addAll(types);
-        arrayAdapterListchoose.notifyDataSetChanged();
-
-    }
 
     private void addEvents() {
-        btnBacktoaddwallet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+
+//        btnCancle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+
+        mAdapter = new CategoriesPagerAdapter(this.getSupportFragmentManager(),this);
+        mViewPager.setAdapter(mAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setScrollPosition(1,0f,true);
+        mViewPager.setCurrentItem(1);
     }
 
     private void addControls() {
-        btnBacktoaddwallet = (Button)findViewById(R.id.btnBacktoaddwallet);
-        lvListchoose = (ListView)findViewById(R.id.lvListchoose);
-        arrayListListchoose = new ArrayList<>();
-        arrayAdapterListchoose = new ListCategoryAdapter(
-                SelectCategoryActivity.this,
-                R.layout.custom_item_category,
-                arrayListListchoose
-        );
-        lvListchoose.setAdapter(arrayAdapterListchoose);
 
-        lvListchoose.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Category category = arrayListListchoose.get(position);
-                Intent intent = new Intent();
-                intent.putExtra("transaction_type", category);
-                setResult(RESULT_OK,intent);
-                finish();
-            }
-        });
+        mTabLayout = findViewById(R.id.tab_layout_categories);
+        mViewPager = findViewById(R.id.view_pager_categories);
+    }
+
+
+    @Override
+    public void onItemClicked(Category category) {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_CATEGORY,category);
+        setResult(RESULT_OK,intent);
+        finish();
     }
 }

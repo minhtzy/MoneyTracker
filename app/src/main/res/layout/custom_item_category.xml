@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:background="@drawable/vien4">
     <ImageView
-        android:id="@+id/imganhItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:src="@drawable/cafet"
-        android:padding="10dp"
+        android:id="@+id/imgCategoryLogo"
+        android:layout_width="@dimen/item_category_parent_size"
+        android:layout_height="@dimen/item_category_parent_size"
+        android:contentDescription="logo"
+        android:layout_alignParentStart="true"
+        android:layout_margin="8dp"
         />
     <TextView
-        android:id="@+id/txtTenitem"
+        android:id="@+id/txtCategoryTitle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="8"
-        android:background="@drawable/vien4"
-        android:text="Ăn uống"/>
-</LinearLayout>
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="48dp"
+        android:textSize="24sp"
+        android:text="Category"/>
+</RelativeLayout>
