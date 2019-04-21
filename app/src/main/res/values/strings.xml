@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">MoneyTracker</string>
+
     <string name="title_activity_main_drawer" translatable="false">Main Drawer Activity</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
@@ -11,6 +12,10 @@
     <string name="title_activity_transaction_tab" translatable="false">Transaction Tab Activity</string>
     <string name="section_format" translatable="false">Hello World from section: %1$d</string>
 
+    <string name="select_category_name">Chọn Nhóm</string>
+    <string name="add_transaction_name">Thêm Giao Dịch</string>
+    <string name="login_name">Đăng nhập</string>
+    <string name="register_name">Đăng ký</string>
 
     <!--text in activity_add_wallet.xml-->
     <string name="name_wallet">Tên ví</string>
@@ -52,7 +57,7 @@
     <string name="share">Chia sẻ</string>
     <string name="send">Gửi</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
 
     <!--change language-->
     <string name="change_language_title">Ngôn ngữ</string>
@@ -79,5 +84,27 @@
         <item>@string/language_japanese_code</item>
 
     </string-array>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- title category type  -->
+    <string name="income_category_title">Khoản thu</string>
+    <string name="expense_category_title">Khoản chi</string>
+    <string name="debt_loan_category_title">Nợ/Cho vay</string>
+
+    <!-- transaction list periods -->
+    <string name="all_transaction">Tất cả giao dịch</string>
+    <string name="all_time">Tất cả thời gian</string>
+    <string name="today">Hôm nay</string>
+    <string name="last7days">7 ngày trước</string>
+    <string name="last15days">2 tuần trước</string>
+    <string name="last30days">Last 30 Days</string>
+    <string name="last_month">Tháng trước</string>
+    <string name="last3months">3 tháng trước</string>
+    <string name="last6months">6 tháng trước</string>
+    <string name="current_month">Tháng này</string>
+    <string name="last_year">Năm trước</string>
+    <string name="current_year">Năm nay</string>
+    <string name="future_transactions">Tương lai</string>
+
 
 </resources>

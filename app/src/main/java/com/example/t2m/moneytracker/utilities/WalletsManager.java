@@ -2,7 +2,9 @@ package com.example.t2m.moneytracker.utilities;
 
 import android.content.Context;
 
+import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
 import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
+import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
 import com.example.t2m.moneytracker.model.Wallet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WalletsManager {
-    private MoneyTrackerDBHelper dbHelper;
+    private IWalletsDAO iWalletsDAO;
     private List<Wallet> wallets;
     private static final WalletsManager ourInstance = new WalletsManager();
 
@@ -22,7 +24,7 @@ public class WalletsManager {
 
     private void setContext(Context context) {
         if(context != null) {
-            this.dbHelper = new MoneyTrackerDBHelper(context);
+            this.iWalletsDAO = new WalletsDAOImpl(context);
         }
     }
 
@@ -32,7 +34,7 @@ public class WalletsManager {
     public Wallet getCurrentWallet() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser != null) {
-            return dbHelper.getAllWalletByUser(currentUser.getUid()).get(0);
+            return iWalletsDAO.getAllWalletByUser(currentUser.getUid()).get(0);
         }
         return null;
     }

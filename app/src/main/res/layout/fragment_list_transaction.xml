@@ -7,6 +7,8 @@
     android:theme="@style/AppTheme.NoActionBar"
     tools:context=".transaction.TransactionListFragment">
 
+    <!--<include layout="@layout/header_transaction_statistics" />-->
+
     <com.example.t2m.moneytracker.pinnedlistview.PinnedHeaderListView
         android:id="@+id/list_view_transaction"
         android:layout_width="match_parent"
@@ -15,5 +17,6 @@
         android:clipToPadding="false">
 
     </com.example.t2m.moneytracker.pinnedlistview.PinnedHeaderListView>
+
 
 </RelativeLayout>

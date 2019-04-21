@@ -3,7 +3,14 @@ package com.example.t2m.moneytracker.utilities;
 
 import android.content.Context;
 
+import com.example.t2m.moneytracker.dataaccess.CategoriesDAOImpl;
+import com.example.t2m.moneytracker.dataaccess.ICategoriesDAO;
+import com.example.t2m.moneytracker.dataaccess.ITransactionsDAO;
+import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
 import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
+import com.example.t2m.moneytracker.dataaccess.TransactionsDAOImpl;
+import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
+import com.example.t2m.moneytracker.model.DateRange;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.model.Wallet;
 
@@ -13,9 +20,10 @@ import java.util.List;
 
 public class TransactionsManager {
 
-    private Wallet wallet;
-    List<Transaction> transactions;
-    MoneyTrackerDBHelper dbHelper = null;
+    private Wallet mWallet;
+    private List<Transaction> transactions;
+    private ITransactionsDAO iTransactionsDAO;
+    private IWalletsDAO iWalletsDAO;
     private static final TransactionsManager ourInstance = new TransactionsManager();
 
     public static TransactionsManager getInstance(Context context) {
@@ -24,15 +32,18 @@ public class TransactionsManager {
     }
 
     private TransactionsManager() {
-        wallet = null;
+        mWallet = null;
         transactions = new ArrayList<>();
     }
     private void setContext(Context context) {
-        if(context != null) dbHelper = new MoneyTrackerDBHelper(context.getApplicationContext());
+        if(context != null) {
+            iTransactionsDAO = new TransactionsDAOImpl(context);
+            iWalletsDAO = new WalletsDAOImpl(context);
+        }
     }
 
     public void setCurrentWallet(Wallet wallet) {
-        this.wallet = wallet;
+        this.mWallet = wallet;
         updateTransactions(wallet);
     }
 
@@ -40,15 +51,12 @@ public class TransactionsManager {
         return transactions;
     }
 
-    public List<Transaction> getAllTransactionByTime(int dayOfMonth,int month,int year) {
+    public List<Transaction> getAllTransactionByTime(DateRange dateRange) {
         List<Transaction> filterTransaction = new ArrayList<>();
 
         for(Transaction tran : transactions) {
             Date date = tran.getTransactionDate();
-            int t_dayOfMonth = DateUtils.getDayOfMonth(date);
-            int t_month = DateUtils.getMonth(date);
-            int t_year = DateUtils.getYear(date);
-            if((dayOfMonth == 0 || dayOfMonth == t_dayOfMonth) && (month == 0 || month == t_month) && year == t_year) {
+            if(dateRange.isContain(date)) {
                 filterTransaction.add(tran);
             }
         }
@@ -58,22 +66,23 @@ public class TransactionsManager {
 
     public boolean addTransaction(Transaction transaction) {
         transactions.add(transaction);
-        dbHelper.insertTransaction(transaction);
+        iTransactionsDAO.insertTransaction(transaction);
         updateWallet(transaction);
         return true;
     }
 
     private boolean updateWallet(Transaction transaction) {
+        Wallet wallet = transaction.getWallet();
         float balance = wallet.getCurrentBalance();
         balance -= transaction.getMoneyTrading();
         wallet.setCurrentBalance(balance);
-        dbHelper.updateWallet(wallet);
+        iWalletsDAO.updateWallet(wallet);
         return true;
     }
     private void updateTransactions(Wallet wallet) {
         transactions.clear();
         if(wallet != null){
-            transactions = dbHelper.getAllTransactionByWalletId(wallet.getWalletId());
+            transactions = iTransactionsDAO.getAllTransactionByWalletId(wallet.getWalletId());
         }
     }
 }

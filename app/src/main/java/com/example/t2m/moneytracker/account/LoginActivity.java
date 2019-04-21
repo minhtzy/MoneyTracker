@@ -3,8 +3,6 @@ package com.example.t2m.moneytracker.account;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,6 +17,9 @@ import android.widget.Toast;
 
 import com.example.t2m.moneytracker.MainActivity;
 import com.example.t2m.moneytracker.R;
+import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
+import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
+import com.example.t2m.moneytracker.wallet.AddWalletActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -26,12 +27,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -62,14 +57,21 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        //updateUI(currentUser);
+        updateUI(currentUser);
     }
 
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser !=null) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("username", currentUser.getEmail());
-            startActivity(intent);
+            // check wallet
+            IWalletsDAO iWalletsDAO = new WalletsDAOImpl(this);
+            if(iWalletsDAO.hasWallet(currentUser.getUid()) ) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+            else  {
+                Intent intent = new Intent(LoginActivity.this, AddWalletActivity.class);
+                startActivity(intent);
+            }
             finish();
         }
     }

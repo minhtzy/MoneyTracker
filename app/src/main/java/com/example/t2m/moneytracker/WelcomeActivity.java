@@ -40,14 +40,6 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void setupApplication() {
-        SharedPreferences sharedPreferences = this.getSharedPreferences(DB_PREFS,Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        // Kiểm tra lần đầu khởi tạo
-        if(sharedPreferences.getBoolean(KEY_IS_FIRST_TIME_INIT_DATABASE,true)) {
-            CopySqlitetoSystemMobile();
-            editor.putBoolean(KEY_IS_FIRST_TIME_INIT_DATABASE,false);
-            editor.commit();
-        }
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -56,67 +48,23 @@ public class WelcomeActivity extends AppCompatActivity {
         }, 1000);
     }
     private void startApplication() {
-        // Kiểm tra nếu chưa đăng nhập thì đăng nhập
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user == null) {
+//        // Kiểm tra nếu chưa đăng nhập thì đăng nhập
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        if(user == null) {
             Intent intent = new Intent(this,LoginActivity.class);
             startActivity(intent);
-        }
-        // Kiểm tra nếu chưa có ví
-        else if(false) {
-            Intent intent = new Intent(this,AddWalletActivity.class);
-            startActivity(intent);
-        }
-        else {
-            Intent intent = new Intent(this,MainActivity.class);
-            startActivity(intent);
-        }
+//        }
+//        // Kiểm tra nếu chưa có ví
+//        else if(false) {
+//            Intent intent = new Intent(this,AddWalletActivity.class);
+//            startActivity(intent);
+//        }
+//        else {
+//            Intent intent = new Intent(this,MainActivity.class);
+//            startActivity(intent);
+//        }
         finish();
     }
 
-    private void CopyDatabasefromAssetToSystem() {
-        try {
-            // luồng đọc file
-            InputStream inputStream = getAssets().open(DATABASE_NAME);
-            String outFilename = LayDuongDan();
-            // if the path doesn't exist first, create it
-            File f = new File(getApplicationInfo().dataDir + DB_PATH_SUFFIX);
-            if (!f.exists()){
-                f.mkdir();
-            }
-            // Open the empty db as the output stream
-            // Tạo một luồng ký tự đầu ra với mục đích ghi thông tin vào file
-            OutputStream outputStream = new FileOutputStream(outFilename);
-            // transfer bytes from the inputfile to the outputfile
-            // Tạo một mảng byte ,ta sẽ ghi các byte này vào file nói trên .
-            byte[] buffer = new byte[1024];
-            int length;
-            // Ghi lần lượt các ký tự vào luồng
-            while ((length = inputStream.read(buffer)) > 0){
-                outputStream.write(buffer,0,length);
-            }
-            // Close the streams
-            outputStream.flush();// những cái gì còn lại cta tống ra hết
-            outputStream.close();
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private String LayDuongDan() {
-
-        return getApplicationInfo().dataDir + DB_PATH_SUFFIX + DATABASE_NAME ;
-    }
-
-    private void CopySqlitetoSystemMobile() {
-        File dbFile = getDatabasePath(DATABASE_NAME);
-        if (!dbFile.exists()){
-            try {
-                CopyDatabasefromAssetToSystem();
-            }catch (Exception ex){
-                ex.printStackTrace();
-            }
-        }
-    }
 }

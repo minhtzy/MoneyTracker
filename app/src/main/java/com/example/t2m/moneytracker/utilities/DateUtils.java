@@ -1,57 +1,137 @@
 package com.example.t2m.moneytracker.utilities;
 
+import android.content.Context;
+import android.text.TextUtils;
+import android.widget.DatePicker;
+
+import com.example.t2m.moneytracker.R;
+import com.example.t2m.moneytracker.model.DateRange;
+import com.example.t2m.moneytracker.model.MTDate;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateUtils {
-    private DateUtils() {
+    private Locale _locale = Locale.ENGLISH;
+
+    public DateUtils() {
+
     }
 
-    public static int getDayOfMonth(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal.get(Calendar.DAY_OF_MONTH);
-    }
-    public static int getMonth(Date date){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal.get(Calendar.MONTH);
-    }
-    public static int getYear(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal.get(Calendar.YEAR);
-    }
-    public static int compareYear(Date date1,Date date2) {
-        int year1 = DateUtils.getYear(date1);
-        int year2 = DateUtils.getYear(date2);
-        return year1 - year2;
+    public DateUtils(Locale locale) {
+        _locale = locale;
     }
 
-    public static int compareMonth(Date date1, Date date2) {
-        int month1 = DateUtils.getMonth(date1);
-        int month2 = DateUtils.getMonth(date2);
-        return month1 - month2;
-    }
-    public static int compareDayOfMonth(Date date1, Date date2) {
-        int day1 = DateUtils.getDayOfMonth(date1);
-        int day2 = DateUtils.getDayOfMonth(date2);
-        return day1 - day2;
+    public Date from(int year, int monthOfYear, int dayOfMonth) {
+        return new MTDate(year, monthOfYear, dayOfMonth).toDate();
     }
 
-    public static int compareDate(Date date1, Date date2) {
-        int result = compareYear(date1,date2);
-        if(result == 0) {
-            result = compareMonth(date1,date2);
-            if(result ==0 ) {
-                return compareDayOfMonth(date1,date2);
-            }
-            else {
-                return result;
-            }
+    public Date from(DatePicker datePicker) {
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year = datePicker.getYear();
+
+        return new MTDate(year, month, day).toDate();
+    }
+
+    public String format(Date date, String format) {
+        return getFormatterFor(format).format(date);
+    }
+    public DateRange getDateRangeForPeriod(Context context, int resourceId) {
+        String value = context.getString(resourceId);
+        return getDateRangeForPeriod(context, value);
+    }
+
+    /**
+     * Creates a date range from the period name. Used when selecting a date range from the
+     * localized menus.
+     * @param period Period name in local language.
+     * @return Date Range object.
+     */
+    public DateRange getDateRangeForPeriod(Context context, String period) {
+        if (TextUtils.isEmpty(period)) return null;
+
+        MTDate dateFrom = new MTDate();
+        MTDate dateTo = new MTDate();
+
+        // we ignore the minutes at the moment, since the field in the db only stores the date value.
+
+        if (period.equalsIgnoreCase(context.getString(R.string.all_transaction)) ||
+                period.equalsIgnoreCase(context.getString(R.string.all_time))) {
+            // All transactions.
+            dateFrom = dateFrom.today().minusYears(1000);
+            dateTo = dateTo.today().plusYears(1000);
+        } else if (period.equalsIgnoreCase(context.getString(R.string.today))) {
+            dateFrom = dateFrom.today();
+            dateTo = dateTo.today();
+        } else if (period.equalsIgnoreCase(context.getString(R.string.last7days))) {
+            dateFrom = dateFrom.today().minusDays(7);
+            dateTo = dateTo.today();
+        } else if (period.equalsIgnoreCase(context.getString(R.string.last15days))) {
+            dateFrom = dateFrom.today().minusDays(14);
+            dateTo = dateTo.today();
+        } else if (period.equalsIgnoreCase(context.getString(R.string.current_month))) {
+            dateFrom = dateFrom.today().firstDayOfMonth();
+            dateTo = dateTo.today().lastDayOfMonth();
+        } else if (period.equalsIgnoreCase(context.getString(R.string.last30days))) {
+            dateFrom = dateFrom.today().minusDays(30);
+            dateTo = dateTo.today();
+        } else if (period.equalsIgnoreCase(context.getString(R.string.last3months))) {
+            dateFrom = dateFrom.today().minusMonths(3)
+                    .firstDayOfMonth();
+            dateTo = dateTo.today();
+        } else if (period.equalsIgnoreCase(context.getString(R.string.last6months))) {
+            dateFrom = dateFrom.today().minusMonths(6)
+                    .firstDayOfMonth();
+            dateTo = dateTo.today();
+        } else if (period.equalsIgnoreCase(context.getString(R.string.current_year))) {
+            dateFrom = dateFrom.today().firstMonthOfYear()
+                    .firstDayOfMonth();
+            dateTo = dateTo.today().lastMonthOfYear()
+                    .lastDayOfMonth();
+        } else if (period.equalsIgnoreCase(context.getString(R.string.future_transactions))) {
+            // Future transactions
+            dateFrom = dateFrom.today().plusDays(1);
+            dateTo = dateTo.today().plusYears(1000);
+        } else {
+            dateFrom = null;
+            dateTo = null;
         }
-        else {
-            return result;
-        }
+
+        DateRange result = new DateRange(dateFrom.toDate(), dateTo.toDate());
+        return result;
+    }
+
+    public String getDateStringFrom(Date dateTime, String pattern) {
+        SimpleDateFormat format = getFormatterFor(pattern);
+//        DateTimeFormatter format = DateTimeFormat.forPattern(pattern);
+//        String result = format.print(dateTime);
+        return format.format(dateTime);
+//        return result;
+    }
+
+    public int getFirstDayOfWeek() {
+        Calendar cal = Calendar.getInstance(_locale);
+        return cal.getFirstDayOfWeek();
+    }
+
+
+    public Date now() {
+        return new MTDate().toDate();
+    }
+
+    public void setDatePicker(Date date, DatePicker datePicker) {
+        MTDate dateTime = new MTDate(date);
+        datePicker.updateDate(dateTime.getYear(), dateTime.getMonthOfYear(), dateTime.getDayOfMonth());
+    }
+
+    /*
+        Private
+     */
+
+    private SimpleDateFormat getFormatterFor(String format) {
+        return new SimpleDateFormat(format, _locale);
     }
 }

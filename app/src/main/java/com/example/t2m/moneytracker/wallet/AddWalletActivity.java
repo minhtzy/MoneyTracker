@@ -11,9 +11,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.widget.Toolbar;
 
+import com.example.t2m.moneytracker.MainActivity;
 import com.example.t2m.moneytracker.R;
+import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
+import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
+import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
+import com.example.t2m.moneytracker.model.Wallet;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class AddWalletActivity extends AppCompatActivity {
 
@@ -36,14 +41,36 @@ public class AddWalletActivity extends AppCompatActivity {
                 finish();
             }
         });
-        btnNhom.setOnClickListener(new View.OnClickListener() {
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddWalletActivity.this,SelectCategoryActivity.class);
+                addWallet();
+                Intent intent = new Intent(AddWalletActivity.this,MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
+    }
+
+    private void addWallet() {
+        String name = txtTen.getText().toString();
+        int soTien = Integer.parseInt(txtSotien.getText().toString());
+        if(name.isEmpty() ) {
+            txtTen.setError("Tên không được để trống");
+            txtTen.requestFocus();
+            return;
+        }
+        IWalletsDAO iWalletsDAO = new WalletsDAOImpl(this);
+        Wallet wallet = new Wallet.WalletBuilder()
+                .setWalletName(name)
+                .setCurrentBalance(soTien)
+                .setUserUID(FirebaseAuth.getInstance().getUid())
+                .setCurrencyCode("VND")
+                .setWalletType(1)
+                .setImageSrc("")
+                .build();
+        iWalletsDAO.insertWallet(wallet);
     }
 
     private void addControls() {
@@ -51,7 +78,7 @@ public class AddWalletActivity extends AppCompatActivity {
         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         LayoutInflater inflater =(LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.add_wallet_custom_action_bar,null);
+        View view = inflater.inflate(R.layout.custom_action_bar_add_wallet,null);
         getSupportActionBar().setCustomView(view,new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
 
         //
@@ -61,5 +88,6 @@ public class AddWalletActivity extends AppCompatActivity {
         swtTinhtong = (Switch)findViewById(R.id.swtTichtong);
         btnCancel = (Button)view.findViewById(R.id.btnCancel);
         btnSave = (Button)view.findViewById(R.id.btnSave);
+
     }
 }

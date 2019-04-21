@@ -1,28 +1,26 @@
 package com.example.t2m.moneytracker.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Category implements Serializable {
     private int id;
-    private int type;
+    private TransactionTypes type;
     private String icon;
     private String category;
-    private Category parentType;
+    private List<Category> subCategories;
 
 
-    public static final int TRANSACTION_TYPE_EXPENSE = 1;
-    public static final int TRANSACTION_TYPE_INCOME = 2;
-    public static final int TRANSACTION_TYPE_DEBIT = 3;
-    public static final int TRANSACTION_TYPE_LOAN = 4;
+
     public Category() {
     }
 
-    public Category(int id, int type, String category, String icon, Category parentType) {
+    public Category(int id, int type, String category, String icon,  List<Category> subCategories) {
         this.id = id;
-        this.type = type;
+        this.type = TransactionTypes.from(type);
         this.icon = icon;
         this.category = category;
-        this.parentType = parentType;
+        this.subCategories = subCategories;
     }
 
     public int getId() {
@@ -33,12 +31,12 @@ public class Category implements Serializable {
         this.id = id;
     }
 
-    public int getType() {
+    public TransactionTypes getType() {
         return type;
     }
 
     public void setType(int type) {
-        this.type = type;
+        this.type = TransactionTypes.from(type);
     }
 
     public String getIcon() {
@@ -57,12 +55,11 @@ public class Category implements Serializable {
         this.category = category;
     }
 
-    public Category getParentType() {
-        return parentType;
+    public List<Category> getSubCategories() {
+        return subCategories;
     }
 
-    public void setParentType(Category parentType) {
-        this.parentType = parentType;
+    public void setSubCategories(List<Category> subCategories) {
+        this.subCategories = subCategories;
     }
-
 }
