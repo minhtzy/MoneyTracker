@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".wallet.AddWalletActivity"
-    android:theme="@style/AppTheme.NoActionBar">
+    tools:context=".wallet.AddWalletActivity">
 
     <!--<TextView-->
     <!--android:layout_width="match_parent"-->

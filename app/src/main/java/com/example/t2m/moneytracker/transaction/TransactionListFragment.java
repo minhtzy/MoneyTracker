@@ -61,6 +61,7 @@ public class TransactionListFragment extends Fragment {
         headerView = inflater.inflate(
                 R.layout.header_transaction_statistics, null, false);
         mLViewTransaction.addHeaderView(headerView);
+
         new loadTransactions().execute();
         return view;
     }

@@ -19,10 +19,4 @@ public class DateRange {
         return dateTo;
     }
 
-    public boolean isContain(Date date) {
-        MTDate dateC = new MTDate(date);
-        MTDate dateF = new MTDate(dateFrom);
-        MTDate dateT = new MTDate(dateTo);
-        return dateC.getCalendar().compareTo(dateF.getCalendar()) >= 0 && dateC.getCalendar().compareTo(dateT.getCalendar()) <= 0;
-    }
 }

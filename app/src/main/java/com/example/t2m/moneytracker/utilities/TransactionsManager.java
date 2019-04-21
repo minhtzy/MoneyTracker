@@ -54,9 +54,10 @@ public class TransactionsManager {
     public List<Transaction> getAllTransactionByTime(DateRange dateRange) {
         List<Transaction> filterTransaction = new ArrayList<>();
 
+        DateUtils dateUtils = new DateUtils();
         for(Transaction tran : transactions) {
             Date date = tran.getTransactionDate();
-            if(dateRange.isContain(date)) {
+            if(dateUtils.isDateRangeContainDate(dateRange,date)) {
                 filterTransaction.add(tran);
             }
         }

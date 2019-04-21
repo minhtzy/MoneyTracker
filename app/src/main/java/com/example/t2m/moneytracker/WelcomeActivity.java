@@ -25,9 +25,6 @@ import static com.example.t2m.moneytracker.utils.LanguageUtils.initCurrentLangua
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    public static String DATABASE_NAME = "money_tracker.db";
-    public static final String DB_PATH_SUFFIX = "/databases/";
-    public static SQLiteDatabase database = null;
     public static final String DB_PREFS = "MoneyTrackerSharedPrefs";
     public static final String KEY_IS_FIRST_TIME_INIT_DATABASE = "moneytracker.db.sharedprefs.key.is_first_time";
     @Override

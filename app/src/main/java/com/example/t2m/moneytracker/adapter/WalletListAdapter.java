@@ -34,11 +34,19 @@ public class WalletListAdapter extends ArrayAdapter<Wallet> {
         LayoutInflater inflater = context.getLayoutInflater();
         if (convertView == null)
             convertView = inflater.inflate(this.resource, null);
-        ImageView imganhItem = (ImageView) convertView.findViewById(R.id.imgCategoryLogo);
-        TextView txtTenitem = (TextView) convertView.findViewById(R.id.txtCategoryTitle);
+        ImageView imganhItem = (ImageView) convertView.findViewById(R.id.imgWalletLogo);
+        TextView txtTenitem = (TextView) convertView.findViewById(R.id.txtWalletTitle);
+        TextView txtBalacne = convertView.findViewById(R.id.txtWalletBalance);
 
         Wallet wallet = this.objects.get(position);
         txtTenitem.setText(wallet.getWalletName());
+        txtBalacne.setText(String.valueOf(wallet.getCurrentBalance()));
+        if(wallet.getCurrentBalance() >= 0) {
+            txtBalacne.setTextColor(getContext().getResources().getColor(R.color.colorMoneyTradingPositive));
+        }
+        else {
+            txtBalacne.setTextColor(getContext().getResources().getColor(R.color.colorMoneyTradingNegative));
+        }
 
         // lấy id của ảnh
         int idImg = context.getResources().getIdentifier(

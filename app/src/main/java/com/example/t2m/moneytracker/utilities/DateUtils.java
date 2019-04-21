@@ -134,4 +134,18 @@ public class DateUtils {
     private SimpleDateFormat getFormatterFor(String format) {
         return new SimpleDateFormat(format, _locale);
     }
+
+    // Kiểm tra ngày có nằm trong khoảng thời gian hay không
+    public boolean isDateRangeContainDate(DateRange dateRange,Date date) {
+        MTDate dateC = new MTDate(date);
+        MTDate dateF = new MTDate(dateRange.getDateFrom());
+        MTDate dateT = new MTDate(dateRange.getDateTo());
+        return dateC.getCalendar().compareTo(dateF.getCalendar()) >= 0 && dateC.getCalendar().compareTo(dateT.getCalendar()) <= 0;
+    }
+
+    public boolean isFutureDate(Date dateCompare,Date dateFuture) {
+        MTDate dateC = new MTDate(dateCompare);
+        MTDate dateT = new MTDate(dateFuture);
+        return dateC.getCalendar().compareTo(dateT.getCalendar()) < 0;
+    }
 }

@@ -3,26 +3,34 @@ package com.example.t2m.moneytracker.transaction;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.t2m.moneytracker.R;
 import com.example.t2m.moneytracker.adapter.WalletListAdapter;
 import com.example.t2m.moneytracker.dataaccess.ITransactionsDAO;
 import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
-import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
 import com.example.t2m.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
+import com.example.t2m.moneytracker.model.MTDate;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.model.Category;
 import com.example.t2m.moneytracker.model.Wallet;
@@ -31,6 +39,9 @@ import com.example.t2m.moneytracker.wallet.SelectCategoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,14 +51,19 @@ import java.util.List;
 public class AddTransactionActivity extends AppCompatActivity {
 
     public static final int REQUEST_CODE_CATEGORY = 1;
+    private static final int REQUEST_CODE_GALLERY = 2;
+    private static final int REQUEST_CODE_CAMERA = 3 ;
     public static final String EXTRA_TRANSACTION = "com.example.t2m.moneytracker.extra.transaction";
+    private static final Object IMAGE_DIRECTORY = "images";
+
     private EditText mTextMoney;
     private EditText mTextCategory;
     private EditText mTextNote;
     private EditText mTextDate;
     private EditText mTextWallet;
-    private Button mBtnAdd;
-    private Button mBtnCancle;
+    private ImageView mImgCamera;
+    private ImageView mImgPicture;
+    private ImageView mImgPreView;
     private Calendar mCalendar;
 
     private FirebaseUser mCurrentUser;
@@ -56,13 +72,39 @@ public class AddTransactionActivity extends AppCompatActivity {
     private List<Wallet> mListWallet;
     private Category mCurrentCategory =null;
     private Wallet mCurrentWallet = null;
+    private Bitmap mCurrentImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transaction);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         addControls();
         updateLabelDate();
         addEvents();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_save,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save : {
+                onClickedAdd();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onClickedCancle();
+        return true;
     }
 
     private void addControls() {
@@ -71,8 +113,9 @@ public class AddTransactionActivity extends AppCompatActivity {
         mTextNote = findViewById(R.id.text_transaction_note);
         mTextDate = findViewById(R.id.text_transaction_date);
         mTextWallet = findViewById(R.id.text_transaction_wallet);
-        mBtnAdd = findViewById(R.id.buttonSave);
-        mBtnCancle = findViewById(R.id.buttonCancle);
+        mImgCamera = findViewById(R.id.image_capture_picture);
+        mImgPicture = findViewById(R.id.image_choose_picture);
+        mImgPreView = findViewById(R.id.image_preview);
         mCalendar = Calendar.getInstance();
         iWalletsDAO = new WalletsDAOImpl(this);
         iTransactionsDAO = new TransactionsDAOImpl(this);
@@ -99,21 +142,32 @@ public class AddTransactionActivity extends AppCompatActivity {
                 onClickedWallet(v);
             }
         });
-        mBtnAdd.setOnClickListener(new View.OnClickListener() {
+        mImgCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickedAdd(v);
+                takePhotoFromCamera();
             }
         });
-        mBtnCancle.setOnClickListener(new View.OnClickListener() {
+        mImgPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickedCancle(v);
+                choosePhotoFromGallary();
             }
         });
     }
 
-    private void onClickedAdd(View v) {
+    private void takePhotoFromCamera() {
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CODE_CAMERA);
+    }
+
+    private void choosePhotoFromGallary() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, REQUEST_CODE_GALLERY);
+    }
+
+    private void onClickedAdd() {
         if(mCurrentWallet == null) {
             mTextWallet.setError("Chọn ví của bạn");
             mTextWallet.requestFocus();
@@ -143,7 +197,9 @@ public class AddTransactionActivity extends AppCompatActivity {
         setResult(RESULT_OK,intent);
         finish();
     }
-    private void onClickedCancle(View v) {
+    private void onClickedCancle() {
+
+        setResult(RESULT_CANCELED);
         finish();
     }
 
@@ -170,7 +226,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         builderSingle.setIcon(R.drawable.ic_account_balance_wallet_black_24dp);
         builderSingle.setTitle("Chọn ví của bạn");
 
-        final ArrayAdapter arrayAdapter = new WalletListAdapter(this, R.layout.custom_item_category,mListWallet);
+        final ArrayAdapter arrayAdapter = new WalletListAdapter(this, R.layout.custom_item_wallet,mListWallet);
 
 
         builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -197,20 +253,78 @@ public class AddTransactionActivity extends AppCompatActivity {
             mTextDate.setText("Hôm nay");
         }
         else {
-            String myFormat = "dd/MM/yyyy";
-            SimpleDateFormat sdformat = new SimpleDateFormat(myFormat);
-            mTextDate.setText(sdformat.format(mCalendar.getTime()));
+            String strDate = new MTDate(mCalendar).toIsoDateShortTimeString();
+            mTextDate.setText(strDate);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == REQUEST_CODE_CATEGORY) {
-            if(resultCode == RESULT_OK) {
+        if(resultCode == RESULT_OK) {
+            if(requestCode == REQUEST_CODE_CATEGORY) {
                 mCurrentCategory =(Category) data.getSerializableExtra(SelectCategoryActivity.EXTRA_CATEGORY);
                 updateUI();
             }
+            else if(requestCode == REQUEST_CODE_GALLERY) {
+                if (data != null) {
+                    Uri contentURI = data.getData();
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                        mCurrentImage = bitmap;
+                        //String path = saveImage(bitmap);
+                        updateImagePreView(bitmap);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(AddTransactionActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            else if(requestCode == REQUEST_CODE_CAMERA) {
+                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                mCurrentImage = thumbnail;
+                updateImagePreView(thumbnail);
+                //saveImage(thumbnail);
+            }
         }
+
+    }
+
+    private void updateImagePreView(Bitmap bitmap) {
+        if(bitmap != null) {
+            int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+            Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+            mImgPreView.setImageBitmap(scaled);
+        }
+    }
+
+    private String saveImage(Bitmap myBitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        File wallpaperDirectory = new File(
+                Environment.getExternalStorageDirectory().getAbsolutePath() + IMAGE_DIRECTORY);
+        // have the object build the directory structure, if needed.
+        if (!wallpaperDirectory.exists()) {
+            wallpaperDirectory.mkdirs();
+        }
+
+        try {
+            File f = new File(wallpaperDirectory, Calendar.getInstance()
+                    .getTimeInMillis() + ".jpg");
+            f.createNewFile();
+            FileOutputStream fo = new FileOutputStream(f);
+            fo.write(bytes.toByteArray());
+            MediaScannerConnection.scanFile(this,
+                    new String[]{f.getPath()},
+                    new String[]{"image/jpeg"}, null);
+            fo.close();
+            Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
+
+            return f.getAbsolutePath();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return "";
     }
 
     private void updateUI() {
@@ -229,14 +343,6 @@ public class AddTransactionActivity extends AppCompatActivity {
 
         if(mCurrentWallet != null) {
             mTextWallet.setText(mCurrentWallet.getWalletName());
-            ImageView imageView = findViewById(R.id.image_transaction_wallet);
-            int resourceId = getResources().getIdentifier(
-                    mCurrentWallet.getImageSrc(),
-                    "drawable",
-                    "com.example.t2m.moneytracker"
-            );
-            if(resourceId == 0) resourceId = R.drawable.ic_account_balance_wallet_black_24dp;
-            imageView.setImageResource(resourceId);
         }
     }
 }
