@@ -26,7 +26,6 @@ public class Setting extends AppCompatActivity {
     Button btnLanguage,btnLogout,btnBack;
     private ActivitySettingBinding mBinding;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +72,7 @@ public class Setting extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Setting.this, MainActivity.class);
+                Intent intent = new Intent(Setting.this,MainActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -91,11 +90,13 @@ public class Setting extends AppCompatActivity {
         }
     }
     private void updateViewByLanguage() {
-        mBinding.btnLanguage.setText(getString(R.string.change_language));
-        mBinding.btnLogout.setText(getString(R.string.signout));
-        mBinding.btnback.setText(getString(R.string.back));
-        mBinding.textView8.setText(getString(R.string.name_account));
-        mBinding.textview09.setText(getString(R.string.action_settings));
+
+        recreate();
+        //        mBinding.btnLanguage.setText(getString(R.string.change_language));
+//        mBinding.btnLogout.setText(getString(R.string.signout));
+//        mBinding.btnback.setText(getString(R.string.back));
+//        mBinding.textView8.setText(getString(R.string.name_account));
+//        mBinding.textview09.setText(getString(R.string.action_settings));
 
     }
     public void openLanguageScreen() {

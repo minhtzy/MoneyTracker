@@ -40,4 +40,24 @@
     <string name="communicate">Communicate</string>
     <string name="share">Share</string>
     <string name="send">Send</string>
+    <string name="select_category_name">Select Category</string>
+    <string name="add_transaction_name">Add Transaction</string>
+    <string name="login_name">Login</string>
+    <string name="register_name">Registration</string>
+    <string name="income_category_title">Revenues</string>
+    <string name="expense_category_title">Expenses</string>
+    <string name="debt_loan_category_title">Debt/Lending</string>
+    <string name="all_transaction">All Transaction</string>
+    <string name="all_time">All time</string>
+    <string name="today">Today</string>
+    <string name="last7days">Last 7days</string>
+    <string name="last15days">Last 15days</string>
+    <string name="last30days">Last 30days</string>
+    <string name="last_month">Last Month</string>
+    <string name="last3months">Last 3Months</string>
+    <string name="last6months">Last 6Months</string>
+    <string name="current_month">Current Month</string>
+    <string name="last_year">Last year</string>
+    <string name="current_year">Current year</string>
+    <string name="future_transactions">Future Transaction</string>
 </resources>

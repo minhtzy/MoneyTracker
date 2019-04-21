@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.t2m.moneytracker">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,13 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
 
-        android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".setting.Setting"></activity>
+        android:theme="@style/AppTheme">
+        <activity android:name=".setting.Setting"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".changelanguage.ChangeLanguageActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".wallet.SelectCategoryActivity" />
-        <activity android:name=".wallet.AddWalletActivity">
+        <!--<activity android:name=".wallet.SelectCategoryActivity" />-->
+        <activity android:name=".wallet.AddWalletActivity"></activity>
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -34,11 +36,11 @@
         <activity android:name=".wallet.SelectCategoryActivity"
             android:label="@string/select_category_name"
             android:theme="@style/AppTheme"
-            tools:ignore="DuplicateActivity" />
-        <activity android:name=".wallet.AddWalletActivity"
-            tools:ignore="DuplicateActivity">
+            />
+        <!--<activity android:name=".wallet.AddWalletActivity"-->
+            <!--tools:ignore="DuplicateActivity">-->
 
-        </activity>
+        <!--</activity>-->
         <activity android:name=".account.ForgotPasswordActivity" />
         <activity android:name=".account.RegistrationActivity">
 
@@ -52,9 +54,9 @@
             android:label="Main Activity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity
-            android:name=".transaction.AddTransactionActivity"
-            android:label="Add Transaction">
+        <!--<activity-->
+            <!--android:name=".transaction.AddTransactionActivity"-->
+            <!--android:label="Add Transaction"></activity>-->
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -66,7 +68,7 @@
         <activity android:name=".transaction.AddTransactionActivity"
             android:label="@string/add_transaction_name"
             android:theme="@style/AppTheme"
-            tools:ignore="DuplicateActivity">
+            >
 
         </activity>
         <activity android:name=".WelcomeActivity"

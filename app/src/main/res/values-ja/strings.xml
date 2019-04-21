@@ -34,4 +34,24 @@
     <string name="report">レポート</string>
     <string name="transaction_ledger">トランザクション元帳</string>
     <string name="send">送信</string>
+    <string name="debt_loan_category_title">借金/貸出</string>
+    <string name="income_category_title">収益</string>
+    <string name="expense_category_title">費用</string>
+    <string name="all_transaction">すべてのトランザクション</string>
+    <string name="all_time">すべての時間</string>
+    <string name="today">本日は</string>
+    <string name="last7days">7日前</string>
+    <string name="last15days">15日ほど前</string>
+    <string name="last30days">30日ほど前</string>
+    <string name="last_month">ヶ月前</string>
+    <string name="last3months">3か月前</string>
+    <string name="last6months">6ヶ月前</string>
+    <string name="current_month">当月</string>
+    <string name="last_year">事前</string>
+    <string name="current_year">今年度</string>
+    <string name="future_transactions">将来</string>
+    <string name="select_category_name">グループを選択し</string>
+    <string name="add_transaction_name">トランザクションを追加</string>
+    <string name="login_name">ログ</string>
+    <string name="register_name">登録</string>
 </resources>

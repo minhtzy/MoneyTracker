@@ -2,6 +2,7 @@ package com.example.t2m.moneytracker;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -27,11 +28,10 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final int REQUEST_SETTING_CODE = 1;
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
     @Override
@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, Setting.class);
+            startActivityForResult(intent,REQUEST_SETTING_CODE);
             return true;
         }
 
@@ -134,5 +136,16 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    public static void recreateAppMain(AppCompatActivity appCompatActivity){
+        appCompatActivity.recreate();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SETTING_CODE && resultCode == RESULT_OK){
+            MainActivity.recreateAppMain(this);
+        }
     }
 }

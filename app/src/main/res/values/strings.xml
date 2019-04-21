@@ -84,7 +84,7 @@
         <item>@string/language_japanese_code</item>
 
     </string-array>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
     <!-- title category type  -->
     <string name="income_category_title">Khoản thu</string>
