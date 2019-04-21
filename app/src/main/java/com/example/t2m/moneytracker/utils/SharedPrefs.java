@@ -21,6 +21,7 @@ public class SharedPrefs {
         if (mInstance == null) {
             mInstance = new SharedPrefs();
         }
+
         return mInstance;
     }
 
