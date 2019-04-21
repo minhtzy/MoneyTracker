@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/colorAppBar</color>
-    <color name="colorPrimaryDark">@color/colorStatusBar</color>
-    <color name="colorAccent">#009688</color>
+    <color name="colorPrimary">#2baf2b</color>
+    <color name="colorPrimaryDark">#007e00</color>
+    <color name="colorAccent">#68e25c</color>
 
+    <color name="primaryDarkColor">#007e00</color>
     <color name="colorBackgroundPrimary">#EEEEEE</color>
     <color name="colorAppBar">#E0E0E0</color>
     <color name="colorBackgroundItem">#FAFAFA</color>

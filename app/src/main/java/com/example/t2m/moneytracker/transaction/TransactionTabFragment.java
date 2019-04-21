@@ -60,6 +60,7 @@ public class TransactionTabFragment extends Fragment {
     ITransactionsDAO iTransactionsDAO;
     Wallet mCurrentWallet = null;
 
+    DateUtils dateUtils;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,11 +69,13 @@ public class TransactionTabFragment extends Fragment {
         mViewPager = view.findViewById(R.id.page_view);
         mFabAddTransaction = view.findViewById(R.id.fab_add_transaction);
         addEvents();
+        dateUtils = new DateUtils();
         mTabFragment = new ArrayList<>();
         mCurrentWallet = WalletsManager.getInstance(this.getContext()).getCurrentWallet();
         iTransactionsDAO = new TransactionsDAOImpl(this.getContext());
         mListTransaction = iTransactionsDAO.getAllTransactionByWalletId(mCurrentWallet.getWalletId());
         mAdapter = new TransactionPagerAdapter(getFragmentManager(),mTabFragment);
+
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         new loadTabs().execute();
@@ -82,11 +85,16 @@ public class TransactionTabFragment extends Fragment {
     private void scrollToCurrentMonth() {
         for(int  i = mTabFragment.size()- 1; i >= 0;--i) {
             if(mTabFragment.get(i).first.compareTo(getString(R.string.current_month)) == 0) {
-                mTabLayout.setScrollPosition(i,0f,true);
-                mViewPager.setCurrentItem(i);
+                scrollToTabIndex(i,0.0f,true);
                 break;
             }
         }
+    }
+
+    private void scrollToTabIndex(int index,float positionOffset,boolean updateSelectedText) {
+        mTabLayout.setScrollPosition(index,positionOffset,updateSelectedText);
+        mViewPager.setCurrentItem(index);
+
     }
 
 
@@ -147,8 +155,11 @@ public class TransactionTabFragment extends Fragment {
         DateRange dateRange = new DateRange(
                 currentDate.firstDayOfMonth().setTimeToBeginningOfDay().toDate(),
                 currentDate.lastDayOfMonth().setTimeToEndOfDay().toDate());
-        if(dateRange.isContain(date)) {
+        if(dateUtils.isDateRangeContainDate(dateRange,date)) {
             title = getString(R.string.current_month);
+        }
+        else if (dateUtils.isFutureDate(dateRange.getDateTo(),date)) {
+            title = getString(R.string.future_transactions);
         }
         return title;
     }
@@ -156,7 +167,7 @@ public class TransactionTabFragment extends Fragment {
     private List<Transaction> filterTransactions(DateRange dateRange, List<Transaction> transactions) {
         List<Transaction> filter = new ArrayList<>();
         for(Transaction t : transactions) {
-            if(dateRange.isContain(t.getTransactionDate())) {
+            if(dateUtils.isDateRangeContainDate(dateRange,t.getTransactionDate())) {
                 filter.add(t);
             }
         }
@@ -182,6 +193,7 @@ public class TransactionTabFragment extends Fragment {
             if(title.compareTo(tab.first) ==0) {
                 if(tab.second instanceof TransactionListFragment) {
                     ((TransactionListFragment)tab.second).add(transaction);
+
                 }
             }
         }

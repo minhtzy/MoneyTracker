@@ -16,7 +16,9 @@
         <activity android:name=".wallet.SelectCategoryActivity"
             android:label="@string/select_category_name"
             android:theme="@style/AppTheme"/>
-        <activity android:name=".wallet.AddWalletActivity">
+        <activity android:name=".wallet.AddWalletActivity"
+            android:label="@string/add_wallet"
+            android:theme="@style/AppTheme">
         </activity>
         <activity android:name=".account.ForgotPasswordActivity" />
         <activity android:name=".account.RegistrationActivity">

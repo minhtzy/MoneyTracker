@@ -19,7 +19,6 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
 
 
     public static final String LOG_TAG = "MONEY_TRACKER_DB_HELPER";
-    public static final String DB_FILE_NAME = "money_tracker.db";
     public static final int DB_VERSION = 1;
 
     private Context mContext;
@@ -48,10 +47,17 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion != newVersion) {
-            dropDatabase(db);
-            onCreate(db);
+
+        // cập nhập cơ sở dữ liệu
+        for(int i = oldVersion + 1; i <= newVersion; ++i) {
+            // lấy ID của tập tin update trong thư mục raw
+            int identifier = mContext.getResources().getIdentifier(
+                    String.format("update_database_v%d",i),
+                    "raw",
+                    mContext.getPackageName());
+            if(identifier != 0) executeRawSql(db,identifier);
         }
+
     }
 
     private void createDatabase(SQLiteDatabase db) {
@@ -93,5 +99,6 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
     private void dropDatabase(SQLiteDatabase db) {
         executeRawSql(db, R.raw.drop_money_tracker_database);
     }
+
 
 }

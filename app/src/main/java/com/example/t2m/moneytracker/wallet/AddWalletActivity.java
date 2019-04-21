@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,34 +24,20 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class AddWalletActivity extends AppCompatActivity {
 
-    Button btnCancel,btnSave,btnNhom;
+    Button btnNhom;
     EditText txtTen,txtSotien;
     Switch swtTinhtong;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_wallet);
-
+        // add back arrow
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         addControls();
         addEvents();
     }
 
     private void addEvents() {
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addWallet();
-                Intent intent = new Intent(AddWalletActivity.this,MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
 
     }
 
@@ -74,20 +62,38 @@ public class AddWalletActivity extends AppCompatActivity {
     }
 
     private void addControls() {
-        // add custom action bar
-        this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        LayoutInflater inflater =(LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.custom_action_bar_add_wallet,null);
-        getSupportActionBar().setCustomView(view,new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
-
         //
         txtTen = (EditText)findViewById(R.id.txtTen);
         txtSotien = (EditText)findViewById(R.id.txtSotien);
         btnNhom = (Button)findViewById(R.id.btnNhom);
         swtTinhtong = (Switch)findViewById(R.id.swtTichtong);
-        btnCancel = (Button)view.findViewById(R.id.btnCancel);
-        btnSave = (Button)view.findViewById(R.id.btnSave);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_save,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save : {
+                addWallet();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onClickedBack();
+        return true;
+    }
+
+    private void onClickedBack() {
+        finish();
     }
 }
