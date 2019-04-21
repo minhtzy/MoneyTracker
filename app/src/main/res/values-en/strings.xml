@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MoneyTracker</string>
+    <string name="action_settings">Setting</string>
+    <!--text in activity_add_wallet.xml-->
+    <string name="name_wallet">Name Wallet</string>
+    <string name="current_amount">Current Amount</string>
+    <string name="group">Group</string>
+    <string name="standard_group">Standard Group</string>
+    <string name="service_link">Service link</string>
+    <string name="connect_the_service_right_in_moneytracher">Connect the service right in MoneyTracher</string>
+    <string name="not_total">No total</string>
+    <string name="ignore_this_wallet_and_the_balance_from_the_total">Ignore this wallet and the balance from the total.</string>
+    <string name="add_wallet">Add wallet</string>
+    <string name="save">Save</string>
+    <!--text in activity_choose_category.xml-->
+    <string name="back">Back</string>
+    <!--text in activity_forgot_password-->
+    <string name="forgot_password">ForgotPassword?</string>
+    <string name="to_reset_password">To reset your password, enter your email, press the button and check the message to follow the instruction.</string>
+    <string name="enter_your_email">Enter Your Email</string>
+    <string name="reset_password">Reset Password</string>
+    <!--text in activity_fragment_setting.xml-->
+    <string name="name_account">Account name </string>
+    <string name="change_language">Change Language</string>
+    <string name="signout">Sign Out</string>
+    <!--text in activity_login.xml-->
+    <string name="signin_account">SignIn Account</string>
+    <string name="signin">SignIn</string>
+    <string name="not_account_signup_now">Not Account. SignUp NOW !</string>
+    <!--text in activity_registration-->
+    <string name="signup_account">SignUp Account</string>
+    <string name="password">Password</string>
+    <string name="signup">SignUp</string>
+    <string name="account_exist_signin_now">Already have an account. Sign in NOW!</string>
+    <string name="change_language_title">Language</string>
+    <string name="transaction_ledger">Transaction Ledger</string>
+    <string name="report">Report</string>
+    <string name="scheduling">Scheduling</string>
+    <string name="communicate">Communicate</string>
+    <string name="share">Share</string>
+    <string name="send">Send</string>
+</resources>

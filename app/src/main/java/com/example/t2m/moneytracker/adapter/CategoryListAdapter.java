@@ -15,43 +15,44 @@ import com.example.t2m.moneytracker.model.Category;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by minhthuanht on 24,March,2019
- */
-public class CategoryListAdapter extends ArrayAdapter<Category> {
-    Activity context;
-    int resource;
-    public List<Category> objects;
-    public CategoryListAdapter(Activity context, int resource, List<Category> objects) {
-        super(context, resource, objects);
-        this.context = context;
-        this.resource = resource;
-        this.objects = objects;
-    }
 
+    public class CategoryListAdapter extends ArrayAdapter<Category> {
 
-    @Override
-    public View getView(int position,  View convertView,  ViewGroup parent) {
+        Activity context;
+        int resource;
+        public List<Category> objects;
 
-        LayoutInflater inflater = context.getLayoutInflater();
-        if(convertView == null)
-            convertView= inflater.inflate(this.resource,null);
-        ImageView imganhItem = (ImageView)convertView.findViewById(R.id.imgCategoryLogo);
-        TextView txtTenitem = (TextView)convertView.findViewById(R.id.txtCategoryTitle);
-
-        Category category = this.objects.get(position);
-        txtTenitem.setText(category.getCategory());
-
-        // lấy ảnh từ asset
-        String base_path = "category/";
-        try {
-            Drawable img = Drawable.createFromStream(context.getAssets().open(base_path + category.getIcon()),null);
-            imganhItem.setImageDrawable(img);
-        } catch (IOException e) {
-            e.printStackTrace();
+        public CategoryListAdapter(Activity context, int resource, List<Category> objects) {
+            super(context, resource, objects);
+            this.context = context;
+            this.resource = resource;
+            this.objects = objects;
         }
 
-        return convertView;
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            LayoutInflater inflater = context.getLayoutInflater();
+            if (convertView == null)
+                convertView = inflater.inflate(this.resource, null);
+            ImageView imganhItem = (ImageView) convertView.findViewById(R.id.imgCategoryLogo);
+            TextView txtTenitem = (TextView) convertView.findViewById(R.id.txtCategoryTitle);
+
+            Category category = this.objects.get(position);
+            txtTenitem.setText(category.getCategory());
+
+            // lấy ảnh từ asset
+            String base_path = "category/";
+            try {
+                Drawable img = Drawable.createFromStream(context.getAssets().open(base_path + category.getIcon()), null);
+                imganhItem.setImageDrawable(img);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return convertView;
+        }
+
     }
 
-}

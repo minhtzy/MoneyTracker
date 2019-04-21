@@ -29,7 +29,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="Đăng ký tài khoản"
+        android:text="@string/signup_account"
         android:textSize="20dp"
         android:textColor="#ff0000"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -57,7 +57,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Tài khoản"
+            android:text="@string/name_account"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="15dp" />
 
@@ -68,7 +68,7 @@
             android:layout_weight="2"
             android:ems="10"
             android:inputType="textPersonName"
-            android:hint="Email" />
+            android:hint="@string/enter_your_email" />
 
     </LinearLayout>
 
@@ -88,11 +88,11 @@
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Mật khẩu"
+            android:text="@string/password"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="15dp" />
 
@@ -117,7 +117,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="Đăng ký"
+        android:text="@string/signup"
         android:background="@null"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -135,7 +135,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@null"
-        android:text="Đã có tài khoản. Đăng nhập ngay!"
+        android:text="@string/account_exist_signin_now"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
 

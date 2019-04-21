@@ -3,12 +3,14 @@ package com.example.t2m.moneytracker;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.t2m.moneytracker.account.LoginActivity;
+import com.example.t2m.moneytracker.changelanguage.ChangeLanguageActivity;
 import com.example.t2m.moneytracker.wallet.AddWalletActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static com.example.t2m.moneytracker.utils.LanguageUtils.initCurrentLanguage;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     public static final String DB_PREFS = "MoneyTrackerSharedPrefs";
@@ -27,7 +31,9 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
         setupApplication();
+
     }
 
     private void setupApplication() {

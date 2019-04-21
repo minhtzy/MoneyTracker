@@ -1,5 +1,6 @@
 package com.example.t2m.moneytracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,11 @@ import android.view.MenuItem;
 
 import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
 import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
+
+import com.example.t2m.moneytracker.setting.Setting;
+
 import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
+
 import com.example.t2m.moneytracker.transaction.TransactionTabFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -96,11 +101,16 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_transaction) {
             Log.d(MainActivity.class.getSimpleName(),"Start Transaction Activity");
             fragmentClass = TransactionTabFragment.class;
+
         } else if (id == R.id.nav_chart) {
 
         } else if (id == R.id.nav_plan) {
 
         } else if (id == R.id.nav_manage) {
+            Intent intent = new Intent(MainActivity.this, Setting.class);
+            startActivity(intent);
+            finish();
+            return true;
 
         } else if (id == R.id.nav_share) {
 
