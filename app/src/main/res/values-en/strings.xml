@@ -60,4 +60,5 @@
     <string name="last_year">Last year</string>
     <string name="current_year">Current year</string>
     <string name="future_transactions">Future Transaction</string>
+    <string name="user_name">User name</string>
 </resources>

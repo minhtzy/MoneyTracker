@@ -24,6 +24,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -31,7 +33,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
     ImageView imgUserLogin;
-    EditText txtPassWord, txtConfirmPassword, txtEmail;
+    EditText txtPassWord, txtConfirmPassword, txtEmail,txtUsername;
     Button btnSignin, btnForgotPassword, btnRegistration;
     ProgressDialog progressDialog;
 
@@ -88,6 +90,7 @@ public class RegistrationActivity extends AppCompatActivity {
         btnRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String username = txtUsername.getText().toString();
                 String email = txtEmail.getText().toString();
                 String password = txtPassWord.getText().toString();
 
@@ -96,6 +99,12 @@ public class RegistrationActivity extends AppCompatActivity {
                 if (!isNetworkConnected()) {
                     Toast.makeText(RegistrationActivity.this, "Bạn cần kết nối Internet", Toast.LENGTH_LONG).show();
                 } else {
+                    if (username.isEmpty()){
+                        txtUsername.setError("Không được để trống");
+                        if (review == null){
+                            review = txtUsername;
+                        }
+                    }
                     if (email.isEmpty()) {
                         txtEmail.setError("Không được để trống");
                         if (review ==null){
@@ -137,7 +146,15 @@ public class RegistrationActivity extends AppCompatActivity {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d(TAG, "createUserWithEmail:success");
                                         FirebaseUser user = mAuth.getCurrentUser();
+                                        String username = txtUsername.getText().toString();
+                                        UserProfileChangeRequest changeRequest = new UserProfileChangeRequest
+                                                .Builder()
+                                                .setDisplayName(username)
+                                                .build();
+                                        user.updateProfile(changeRequest);
                                         updateUI(user);
+
+
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -176,6 +193,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
+            mAuth.signOut();
             getIntent().putExtra("username", user.getEmail());
             setResult(11,getIntent());
             finish();
@@ -184,6 +202,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void addControls() {
 //        imgUserLogin = (ImageView) findViewById(R.id.imgUserLoginRe);
+        txtUsername = (EditText)findViewById(R.id.txtUsername);
         txtPassWord = (EditText) findViewById(R.id.txtPassWordRe);
         txtEmail = (EditText) findViewById(R.id.txtEmailRe);
         btnRegistration = (Button) findViewById(R.id.btnRegistration);

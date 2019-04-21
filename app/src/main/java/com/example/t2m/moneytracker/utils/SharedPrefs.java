@@ -7,9 +7,9 @@ import com.example.t2m.moneytracker.App;
 
 public class SharedPrefs {
 
-    private static final String PREFS_NAME = "multi_language_active";
+    private static final String PREFS_NAME = "MoneyTrackerSharedPrefs";
     public static final String LANGUAGE = "langauge";
-
+    public static final String KEY_IS_FIRST_TIME = "moneytracker.sharedprefs.key.is_first_time";
     private static SharedPrefs mInstance;
     private SharedPreferences mSharedPreferences;
 
@@ -41,6 +41,23 @@ public class SharedPrefs {
             return (T) App.self()
                     .getGSon()
                     .fromJson(mSharedPreferences.getString(key, ""), anonymousClass);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T get(String key, T defaultValue) {
+        if (defaultValue == String.class) {
+            return (T) mSharedPreferences.getString(key, (String) defaultValue);
+        } else if (defaultValue == Boolean.class) {
+            return (T) Boolean.valueOf(mSharedPreferences.getBoolean(key, (Boolean) defaultValue));
+        } else if (defaultValue == Float.class) {
+            return (T) Float.valueOf(mSharedPreferences.getFloat(key, (Float) defaultValue));
+        } else if (defaultValue == Integer.class) {
+            return (T) Integer.valueOf(mSharedPreferences.getInt(key, (Integer) defaultValue));
+        } else if (defaultValue == Long.class) {
+            return (T) Long.valueOf(mSharedPreferences.getLong(key, (Long) defaultValue));
+        } else {
+            return defaultValue;
         }
     }
 

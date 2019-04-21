@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
 import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
@@ -28,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    TextView txtEmail,txtUsername;
+    FirebaseAuth mAuth;
     public static final int REQUEST_SETTING_CODE = 1;
     @Override
     protected void onStart() {
@@ -54,6 +57,17 @@ public class MainActivity extends AppCompatActivity
         IWalletsDAO iWalletsDAO = new WalletsDAOImpl(this);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         iWalletsDAO.getAllWalletByUser(user.getUid());
+
+        txtEmail = navigationView.getHeaderView(0).findViewById(R.id.txtEmail);
+        txtUsername = navigationView.getHeaderView(0).findViewById(R.id.txtUsername);
+
+        if (user != null){
+            if (txtUsername != null && user.getDisplayName() != null){
+                txtUsername.setText(user.getDisplayName());
+            }
+            if(txtEmail != null) txtEmail.setText(user.getEmail());
+        }
+
 
     }
 

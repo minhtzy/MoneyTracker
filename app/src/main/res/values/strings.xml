@@ -46,6 +46,7 @@
     <string name="not_account_signup_now">Chưa có tài khoản. Đăng ký ngay!</string>
     <!--text in activity_registration-->
     <string name="signup_account">Đăng ký tài khoản</string>
+    <string name="user_name">Tên người dùng</string>
     <string name="password">Mật khẩu</string>
     <string name="signup">Đăng ký</string>
     <string name="account_exist_signin_now">Đã có tài khoản. Đăng nhập ngay!</string>

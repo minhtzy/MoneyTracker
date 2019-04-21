@@ -32,7 +32,6 @@ public class LanguageUtils {
         Language currentLanguage =
                 SharedPrefs.getInstance().get(SharedPrefs.LANGUAGE, Language.class);
         if (currentLanguage != null) {
-
             return currentLanguage;
         }
         currentLanguage = new Language(Constants.Value.DEFAULT_LANGUAGE_ID,

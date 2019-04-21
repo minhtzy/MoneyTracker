@@ -16,4 +16,5 @@ public static final String AppPreferences = "MoneyTracker.App.SharedPreferences"
 
     // Amount formats
     public static final String PRICE_FORMAT = "%.2f";
+
 }
