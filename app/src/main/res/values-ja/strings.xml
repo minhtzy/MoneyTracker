@@ -55,4 +55,13 @@
     <string name="login_name">ログ</string>
     <string name="register_name">登録</string>
     <string name="user_name">ユーザー名</string>
+    <string name="loading">Loading...</string>
+    <string name="init_zero">0</string>
+    <string name="so_du_dau">流入</string>
+    <string name="so_du_cuoi">流出</string>
+    <string name="view_statistic">レポート全体を表示するにはタップします</string>
+    <string name="choose_category">カテゴリーを選択</string>
+    <string name="write_note">記帳</string>
+    <string name="edit">編集する</string>
+    <string name="delete">削除する</string>
 </resources>

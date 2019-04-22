@@ -1,6 +1,7 @@
 package com.example.t2m.moneytracker.transaction;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.example.t2m.moneytracker.R;
@@ -44,13 +46,22 @@ public class TransactionListFragment extends Fragment {
         TransactionListFragment fragment = new TransactionListFragment();
         fragment.setItems(items);
         Bundle bundle = new Bundle();
-        //bundle.putSerializable(BUNDLE_LIST_ITEM,items);
+        bundle.putSerializable(BUNDLE_LIST_ITEM,(ArrayList<Transaction>)items);
         fragment.setArguments(bundle);
         return fragment;
     }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        if(mItems == null){
+            if(savedInstanceState != null) {
+                mItems =(ArrayList<Transaction>) savedInstanceState.getSerializable(BUNDLE_LIST_ITEM);
+            }
+            else {
+                mItems = new ArrayList<>();
+            }
+        }
         Log.d(LOG_TAG,"create view items " + mItems.size());
 
         View view = inflater.inflate(R.layout.fragment_list_transaction,container,false);
@@ -61,9 +72,30 @@ public class TransactionListFragment extends Fragment {
         headerView = inflater.inflate(
                 R.layout.header_transaction_statistics, null, false);
         mLViewTransaction.addHeaderView(headerView);
+        mLViewTransaction.setOnItemClickListener(new PinnedHeaderListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int section, int position, long id) {
+                Transaction transaction = (Transaction) mAdapter.getItem(section,position);
+                onClickItem(transaction);
+            }
 
+            @Override
+            public void onSectionClick(AdapterView<?> adapterView, View view, int section, long id) {
+
+            }
+            @Override
+            public void onHeaderClick(AdapterView<?> adapterView, View view, int section, long id) {
+
+            }
+        });
         new loadTransactions().execute();
         return view;
+    }
+
+    private void onClickItem(Transaction transaction) {
+        Intent data = new Intent(TransactionListFragment.this.getContext(),ViewTransactionDetailActivity.class);
+        data.putExtra(ViewTransactionDetailActivity.EXTRA_TRANSACTION,transaction);
+        startActivity(data);
     }
 
     public void setItems(List<Transaction> items) {

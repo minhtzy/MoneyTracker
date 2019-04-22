@@ -178,14 +178,24 @@ public class PinnedHeaderListView extends ListView implements OnScrollListener {
             SectionedBaseAdapter adapter;
             if (adapterView.getAdapter().getClass().equals(HeaderViewListAdapter.class)) {
                 HeaderViewListAdapter wrapperAdapter = (HeaderViewListAdapter) adapterView.getAdapter();
-                adapter = (SectionedBaseAdapter) wrapperAdapter.getWrappedAdapter();
+                int headerCount = wrapperAdapter.getHeadersCount();
+                if(rawPosition < headerCount) {
+                    onHeaderClick(adapterView,view,rawPosition,id);
+                    return;
+                }
+                else {
+                    adapter = (SectionedBaseAdapter) wrapperAdapter.getWrappedAdapter();
+                    rawPosition -= headerCount;
+                }
+
+
             } else {
                 adapter = (SectionedBaseAdapter) adapterView.getAdapter();
             }
             int section = adapter.getSectionForPosition(rawPosition);
             int position = adapter.getPositionInSectionForPosition(rawPosition);
 
-            if (position == -1) {
+            if (adapter.isSectionHeader(rawPosition)) {
                 onSectionClick(adapterView, view, section, id);
             } else {
                 onItemClick(adapterView, view, section, position, id);
@@ -195,6 +205,8 @@ public class PinnedHeaderListView extends ListView implements OnScrollListener {
         public abstract void onItemClick(AdapterView<?> adapterView, View view, int section, int position, long id);
 
         public abstract void onSectionClick(AdapterView<?> adapterView, View view, int section, long id);
+
+        public abstract void onHeaderClick(AdapterView<?> adapterView, View view, int header, long id);
 
     }
 }

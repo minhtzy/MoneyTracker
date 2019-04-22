@@ -34,6 +34,7 @@ import com.example.t2m.moneytracker.model.MTDate;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.model.Category;
 import com.example.t2m.moneytracker.model.Wallet;
+import com.example.t2m.moneytracker.utilities.BitmapUtils;
 import com.example.t2m.moneytracker.utilities.TransactionsManager;
 import com.example.t2m.moneytracker.wallet.SelectCategoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -72,7 +73,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     private List<Wallet> mListWallet;
     private Category mCurrentCategory =null;
     private Wallet mCurrentWallet = null;
-    private Bitmap mCurrentImage;
+    private Bitmap mCurrentImage = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -178,6 +179,10 @@ public class AddTransactionActivity extends AppCompatActivity {
             mTextCategory.requestFocus();
             return;
         }
+        String mMediaUri = null;
+        if(mCurrentImage != null) {
+            mMediaUri = BitmapUtils.saveImage(this,mCurrentImage);
+        }
         float money = Float.parseFloat(mTextMoney.getText().toString());
         String note = mTextNote.getText().toString();
         Date date = mCalendar.getTime();
@@ -188,6 +193,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 .setCurrencyCode(mCurrentWallet.getCurrencyCode())
                 .setMoneyTrading(money)
                 .setTransactionNote(note)
+                .setMediaUri(mMediaUri)
                 .build();
 
         TransactionsManager.getInstance(this).addTransaction(transaction);
@@ -250,7 +256,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     private void updateLabelDate() {
         Date date = mCalendar.getTime();
         if(DateUtils.isToday(date.getTime())) {
-            mTextDate.setText("Hôm nay");
+            mTextDate.setText(getResources().getString(R.string.today));
         }
         else {
             String strDate = new MTDate(mCalendar).toIsoDateShortTimeString();
@@ -271,7 +277,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                         mCurrentImage = bitmap;
-                        //String path = saveImage(bitmap);
                         updateImagePreView(bitmap);
 
                     } catch (IOException e) {
@@ -284,7 +289,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 mCurrentImage = thumbnail;
                 updateImagePreView(thumbnail);
-                //saveImage(thumbnail);
             }
         }
 
@@ -296,35 +300,6 @@ public class AddTransactionActivity extends AppCompatActivity {
             Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
             mImgPreView.setImageBitmap(scaled);
         }
-    }
-
-    private String saveImage(Bitmap myBitmap) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File wallpaperDirectory = new File(
-                Environment.getExternalStorageDirectory().getAbsolutePath() + IMAGE_DIRECTORY);
-        // have the object build the directory structure, if needed.
-        if (!wallpaperDirectory.exists()) {
-            wallpaperDirectory.mkdirs();
-        }
-
-        try {
-            File f = new File(wallpaperDirectory, Calendar.getInstance()
-                    .getTimeInMillis() + ".jpg");
-            f.createNewFile();
-            FileOutputStream fo = new FileOutputStream(f);
-            fo.write(bytes.toByteArray());
-            MediaScannerConnection.scanFile(this,
-                    new String[]{f.getPath()},
-                    new String[]{"image/jpeg"}, null);
-            fo.close();
-            Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
-
-            return f.getAbsolutePath();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        return "";
     }
 
     private void updateUI() {

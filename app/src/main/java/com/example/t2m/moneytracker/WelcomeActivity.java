@@ -1,45 +1,17 @@
 package com.example.t2m.moneytracker;
 
-import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.Toast;
 
 import com.example.t2m.moneytracker.account.LoginActivity;
-import com.example.t2m.moneytracker.changelanguage.ChangeLanguageActivity;
-import com.example.t2m.moneytracker.changelanguage.LanguageAdapter;
-import com.example.t2m.moneytracker.common.Constants;
-import com.example.t2m.moneytracker.model.Language;
-import com.example.t2m.moneytracker.utils.LanguageHelper;
 import com.example.t2m.moneytracker.utils.LanguageUtils;
 import com.example.t2m.moneytracker.utils.SharedPrefs;
-import com.example.t2m.moneytracker.wallet.AddWalletActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Locale;
 
-
-import static com.example.t2m.moneytracker.utils.LanguageUtils.initCurrentLanguage;
-
 public class WelcomeActivity extends AppCompatActivity {
-
-
-
-    public Locale LANGUAGE_CURRENT;
-    public String LanguageCurrent ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

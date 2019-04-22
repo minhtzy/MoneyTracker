@@ -11,8 +11,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="8dp"
         android:layout_centerVertical="true"
-        android:textSize="32sp"
-        android:text="00" />
+        android:textSize="32sp" />
     <TextView
         android:id="@+id/text_day_header"
         android:layout_width="wrap_content"
@@ -22,8 +21,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textStyle="bold"
-        android:textSize="16sp"
-        android:text="Today"/>
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/text_month_year_header"
@@ -34,7 +32,6 @@
         android:layout_marginTop="2dp"
         android:layout_marginBottom="8dp"
         android:layout_toEndOf="@id/text_date_header"
-        android:text="Tháng 1 2019"
         android:textSize="16sp" />
     <TextView
         android:id="@+id/text_money_trading"
@@ -43,8 +40,6 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="8dp"
-        android:textSize="24sp"
-        android:text="0"
-        />
+        android:textSize="24sp" />
 
 </RelativeLayout>

@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Transaction implements Serializable {
 
+    private Wallet wallet;
     private int transactionId;
     private Date transactionDate;
     private String transactionNote;
@@ -12,7 +13,10 @@ public class Transaction implements Serializable {
     private String currencyCode;
     private String location;
     private Category category;
-    Wallet wallet;
+
+    //---------------------------
+    // update database v2
+    private String mediaUri;
 
     public Transaction() {
         this.transactionDate = new MTDate().toDate();
@@ -28,6 +32,7 @@ public class Transaction implements Serializable {
         this.location = builder.location;
         this.category = builder.category;
         this.wallet = builder.wallet;
+        this.mediaUri = builder.mediaUri;
     }
 
     public int getTransactionId() {
@@ -100,6 +105,10 @@ public class Transaction implements Serializable {
         this.currencyCode = currencyCode;
     }
 
+    public String getMediaUri() {
+        return mediaUri;
+    }
+
     public static class TransactionBuilder {
         int transactionId;
         private Date transactionDate;
@@ -109,6 +118,8 @@ public class Transaction implements Serializable {
         private String location;
         private Category category;
         Wallet wallet;
+        // update database v2
+        private String mediaUri;
 
         public TransactionBuilder() {
         }
@@ -149,6 +160,11 @@ public class Transaction implements Serializable {
 
         public TransactionBuilder setWallet(Wallet wallet) {
             this.wallet = wallet;
+            return this;
+        }
+
+        public TransactionBuilder setMediaUri(String mediaUri) {
+            this.mediaUri = mediaUri;
             return this;
         }
 

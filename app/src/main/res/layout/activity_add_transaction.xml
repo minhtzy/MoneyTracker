@@ -41,7 +41,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="8dp"
                         android:layout_toEndOf="@id/image_money_type"
-                        android:hint="0"
+                        android:hint="@string/init_zero"
                         android:inputType="numberDecimal" />
                 </RelativeLayout>
 
@@ -65,7 +65,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_toEndOf="@id/image_transaction_category"
                         android:focusable="false"
-                        android:hint="Choose your category" />
+                        android:hint="@string/choose_category" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_toEndOf="@id/image_transaction_note"
-                        android:hint="Write note" />
+                        android:hint="@string/write_note" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -110,7 +110,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_toEndOf="@id/image_transaction_date"
                         android:focusable="false"
-                        android:text="Today" />
+                        android:text="@string/today"/>
                 </RelativeLayout>
 
                 <RelativeLayout

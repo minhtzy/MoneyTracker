@@ -60,5 +60,15 @@
     <string name="last_year">Last year</string>
     <string name="current_year">Current year</string>
     <string name="future_transactions">Future Transaction</string>
-    <string name="user_name">User name</string>
+
+    <string name="loading">Loading...</string>
+    <string name="so_du_dau">Inflow</string>
+    <string name="so_du_cuoi">Outflow</string>
+    <string name="view_statistic">Tap to view full report</string>
+    <string name="init_zero">0</string>
+    <string name="write_note">Write note</string>
+    <string name="choose_category">Choose Category</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="user_name">Username</string>
 </resources>

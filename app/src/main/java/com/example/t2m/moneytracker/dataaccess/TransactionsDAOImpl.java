@@ -38,6 +38,8 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
     public static final String COLUMN_CATEGORY_ID_FK = "categoryId";
     public static final String COLUMN_WALLET_ID_FK = "walletId";
 
+    public static final String COLUMN_TRANSACTION_MEDIA_URI = "media_uri";
+
     MoneyTrackerDBHelper dbHelper;
     ICategoriesDAO iCategoriesDAO;
     IWalletsDAO iWalletsDAO;
@@ -57,6 +59,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
         values.put(COLUMN_TRANSACTION_DATE, transaction.getTransactionDate().getTime());
         values.put(COLUMN_TRANSACTION_NOTE, transaction.getTransactionNote());
         //values.put(COLUMN_TRANSACTION_LOCATION,transaction.getLocation());
+        values.put(COLUMN_TRANSACTION_MEDIA_URI,transaction.getMediaUri());
         values.put(COLUMN_CATEGORY_ID_FK, transaction.getCategory().getId());
         values.put(COLUMN_WALLET_ID_FK, transaction.getWallet().getWalletId());
         int id = (int) db.insert(TABLE_TRANSACTION_NAME, COLUMN_TRANSACTION_LOCATION, values);
@@ -175,6 +178,11 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
         int walletId = data.getInt(data.getColumnIndex(COLUMN_WALLET_ID_FK));
         Category category = iCategoriesDAO.getCategoryById(typeId);
         Wallet wallet = iWalletsDAO.getWalletById(walletId);
+        String mediaUri = null;
+        if(!data.isNull(data.getColumnIndex(COLUMN_TRANSACTION_MEDIA_URI))) {
+            mediaUri = data.getString(data.getColumnIndex(COLUMN_TRANSACTION_MEDIA_URI));
+        }
+
         builder
                 .setTransactionId(data.getInt(data.getColumnIndex(COLUMN_TRANSACTION_ID)))
                 .setMoneyTrading(data.getFloat(data.getColumnIndex(COLUMN_TRANSACTION_TRADING)))
@@ -182,6 +190,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
                 .setTransactionNote(data.getString(data.getColumnIndex(COLUMN_TRANSACTION_NOTE)))
                 .setCurrencyCode(data.getString(data.getColumnIndex(COLUMN_TRANSACTION_CURRENCY)))
                 .setCategory(category)
+                .setMediaUri(mediaUri)
                 .setWallet(wallet);
         return builder.build();
     }

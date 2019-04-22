@@ -16,8 +16,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
-import com.example.t2m.moneytracker.dataaccess.MoneyTrackerDBHelper;
-
 import com.example.t2m.moneytracker.setting.Setting;
 
 import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
@@ -112,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         //NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         //int checkedId = navigationView.getCheckedItem().getItemId();
         //if(checkedId == id) ;
-        Fragment fragment = null;
+        Fragment fragment;
         Class fragmentClass = null;
         if (id == R.id.nav_transaction) {
             Log.d(MainActivity.class.getSimpleName(),"Start Transaction Activity");
@@ -135,12 +133,14 @@ public class MainActivity extends AppCompatActivity
         }
 
         try {
-            fragment = (Fragment) fragmentClass.newInstance();
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,fragment).addToBackStack(null).commit();
-            // Highlight the selected item has been done by NavigationView
-            item.setChecked(true);
-            // Set action bar title
-            setTitle(item.getTitle());
+            if(fragmentClass != null) {
+                fragment = (Fragment) fragmentClass.newInstance();
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,fragment).addToBackStack(null).commit();
+                // Highlight the selected item has been done by NavigationView
+                item.setChecked(true);
+                // Set action bar title
+                setTitle(item.getTitle());
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {

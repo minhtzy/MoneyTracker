@@ -11,7 +11,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Số dư đầu" />
+        android:text="@string/so_du_dau" />
 
     <TextView
         android:id="@+id/fts_text_so_du_cuoi"
@@ -21,7 +21,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Số dư cuối" />
+        android:text="@string/so_du_cuoi" />
 
     <TextView
         android:id="@+id/fts_so_du_dau"
@@ -30,8 +30,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="0" />
+        android:layout_marginEnd="8dp" />
 
     <TextView
         android:id="@+id/fts_so_du_cuoi"
@@ -40,8 +39,7 @@
         android:layout_below="@+id/fts_so_du_dau"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="0" />
+        android:layout_marginEnd="8dp" />
 
     <View style="@style/Seperator"
         android:layout_width="100dp"
@@ -56,8 +54,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/fts_so_du_cuoi"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
-        android:text="0" />
+        android:layout_marginTop="16dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -66,7 +63,7 @@
         android:layout_below="@id/fts_con_lai"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Xem báo cáo cho giai đoạn này"
+        android:text="@string/view_statistic"
         android:textColor="@color/colorAccent" />
 
 </RelativeLayout>
