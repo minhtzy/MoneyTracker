@@ -39,8 +39,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_toEndOf="@id/image_money_type"
                     android:hint="@string/init_zero"
-                    android:inputType="numberDecimal"
-                    android:textSize="24dp" />
+                    android:textSize="24sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -65,7 +64,7 @@
                     android:layout_toEndOf="@id/image_transaction_category"
                     android:focusable="false"
                     android:hint="@string/choose_category"
-                    android:textSize="24dp" />
+                    android:textSize="24sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -88,8 +87,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginTop="8dp"
                     android:layout_toEndOf="@id/image_transaction_note"
-                    android:hint="@string/write_note"
-                    android:textSize="24dp" />
+                    android:hint="@string/no_write_note"
+                    android:textSize="24sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -113,8 +112,8 @@
                     android:layout_marginTop="8dp"
                     android:layout_toEndOf="@id/image_transaction_date"
                     android:focusable="false"
-                    android:text="@string/today"
-                    android:textSize="24dp" />
+                    android:hint="@string/today"
+                    android:textSize="24sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -138,7 +137,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_toEndOf="@id/image_transaction_wallet"
                     android:focusable="false"
-                    android:textSize="24dp" />
+                    android:textSize="24sp" />
             </RelativeLayout>
 
             <ImageView
@@ -148,7 +147,6 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:focusable="true"
-                android:scaleType="centerCrop"
                 android:visibility="invisible" />
         </LinearLayout>
     </ScrollView>

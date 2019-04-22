@@ -28,19 +28,18 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
     private TextView mTextDate;
     private TextView mTextWallet;
     private ImageView mImgPreview;
-    private Calendar mCalendar;
 
-    private Transaction mTrasaction;
+    private Transaction mTransaction;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_transaction_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if(savedInstanceState != null) {
-            mTrasaction = (Transaction) savedInstanceState.getSerializable(EXTRA_TRANSACTION);
+            mTransaction = (Transaction) savedInstanceState.getSerializable(EXTRA_TRANSACTION);
         }
         else {
-            mTrasaction = (Transaction) getIntent().getSerializableExtra(EXTRA_TRANSACTION);
+            mTransaction = (Transaction) getIntent().getSerializableExtra(EXTRA_TRANSACTION);
         }
         addControls();
         updateUI();
@@ -48,7 +47,7 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_save,menu);
+        getMenuInflater().inflate(R.menu.meunu_transaction_detail,menu);
         return true;
     }
 
@@ -87,7 +86,6 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
         mTextDate = findViewById(R.id.text_transaction_date);
         mTextWallet = findViewById(R.id.text_transaction_wallet);
         mImgPreview = findViewById(R.id.image_preview);
-        mCalendar = Calendar.getInstance();
     }
 
     private void addEvents() {
@@ -101,30 +99,30 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        if(mTrasaction != null) {
-            mTextCategory.setText(mTrasaction.getCategory().getCategory());
+        if(mTransaction != null) {
+            mTextCategory.setText(mTransaction.getCategory().getCategory());
             ImageView imageView = findViewById(R.id.image_transaction_category);
             // lấy ảnh từ asset
             String base_path = "category/";
             try {
-                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + mTrasaction.getCategory().getIcon()),null);
+                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + mTransaction.getCategory().getIcon()),null);
                 imageView.setImageDrawable(img);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            mTextDate.setText(new MTDate(mTrasaction.getTransactionDate()).toIsoDateShortTimeString());
-            mTextMoney.setText(String.valueOf(mTrasaction.getMoneyTrading()));
-            if(mTrasaction.getMoneyTrading() >= 0) {
+            mTextDate.setText(new MTDate(mTransaction.getTransactionDate()).toIsoDateShortTimeString());
+            mTextMoney.setText(String.valueOf(mTransaction.getMoneyTrading()));
+            if(mTransaction.getMoneyTrading() >= 0) {
                 mTextMoney.setTextColor(getResources().getColor(R.color.colorMoneyTradingPositive));
             }
             else {
                 mTextMoney.setTextColor(getResources().getColor(R.color.colorMoneyTradingNegative));
             }
-            mTextNote.setText(mTrasaction.getTransactionNote());
-            mTextWallet.setText(mTrasaction.getWallet().getWalletName());
-            if(mTrasaction.getMediaUri() != null && !mTrasaction.getMediaUri().isEmpty() ) {
-                updateImagePreView(mTrasaction.getMediaUri());
+            mTextNote.setText(mTransaction.getTransactionNote());
+            mTextWallet.setText(mTransaction.getWallet().getWalletName());
+            if(mTransaction.getMediaUri() != null && !mTransaction.getMediaUri().isEmpty() ) {
+                updateImagePreView(mTransaction.getMediaUri());
             }
         }
     }

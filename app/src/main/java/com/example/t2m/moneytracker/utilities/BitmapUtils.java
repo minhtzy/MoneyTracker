@@ -17,12 +17,12 @@ import java.util.Calendar;
 
 public class BitmapUtils {
 
-    private static final String IMAGE_DIRECTORY = "media";
+    private static final String IMAGE_DIRECTORY = "/money_tracker_media";
 
     // convert from bitmap to byte array
     public static byte[] getBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
         return stream.toByteArray();
     }
 
@@ -31,10 +31,9 @@ public class BitmapUtils {
     }
 
     public static String saveImage(Context context,Bitmap myBitmap) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        byte[] datas = getBytes(myBitmap);
         File wallpaperDirectory = new File(
-                Environment.getExternalStorageDirectory().getAbsolutePath() + IMAGE_DIRECTORY);
+                Environment.getExternalStorageDirectory().toString() + IMAGE_DIRECTORY);
         // have the object build the directory structure, if needed.
         if (!wallpaperDirectory.exists()) {
             wallpaperDirectory.mkdirs();
@@ -45,7 +44,7 @@ public class BitmapUtils {
                     .getTimeInMillis() + ".jpg");
             f.createNewFile();
             FileOutputStream fo = new FileOutputStream(f);
-            fo.write(bytes.toByteArray());
+            fo.write(datas);
             MediaScannerConnection.scanFile(context,
                     new String[]{f.getPath()},
                     new String[]{"image/jpeg"}, null);

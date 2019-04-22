@@ -176,12 +176,10 @@
                 <ImageView
                     android:id="@+id/image_preview"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:scaleType="centerCrop"
+                    android:layout_height="200dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:focusable="true" />
-
             </LinearLayout>
         </LinearLayout>
 

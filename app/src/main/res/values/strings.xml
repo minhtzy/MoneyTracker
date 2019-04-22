@@ -116,5 +116,7 @@
     <string name="write_note">Ghi chú</string>
     <string name="edit">Sửa</string>
     <string name="delete">Xóa</string>
+    <string name="transaction_detail">Chi tiết hóa đơn</string>
+    <string name="no_write_note">Không có ghi chú</string>
 
 </resources>

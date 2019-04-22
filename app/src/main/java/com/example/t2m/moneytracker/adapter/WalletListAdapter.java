@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.t2m.moneytracker.R;
+import com.example.t2m.moneytracker.common.Constants;
 import com.example.t2m.moneytracker.model.Wallet;
 
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class WalletListAdapter extends ArrayAdapter<Wallet> {
 
         Wallet wallet = this.objects.get(position);
         txtTenitem.setText(wallet.getWalletName());
-        txtBalacne.setText(String.valueOf(wallet.getCurrentBalance()));
+        txtBalacne.setText(String.format(Constants.PRICE_FORMAT,wallet.getCurrentBalance()));
         if(wallet.getCurrentBalance() >= 0) {
             txtBalacne.setTextColor(getContext().getResources().getColor(R.color.colorMoneyTradingPositive));
         }

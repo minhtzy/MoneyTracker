@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -48,6 +48,11 @@
         <activity android:name=".setting.Setting"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".changelanguage.ChangeLanguageActivity"></activity>
+        <activity android:name=".transaction.ViewTransactionDetailActivity"
+            android:label="@string/transaction_detail"
+            android:theme="@style/AppTheme">
+
+        </activity>
     </application>
 
 </manifest>

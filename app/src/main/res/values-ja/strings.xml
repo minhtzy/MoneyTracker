@@ -64,4 +64,6 @@
     <string name="write_note">記帳</string>
     <string name="edit">編集する</string>
     <string name="delete">削除する</string>
+    <string name="transaction_detail">取引詳細</string>
+    <string name="no_write_note">メモなし</string>
 </resources>
