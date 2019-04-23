@@ -71,7 +71,10 @@ public class TransactionListFragment extends Fragment {
         mLViewTransaction.setAdapter(mAdapter);
         headerView = inflater.inflate(
                 R.layout.header_transaction_statistics, null, false);
-        mLViewTransaction.addHeaderView(headerView);
+        if(mItems.size() > 0) {
+            mLViewTransaction.addHeaderView(headerView);
+        }
+
         mLViewTransaction.setOnItemClickListener(new PinnedHeaderListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int section, int position, long id) {

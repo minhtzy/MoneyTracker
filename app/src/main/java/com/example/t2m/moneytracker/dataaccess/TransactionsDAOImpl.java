@@ -202,4 +202,32 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
         return db.rawQuery(query, new String[]{String.valueOf(transactionId)});
     }
 
+    public List<Transaction> getStatisticalByCategory(int categoryId , int type) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String sql = "SELECT "
+                + " tblt.trading AS trading "
+                + " ,tblc._id AS categoryId "
+                + " , tblc.type AS type "
+                + " FROM tbl_transactions tblt "
+                + " INNER JOIN tbl_categories tblc ON tblc._id = tblt.categoryId "
+                + " WHERE tblt.categoryId = " + categoryId
+                + " AND tblc.type = "+ type;
+        List<Transaction> list = new ArrayList<Transaction>();
+        Cursor cursor = db.rawQuery(sql,null);
+
+        while(cursor.moveToNext()) {
+            Category cat = new Category();
+            Float column1 = cursor.getFloat(cursor.getColumnIndex("trading"));
+            int column2 = cursor.getInt(cursor.getColumnIndex("categoryId"));
+            int column3 = cursor.getInt(cursor.getColumnIndex("type"));
+            Transaction data = new Transaction();
+            data.setMoneyTrading(column1);
+            cat.setId(column2);
+            cat.setType(column3);
+            data.setCategory(cat);
+            list.add(data);
+        }
+        return list;
+    }
+
 }

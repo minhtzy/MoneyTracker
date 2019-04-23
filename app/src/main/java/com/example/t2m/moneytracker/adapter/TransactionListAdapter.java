@@ -13,11 +13,13 @@ import android.widget.TextView;
 import com.example.t2m.moneytracker.R;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.pinnedlistview.SectionedBaseAdapter;
+import com.example.t2m.moneytracker.utils.LanguageUtils;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class TransactionListAdapter extends SectionedBaseAdapter {
@@ -113,13 +115,14 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         holder.header_month_year = layout.findViewById(R.id.text_month_year_header);
         holder.header_money_trading = layout.findViewById(R.id.text_money_trading);
 
+        Locale locale = new Locale(LanguageUtils.getCurrentLanguage().getCode());
         Date date = mItems.get(section).first;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd",locale);
         holder.header_date.setText(simpleDateFormat.format(date));
 
-        simpleDateFormat = new SimpleDateFormat("EEEE");
+        simpleDateFormat = new SimpleDateFormat("EEEE",locale);
         holder.header_day.setText(simpleDateFormat.format(date));
-        simpleDateFormat = new SimpleDateFormat("MM/yyyy");
+        simpleDateFormat = new SimpleDateFormat("MM/yyyy",locale);
         holder.header_month_year.setText(simpleDateFormat.format(date));
 
         float moneyTrading = 0;

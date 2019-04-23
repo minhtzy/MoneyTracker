@@ -47,12 +47,15 @@
         </activity>
         <activity android:name=".setting.Setting"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".changelanguage.ChangeLanguageActivity"></activity>
+        <activity android:name=".changelanguage.ChangeLanguageActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".transaction.ViewTransactionDetailActivity"
             android:label="@string/transaction_detail"
             android:theme="@style/AppTheme">
-
         </activity>
+        <activity android:name=".statistical.StatisticalActivity"
+            android:label="@string/report"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
