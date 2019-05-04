@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.example.t2m.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.example.t2m.moneytracker.model.Category;
 import com.example.t2m.moneytracker.model.MTDate;
 import com.example.t2m.moneytracker.model.Transaction;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -33,6 +35,9 @@ import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.data.Entry;
@@ -43,6 +48,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
@@ -59,6 +65,9 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
   private Calendar mCalendar;
   private Spinner dropdown;
   private Spinner dropdown2;
+  private BarChart barChart;
+  private RelativeLayout relativeLayoutBarChart;
+  private RelativeLayout relativeLayoutMchart;
   ITransactionsDAO iTransactionsDAO;
   static TransactionsDAOImpl transactionsDAOImpl;
   static CategoriesDAOImpl categoriesDAOImpl;
@@ -68,21 +77,28 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     View view = inflater.inflate(R.layout.activity_statistical_tab,container,false);
     transactionsDAOImpl = new TransactionsDAOImpl(getContext());
     categoriesDAOImpl = new CategoriesDAOImpl(getContext());
-    // methodMChart(mChart, view);
-//    methodComChart(comChart, view);
-    methodSpinner2(view);
-    methodDate(view);
-    ArrayAdapter<CharSequence> adapter1  = methodSpinner(view);
-    ArrayAdapter<CharSequence> adapter2  = methodSpinner2(view);
+    this.addControls(view);
+    this.methodDate();
+    this.methodSpinner();
+    this.methodSpinner2();
     return view;
   }
 
-  /* Xử lý thời gian - start*/
-  public void methodDate (View view) {
+  private void addControls(View view) {
     mTextFromDate = view.findViewById(R.id.text_from_date);
     mTextToDate = view.findViewById(R.id.text_to_date);
+    dropdown = view.findViewById(R.id.spinner1);
+    dropdown2 = view.findViewById(R.id.spinner2);
+    mChart = view.findViewById(R.id.piechart);
     mCalendar = Calendar.getInstance();
+    comChart =  view.findViewById(R.id.combinedChart);
+    barChart = view.findViewById(R.id.bar_chart);
+    relativeLayoutBarChart = view.findViewById(R.id.bar_chart_relative_layout);
+    relativeLayoutMchart = view.findViewById(R.id.piechart_relative_layout);
 
+  }
+  /* Xử lý thời gian - start*/
+  public void methodDate () {
     mTextFromDate.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -124,26 +140,44 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
   /* Xử lý thời gian - end*/
 
   /* Xử lý dropdown - start*/
-  public ArrayAdapter<CharSequence> methodSpinner (View view) {
-    dropdown = view.findViewById(R.id.spinner1);
-
+  public void methodSpinner () {
     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
       R.array.planets_array, android.R.layout.simple_spinner_item);
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
     dropdown.setAdapter(adapter);
-
-    return adapter;
   }
-  public ArrayAdapter<CharSequence> methodSpinner2 (View view) {
-    dropdown2 = view.findViewById(R.id.spinner2);
-
+  public void methodSpinner2 () {
     ArrayAdapter<java.lang.CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(),
       R.array.planets_array2, android.R.layout.simple_spinner_item);
     adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     dropdown2.setAdapter(adapter2);
 
-    return adapter2;
+
+    dropdown2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+         long item = parent.getItemIdAtPosition(position);
+         if(item > 0) {
+           methodMChart();
+           mChart.setVisibility(view.VISIBLE);
+           relativeLayoutMchart.setVisibility(view.VISIBLE);
+           barChart.setVisibility(view.INVISIBLE);
+           relativeLayoutBarChart.setVisibility(view.INVISIBLE);
+         } else if (item == 0) {
+           methodBarchart();
+           mChart.setVisibility(view.INVISIBLE);
+           relativeLayoutMchart.setVisibility(view.INVISIBLE);
+           barChart.setVisibility(view.VISIBLE);
+           relativeLayoutBarChart.setVisibility(view.VISIBLE);
+         }
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+
+      }
+    });
   }
 
   /* Xử lý dropdown - end*/
@@ -156,19 +190,18 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
   }
 
   /* Xử lý biểu đồ tròn - start*/
-  public void methodMChart(PieChart mChartNew, View view){
-    mChartNew = (PieChart) view.findViewById(R.id.piechart);
-    mChartNew.setRotationEnabled(true);
-    mChartNew.setDescription(new Description());
-    mChartNew.setHoleRadius(35f);
-    mChartNew.setTransparentCircleAlpha(0);
-    mChartNew.setCenterText("PieChart");
-    mChartNew.setCenterTextSize(10);
-    mChartNew.setDrawEntryLabels(true);
+  public void methodMChart(){
+    mChart.setRotationEnabled(true);
+    mChart.setDescription(new Description());
+    mChart.setHoleRadius(35f);
+    mChart.setTransparentCircleAlpha(0);
+    mChart.setCenterText("PieChart");
+    mChart.setCenterTextSize(10);
+    mChart.setDrawEntryLabels(true);
 
-    addDataSet(mChartNew);
+    addDataSet(mChart);
 
-    mChartNew.setOnChartValueSelectedListener(this);
+    mChart.setOnChartValueSelectedListener(this);
   }
 
   private static void addDataSet(PieChart pieChart) {
@@ -210,86 +243,9 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
   }
   /* Xử lý biểu đồ tròn - end*/
 
-
-//
-//  public void methodComChart(CombinedChart comChart, View view) {
-//    comChart = (CombinedChart) view.findViewById(R.id.combinedChart);
-//    comChart.getDescription().setEnabled(false);
-//    comChart.setBackgroundColor(Color.WHITE);
-//    comChart.setDrawGridBackground(false);
-//    comChart.setDrawBarShadow(false);
-//    comChart.setHighlightFullBarEnabled(false);
-//    comChart.setOnChartValueSelectedListener(this);
-//
-//    YAxis rightAxis = comChart.getAxisRight();
-//    rightAxis.setDrawGridLines(false);
-//    rightAxis.setAxisMinimum(0f);
-//
-//    YAxis leftAxis = comChart.getAxisLeft();
-//    leftAxis.setDrawGridLines(false);
-//    leftAxis.setAxisMinimum(0f);
-//
-//    final List<String> xLabel = new ArrayList<>();
-//    xLabel.add("Jan");
-//    xLabel.add("Feb");
-//    xLabel.add("Mar");
-//    xLabel.add("Apr");
-//    xLabel.add("May");
-//    xLabel.add("Jun");
-//    xLabel.add("Jul");
-//    xLabel.add("Aug");
-//    xLabel.add("Sep");
-//    xLabel.add("Oct");
-//    xLabel.add("Nov");
-//    xLabel.add("Dec");
-//
-//    XAxis xAxis = comChart.getXAxis();
-//    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-//    xAxis.setAxisMinimum(0f);
-//    xAxis.setGranularity(1f);
-//
-//    CombinedData data = new CombinedData();
-//    LineData lineDatas = new LineData();
-//    lineDatas.addDataSet((ILineDataSet) dataChart());
-//
-//    data.setData(lineDatas);
-//
-//    xAxis.setAxisMaximum(data.getXMax() + 0.25f);
-//
-//    comChart.setData(data);
-//    comChart.invalidate();
-//  }
   @Override
   public void onNothingSelected() {
 
-  }
-
-  private static DataSet dataChart() {
-
-    LineData d = new LineData();
-    int[] data = new int[] { 1, 2, 2, 1, 1, 1, 2, 1, 1, 2, 1, 9 };
-
-    ArrayList<Entry> entries = new ArrayList<Entry>();
-
-    for (int index = 0; index < 12; index++) {
-      entries.add(new Entry(index, data[index]));
-    }
-
-    LineDataSet set = new LineDataSet(entries, "Request Ots approved");
-    set.setColor(Color.GREEN);
-    set.setLineWidth(2.5f);
-    set.setCircleColor(Color.GREEN);
-    set.setCircleRadius(5f);
-    set.setFillColor(Color.GREEN);
-    set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-    set.setDrawValues(true);
-    set.setValueTextSize(10f);
-    set.setValueTextColor(Color.GREEN);
-
-    set.setAxisDependency(YAxis.AxisDependency.LEFT);
-    d.addDataSet(set);
-
-    return set;
   }
 
   public static void initSum() {
@@ -326,4 +282,76 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
       }
     }
   }
+
+
+  /* Vẽ biểu đồ cột - start */
+  private void methodBarchart() {
+    barChart.setDrawBarShadow(false);
+    barChart.setDrawValueAboveBar(true);
+    Description description = new Description();
+    description.setText("");
+    barChart.setDescription(description);
+    barChart.setMaxVisibleValueCount(50);
+    barChart.setPinchZoom(false);
+    barChart.setDrawGridBackground(false);
+
+    XAxis xl = barChart.getXAxis();
+    xl.setGranularity(1f);
+    xl.setCenterAxisLabels(true);
+
+    YAxis leftAxis = barChart.getAxisLeft();
+    leftAxis.setDrawGridLines(false);
+    leftAxis.setSpaceTop(30f);
+    barChart.getAxisRight().setEnabled(false);
+
+    //data
+    float groupSpace = 0.04f;
+    float barSpace = 0.02f;
+    float barWidth = 0.46f;
+
+    int startYear = 1980;
+    int endYear = 1985;
+
+    List<BarEntry> yVals1 = new ArrayList<BarEntry>();
+    List<BarEntry> yVals2 = new ArrayList<BarEntry>();
+
+    for (int i = startYear; i < endYear; i++) {
+      yVals1.add(new BarEntry(i, 0.4f));
+    }
+
+    for (int i = startYear; i < endYear; i++) {
+      yVals2.add(new BarEntry(i, 0.7f));
+    }
+
+    BarDataSet set1, set2;
+
+    if (barChart.getData() != null && barChart.getData().getDataSetCount() > 0) {
+      set1 = (BarDataSet) barChart.getData().getDataSetByIndex(0);
+      set2 = (BarDataSet) barChart.getData().getDataSetByIndex(1);
+      set1.setValues(yVals1);
+      set2.setValues(yVals2);
+      barChart.getData().notifyDataChanged();
+      barChart.notifyDataSetChanged();
+    } else {
+      set1 = new BarDataSet(yVals1, "Company A");
+      set1.setColor(Color.rgb(104, 241, 175));
+      set2 = new BarDataSet(yVals2, "Company B");
+      set2.setColor(Color.rgb(164, 228, 251));
+
+      ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+      dataSets.add(set1);
+      dataSets.add(set2);
+
+      BarData data = new BarData(dataSets);
+      barChart.setData(data);
+    }
+
+    barChart.getBarData().setBarWidth(barWidth);
+    barChart.groupBars(startYear, groupSpace, barSpace);
+    barChart.invalidate();
+
+  }
+  /* Vẽ biểu đồ cột - end */
+
+
 }
