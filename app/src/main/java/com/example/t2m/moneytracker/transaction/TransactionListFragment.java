@@ -1,6 +1,7 @@
 package com.example.t2m.moneytracker.transaction;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.example.t2m.moneytracker.common.Constants;
 import com.example.t2m.moneytracker.model.MTDate;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.pinnedlistview.PinnedHeaderListView;
+import com.example.t2m.moneytracker.utilities.CurrencyUtils;
 
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ public class TransactionListFragment extends Fragment {
     List<Transaction> mItems;
     List<Pair<Date,List<Transaction>>> mFilterItems;
     View headerView;
+    private Context context;
 
     private static final String BUNDLE_LIST_ITEM = "TransactionListFragment.bundle.list_items";
     private Runnable runableUpdateAdapter;
@@ -71,7 +74,10 @@ public class TransactionListFragment extends Fragment {
         mLViewTransaction.setAdapter(mAdapter);
         headerView = inflater.inflate(
                 R.layout.header_transaction_statistics, null, false);
-        mLViewTransaction.addHeaderView(headerView);
+        if(mItems.size() > 0) {
+            mLViewTransaction.addHeaderView(headerView);
+        }
+
         mLViewTransaction.setOnItemClickListener(new PinnedHeaderListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int section, int position, long id) {
@@ -218,9 +224,12 @@ public class TransactionListFragment extends Fragment {
         TextView textTieu = headerView.findViewById(R.id.fts_so_du_cuoi);
         TextView textConLai = headerView.findViewById(R.id.fts_con_lai);
 
-        textChi.setText(String.format(Constants.PRICE_FORMAT,tienChi));
-        textTieu.setText(String.format(Constants.PRICE_FORMAT,tienTieu));
-        textConLai.setText(String.format(Constants.PRICE_FORMAT,tienChi - tienTieu));
+        String moneyChi = CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienChi));
+        String moneyTieu = CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienTieu));
+        String moneyConLai = CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienChi - tienTieu));
+        textChi.setText(moneyChi);
+        textTieu.setText(moneyTieu);
+        textConLai.setText(moneyConLai);
     }
 
 }

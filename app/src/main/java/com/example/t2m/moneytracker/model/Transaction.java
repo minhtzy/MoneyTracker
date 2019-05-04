@@ -13,8 +13,25 @@ public class Transaction implements Serializable {
     private String currencyCode;
     private String location;
     private Category category;
+    private CategoryBean categoryBean;
 
-    //---------------------------
+  public void setCurrencyCode(String currencyCode) {
+    this.currencyCode = currencyCode;
+  }
+
+  public CategoryBean getCategoryBean() {
+    return categoryBean;
+  }
+
+  public void setCategoryBean(CategoryBean categoryBean) {
+    this.categoryBean = categoryBean;
+  }
+
+  public void setMediaUri(String mediaUri) {
+    this.mediaUri = mediaUri;
+  }
+
+  //---------------------------
     // update database v2
     private String mediaUri;
 

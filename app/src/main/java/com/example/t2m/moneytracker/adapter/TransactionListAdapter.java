@@ -13,11 +13,14 @@ import android.widget.TextView;
 import com.example.t2m.moneytracker.R;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.pinnedlistview.SectionedBaseAdapter;
+import com.example.t2m.moneytracker.utilities.CurrencyUtils;
+import com.example.t2m.moneytracker.utils.LanguageUtils;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class TransactionListAdapter extends SectionedBaseAdapter {
@@ -29,6 +32,8 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         mContext = context;
         mItems = items;
     }
+
+    public CurrencyUtils currencyUtils;
 
     public void updateValues(List<Pair<Date,List<Transaction>>> items) {
         mItems = items;
@@ -79,7 +84,9 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         Transaction transaction = mItems.get(section).second.get(position);
         holder.item_label.setText(transaction.getCategory().getCategory());
         holder.item_note.setText(transaction.getTransactionNote());
-        holder.item_money_trading.setText(String.format("%.2f",transaction.getMoneyTrading()));
+
+        String money = CurrencyUtils.formatVnCurrence(String.format("%.2f",transaction.getMoneyTrading()) );
+        holder.item_money_trading.setText(money);
 
 
         // lấy ảnh từ asset
@@ -113,13 +120,14 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         holder.header_month_year = layout.findViewById(R.id.text_month_year_header);
         holder.header_money_trading = layout.findViewById(R.id.text_money_trading);
 
+        Locale locale = new Locale(LanguageUtils.getCurrentLanguage().getCode());
         Date date = mItems.get(section).first;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd",locale);
         holder.header_date.setText(simpleDateFormat.format(date));
 
-        simpleDateFormat = new SimpleDateFormat("EEEE");
+        simpleDateFormat = new SimpleDateFormat("EEEE",locale);
         holder.header_day.setText(simpleDateFormat.format(date));
-        simpleDateFormat = new SimpleDateFormat("MM/yyyy");
+        simpleDateFormat = new SimpleDateFormat("MM/yyyy",locale);
         holder.header_month_year.setText(simpleDateFormat.format(date));
 
         float moneyTrading = 0;
@@ -127,8 +135,8 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         for(Transaction tran : transactions) {
             moneyTrading += tran.getMoneyTrading();
         }
-
-        holder.header_money_trading.setText(String.format("%.2f",moneyTrading));
+        String moneyHeader = CurrencyUtils.formatVnCurrence(String.format("%.2f",moneyTrading) );
+        holder.header_money_trading.setText(moneyHeader);
 
         if (moneyTrading >= 0)
             holder.header_money_trading.setTextColor(parent.getResources().getColor(R.color.colorMoneyTradingPositive));
