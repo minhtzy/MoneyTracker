@@ -23,4 +23,9 @@
 
     <color name="colorMoneyTradingNegative">#F00</color>
     <color name="colorMoneyTradingPositive">#0F0</color>
+
+    <color name="colorTabBackground">@color/colorPrimary</color>
+    <color name="colorTabBackgroundSelected">@color/colorPrimary</color>
+    <color name="colorTabTitle">@color/colorTextSecondaryDark</color>
+    <color name="colorTabTitleSelected">@color/colorTextPrimaryDark</color>
 </resources>

@@ -4,8 +4,8 @@
     <string name="title_activity_main_drawer" translatable="false">Main Drawer Activity</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-    <string name="nav_header_title" translatable="false">Android Studio</string>
-    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_title" translatable="false">User Name</string>
+    <string name="nav_header_subtitle" translatable="false">example@email.com</string>
     <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings">Cài đặt</string>
     <string name="title_activity_main" translatable="false">Main Activity</string>
