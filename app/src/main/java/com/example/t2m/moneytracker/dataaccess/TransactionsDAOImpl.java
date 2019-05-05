@@ -147,8 +147,8 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
         Cursor cursor = db.rawQuery(query,
                 new String[]{
                         String.valueOf(walletId),
-                        String.valueOf(dateRange.getDateFrom().getTime()),
-                        String.valueOf(dateRange.getDateTo().getTime())});
+                        String.valueOf(dateRange.getDateFrom().toDate().getTime()),
+                        String.valueOf(dateRange.getDateTo().toDate().getTime())});
         return cursor;
     }
     public List<Transaction> getAllTransaction() {

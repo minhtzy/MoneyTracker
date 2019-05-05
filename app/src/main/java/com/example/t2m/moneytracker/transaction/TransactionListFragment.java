@@ -1,5 +1,6 @@
 package com.example.t2m.moneytracker.transaction;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.t2m.moneytracker.R;
@@ -36,13 +38,12 @@ public class TransactionListFragment extends Fragment {
     private static final String LOG_TAG = "TransactionList.LOG_TAG";
     private PinnedHeaderListView mLViewTransaction;
     private TransactionListAdapter mAdapter;
+    private LinearLayout mBlankLayout;
     List<Transaction> mItems;
     List<Pair<Date,List<Transaction>>> mFilterItems;
     View headerView;
-    private Context context;
 
     private static final String BUNDLE_LIST_ITEM = "TransactionListFragment.bundle.list_items";
-    private Runnable runableUpdateAdapter;
 
     public static TransactionListFragment newInstance(List<Transaction> items) {
         Log.d(LOG_TAG,"create new instance "+ items.size());
@@ -69,14 +70,13 @@ public class TransactionListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_list_transaction,container,false);
         mLViewTransaction = view.findViewById(R.id.list_view_transaction);
+        mBlankLayout = view.findViewById(R.id.layout_transaction_empty);
         mFilterItems = new ArrayList<>();
         mAdapter = new TransactionListAdapter(this.getContext(),mFilterItems);
         mLViewTransaction.setAdapter(mAdapter);
-        headerView = inflater.inflate(
-                R.layout.header_transaction_statistics, null, false);
-        if(mItems.size() > 0) {
-            mLViewTransaction.addHeaderView(headerView);
-        }
+//        headerView = inflater.inflate(
+//                R.layout.header_transaction_statistics, null, false);
+//        mLViewTransaction.addHeaderView(headerView);
 
         mLViewTransaction.setOnItemClickListener(new PinnedHeaderListView.OnItemClickListener() {
             @Override
@@ -94,7 +94,7 @@ public class TransactionListFragment extends Fragment {
 
             }
         });
-        new loadTransactions().execute();
+        new loadTransactions(getActivity()).execute();
         return view;
     }
 
@@ -110,7 +110,7 @@ public class TransactionListFragment extends Fragment {
 
     public void add(Transaction transaction) {
         mItems.add(transaction);
-        new loadTransactions().execute();
+        new loadTransactions(getActivity()).execute();
     }
 
     private void filterPairTransactions(List<Transaction> transactions) {
@@ -156,13 +156,18 @@ public class TransactionListFragment extends Fragment {
     }
 
     // =====================================================
-    private Dialog mDialog;
 
-    private class loadTransactions extends AsyncTask<Void, Void, Void> {
 
+    protected class loadTransactions extends AsyncTask<Void, Void, Void> {
+        private Dialog mDialog;
+        private Activity activity;
+
+        private loadTransactions(Activity activity) {
+            this.activity = activity;
+        }
         @Override
         protected void onPreExecute() {
-            mDialog = new Dialog(getActivity());
+            mDialog = new Dialog(activity);
             // chu y phai dat truoc setcontentview
             mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             mDialog.setContentView(R.layout.loading_view);
@@ -174,7 +179,7 @@ public class TransactionListFragment extends Fragment {
         protected Void doInBackground(Void... unused) {
 
             // su dung phuong thuc de update lai adapter
-            getActivity().runOnUiThread(runnableUdapteAdapter);
+            activity.runOnUiThread(runnableUpdateAdapter);
 
             return (null);
         }
@@ -185,31 +190,45 @@ public class TransactionListFragment extends Fragment {
         }
     }
 
-    private Runnable runnableUdapteAdapter = new Runnable() {
+
+    private Runnable runnableUpdateAdapter = new Runnable() {
 
         @Override
         public void run() {
-            // thuc hien update lai adapter
-            try {
-                mFilterItems.clear();
-                filterPairTransactions(mItems);
-                mAdapter.updateValues(mFilterItems);
-                //mAdapter.notifyDataSetChanged();
-                updateHeaderView();
 
-            } catch (Exception e) {
-                // TODO: handle exception
-            }
-
+            updateUI();
         }
     };
 
+    private void updateUI() {
+        if(mItems.size() == 0) {
+            mLViewTransaction.setVisibility(View.INVISIBLE);
+            mLViewTransaction.removeHeaderView(headerView);
+            mBlankLayout.setVisibility(View.VISIBLE);
+        }
+        else{
+            mBlankLayout.setVisibility(View.INVISIBLE);
+            if (headerView == null) {
+                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                headerView = inflater.inflate(
+                        R.layout.header_transaction_statistics, null, false);
+            }
+            mLViewTransaction.addHeaderView(headerView);
+            updateHeaderView();
+            // thuc hien update lai adapter
+            mFilterItems.clear();
+            filterPairTransactions(mItems);
+            mAdapter.updateValues(mFilterItems);
+            mLViewTransaction.setVisibility(View.VISIBLE);
+
+        }
+    }
     private void updateHeaderView() {
 
         float tienChi = 0;
         float tienTieu = 0;
 
-        if(headerView != null) {
+        if(headerView  != null) {
             for(Transaction tran : mItems) {
                 if(tran.getMoneyTrading() < 0) {
                     tienTieu += Math.abs(tran.getMoneyTrading());
@@ -218,18 +237,17 @@ public class TransactionListFragment extends Fragment {
                     tienChi += Math.abs(tran.getMoneyTrading());
                 }
             }
+            TextView textChi = headerView.findViewById(R.id.fts_so_du_dau);
+            TextView textTieu = headerView.findViewById(R.id.fts_so_du_cuoi);
+            TextView textConLai = headerView.findViewById(R.id.fts_con_lai);
+
+            String moneyChi = CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienChi));
+            String moneyTieu = CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienTieu));
+            String moneyConLai = CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienChi - tienTieu));
+            textChi.setText(moneyChi);
+            textTieu.setText(moneyTieu);
+            textConLai.setText(moneyConLai);
         }
-
-        TextView textChi = headerView.findViewById(R.id.fts_so_du_dau);
-        TextView textTieu = headerView.findViewById(R.id.fts_so_du_cuoi);
-        TextView textConLai = headerView.findViewById(R.id.fts_con_lai);
-
-        String moneyChi = CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienChi));
-        String moneyTieu = CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienTieu));
-        String moneyConLai = CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienChi - tienTieu));
-        textChi.setText(moneyChi);
-        textTieu.setText(moneyTieu);
-        textConLai.setText(moneyConLai);
     }
 
 }

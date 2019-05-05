@@ -100,7 +100,7 @@ public class DateUtils {
             dateTo = null;
         }
 
-        DateRange result = new DateRange(dateFrom.toDate(), dateTo.toDate());
+        DateRange result = new DateRange(dateFrom, dateTo);
         return result;
     }
 
@@ -136,10 +136,18 @@ public class DateUtils {
     }
 
     // Kiểm tra ngày có nằm trong khoảng thời gian hay không
+    public boolean isDateRangeContainDate(DateRange dateRange,MTDate date) {
+        MTDate dateC = date;
+        MTDate dateF = dateRange.getDateFrom();
+        MTDate dateT = dateRange.getDateTo();
+        return dateC.getCalendar().compareTo(dateF.getCalendar()) >= 0 && dateC.getCalendar().compareTo(dateT.getCalendar()) <= 0;
+    }
+
+    // Kiểm tra ngày có nằm trong khoảng thời gian hay không
     public boolean isDateRangeContainDate(DateRange dateRange,Date date) {
         MTDate dateC = new MTDate(date);
-        MTDate dateF = new MTDate(dateRange.getDateFrom());
-        MTDate dateT = new MTDate(dateRange.getDateTo());
+        MTDate dateF = dateRange.getDateFrom();
+        MTDate dateT = dateRange.getDateTo();
         return dateC.getCalendar().compareTo(dateF.getCalendar()) >= 0 && dateC.getCalendar().compareTo(dateT.getCalendar()) <= 0;
     }
 
@@ -147,5 +155,9 @@ public class DateUtils {
         MTDate dateC = new MTDate(dateCompare);
         MTDate dateT = new MTDate(dateFuture);
         return dateC.getCalendar().compareTo(dateT.getCalendar()) < 0;
+    }
+
+    public boolean isFutureDate(MTDate dateCompare,MTDate dateFuture) {
+        return dateCompare.getCalendar().compareTo(dateFuture.getCalendar()) < 0;
     }
 }

@@ -11,9 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.t2m.moneytracker.R;
+import com.example.t2m.moneytracker.common.Constants;
 import com.example.t2m.moneytracker.model.MTDate;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.utilities.BitmapUtils;
+import com.example.t2m.moneytracker.utilities.CurrencyUtils;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -112,7 +114,7 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
             }
 
             mTextDate.setText(new MTDate(mTransaction.getTransactionDate()).toIsoDateShortTimeString());
-            mTextMoney.setText(String.valueOf(mTransaction.getMoneyTrading()));
+            mTextMoney.setText(CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,mTransaction.getMoneyTrading())));
             if(mTransaction.getMoneyTrading() >= 0) {
                 mTextMoney.setTextColor(getResources().getColor(R.color.colorMoneyTradingPositive));
             }

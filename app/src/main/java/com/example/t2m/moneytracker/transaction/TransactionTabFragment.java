@@ -78,7 +78,7 @@ public class TransactionTabFragment extends Fragment {
 
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        new loadTabs().execute();
+        new loadTabs(getActivity()).execute();
         return view;
     }
 
@@ -114,51 +114,70 @@ public class TransactionTabFragment extends Fragment {
         });
     }
 
-    private void addTabs() {
-        MTDate currentDate = new MTDate();
-        int currentYear = currentDate.getYear();
-        int currentMonth = currentDate.getMonth();
+    private void addTabs(DateRange dateRange) {
+
         int year,month = 0;
-        for (year = 2017; year <= currentYear; ++year) {
+        int from_month = dateRange.getDateFrom().getMonth();
+        int from_year = dateRange.getDateFrom().getYear();
+        int to_month = dateRange.getDateTo().getMonth();
+        int to_year = dateRange.getDateTo().getYear();
+
+        for (year = from_year; year <= to_year; ++year) {
             for( month = 0; month < 12 ; ++month ) {
-                if(year == currentYear && month > currentMonth) break;
-                MTDate mtDate = new MTDate(year,month,1);
-                DateRange dateRange = new DateRange(
-                        mtDate.firstDayOfMonth().setTimeToBeginningOfDay().toDate(),
-                        mtDate.lastDayOfMonth().setTimeToEndOfDay().toDate());
-                addTab(dateRange);
+                if(year == from_year && month < from_month) continue;
+                if(year == to_year && month > to_month) break;
+                MTDate firstDay = new MTDate(year,month,1).firstDayOfMonth().setTimeToBeginningOfDay();
+                MTDate lastDay = new MTDate(year,month,1).lastDayOfMonth().setTimeToEndOfDay();
+                DateRange period = new DateRange(firstDay,lastDay );
+                addTab(period);
             }
         }
         if(month == 12) {
             month = 0;
             ++year;
         }
-        MTDate mtDate = new MTDate(year,month,1);
-        DateRange dateRange = new DateRange(mtDate.firstDayOfMonth().toDate(),mtDate.lastDayOfMonth().toDate());
-        addTab(dateRange);
+        MTDate firstFuture = new MTDate(year,month,1).firstDayOfMonth();
+        MTDate lastFuture = new MTDate(year + 100,month,1).lastDayOfMonth();
+        DateRange period = new DateRange(firstFuture,lastFuture);
+        addTab(period);
     }
 
     private void addTab(DateRange dateRange) {
         List<Transaction> transactions = filterTransactions(dateRange,mListTransaction);
 
-        String title = getTitle(dateRange.getDateFrom());
+        String title = getTitle(dateRange.getDateFrom().toDate());
         Date currentDate = Calendar.getInstance().getTime();
         Fragment fragment =  TransactionListFragment.newInstance(transactions);
         mTabFragment.add(new Pair<>(title,fragment));
 
     }
 
+    // TODO: lay title ngay theo range
+    private String getTitle(DateRange range){
+        MTDate mtDate = range.getDateFrom();
+        String title = String.format("%d/%d",mtDate.getMonth() + 1,mtDate.getYear());
+        MTDate firstDayOfMonth = new MTDate().firstDayOfMonth().setTimeToBeginningOfDay();
+        MTDate lastDayOfMonth = new MTDate().lastDayOfMonth().setTimeToEndOfDay();
+        DateRange currentMonth = new DateRange(firstDayOfMonth,lastDayOfMonth);
+        if(dateUtils.isDateRangeContainDate(currentMonth,mtDate)) {
+            title = getString(R.string.current_month);
+        }
+        else if (dateUtils.isFutureDate(currentMonth.getDateTo(),mtDate)) {
+            title = getString(R.string.future_transactions);
+        }
+        return title;
+    }
+
     private String getTitle(Date date) {
         MTDate mtDate = new MTDate(date);
         String title = String.format("%d/%d",mtDate.getMonth() + 1,mtDate.getYear());
-        MTDate currentDate = new MTDate();
-        DateRange dateRange = new DateRange(
-                currentDate.firstDayOfMonth().setTimeToBeginningOfDay().toDate(),
-                currentDate.lastDayOfMonth().setTimeToEndOfDay().toDate());
-        if(dateUtils.isDateRangeContainDate(dateRange,date)) {
+        MTDate firstDayOfMonth = new MTDate().firstDayOfMonth().setTimeToBeginningOfDay();
+        MTDate lastDayOfMonth = new MTDate().lastDayOfMonth().setTimeToEndOfDay();
+        DateRange currentMonth = new DateRange(firstDayOfMonth,lastDayOfMonth);
+        if(dateUtils.isDateRangeContainDate(currentMonth,mtDate)) {
             title = getString(R.string.current_month);
         }
-        else if (dateUtils.isFutureDate(dateRange.getDateTo(),date)) {
+        else if (dateUtils.isFutureDate(currentMonth.getDateTo(),mtDate)) {
             title = getString(R.string.future_transactions);
         }
         return title;
@@ -204,9 +223,13 @@ public class TransactionTabFragment extends Fragment {
 
     private class loadTabs extends AsyncTask<Void, Void, Void> {
 
+        public loadTabs(Activity activity) {
+            this.activity = activity;
+        }
+        private Activity activity;
         @Override
         protected void onPreExecute() {
-            mDialog = new Dialog(getActivity());
+            mDialog = new Dialog(activity);
             // chu y phai dat truoc setcontentview
             mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             mDialog.setContentView(R.layout.loading_view);
@@ -218,7 +241,7 @@ public class TransactionTabFragment extends Fragment {
         protected Void doInBackground(Void... unused) {
 
             // su dung phuong thuc de update lai adapter
-            getActivity().runOnUiThread(runnableUdapteAdapter);
+            activity.runOnUiThread(runnableUpdateAdapter);
 
             return (null);
         }
@@ -229,14 +252,16 @@ public class TransactionTabFragment extends Fragment {
         }
     }
 
-    private Runnable runnableUdapteAdapter = new Runnable() {
+    private Runnable runnableUpdateAdapter = new Runnable() {
 
         @Override
         public void run() {
             // thuc hien update lai adapter
             try {
                 mTabFragment.clear();
-                addTabs();
+                DateRange dateRange = new DateRange(new MTDate(2018,0,1).firstDayOfMonth().setTimeToBeginningOfDay(),
+                                                    new MTDate());
+                addTabs(dateRange);
                 mAdapter.updateValues(mTabFragment);
 
             } catch (Exception e) {

@@ -1,21 +1,19 @@
 package com.example.t2m.moneytracker.model;
 
-import java.util.Date;
-
 public class DateRange {
-    private Date dateFrom;
-    private Date dateTo;
+    private MTDate dateFrom;
+    private MTDate dateTo;
 
-    public DateRange(Date dateFrom, Date dateTo) {
+    public DateRange(MTDate dateFrom, MTDate dateTo) {
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
     }
 
-    public Date getDateFrom() {
+    public MTDate getDateFrom() {
         return dateFrom;
     }
 
-    public Date getDateTo() {
+    public MTDate getDateTo() {
         return dateTo;
     }
 

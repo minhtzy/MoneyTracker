@@ -119,4 +119,6 @@
     <string name="transaction_detail">Chi tiết hóa đơn</string>
     <string name="no_write_note">Không có ghi chú</string>
 
+    <string name="no_transaction">Không có giao dịch</string>
+
 </resources>
