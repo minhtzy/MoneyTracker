@@ -37,6 +37,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         createDatabase(db);
+        onUpgrade(db,1,DB_VERSION);
     }
 
     @Override
