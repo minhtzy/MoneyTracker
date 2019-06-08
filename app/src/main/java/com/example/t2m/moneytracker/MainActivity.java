@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.t2m.moneytracker.budget.BudgetFragment;
 import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
 import com.example.t2m.moneytracker.setting.Setting;
 
@@ -121,13 +122,15 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_chart) {
             Log.d(MainActivity.class.getSimpleName(),"Start Transaction Activity");
             fragmentClass = StatisticalTabFragment.class;
-        } else if (id == R.id.nav_plan) {
-
         } else if (id == R.id.nav_manage) {
             Intent intent = new Intent(MainActivity.this, Setting.class);
             startActivity(intent);
             finish();
             return true;
+
+        } else if(id == R.id.nav_budget) {
+            fragmentClass = BudgetFragment.class;
+        } else if(id == R.id.nav_periodic_transaction) {
 
         } else if (id == R.id.nav_share) {
 
@@ -140,7 +143,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = (Fragment) fragmentClass.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,fragment).addToBackStack(null).commit();
                 // Highlight the selected item has been done by NavigationView
-                item.setChecked(true);
+                //item.setChecked(true);
                 // Set action bar title
                 setTitle(item.getTitle());
             }
