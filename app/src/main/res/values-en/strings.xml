@@ -74,4 +74,13 @@
     <string name="transaction_detail">Transaction Detail</string>
     <string name="no_write_note">No notes</string>
     <string name="no_transaction">No transactions</string>
+    <string name="search">Search</string>
+    <string name="select_date">Select date</string>
+    <string name="select_date_start">Select date start</string>
+    <string name="select_date_end">Select date end</string>
+    <string name="search_by_date">Search by Date</string>
+    <string name="search_by_time">Search by Time</string>
+    <string name="chovay_trano">Loan / Repayment</string>
+    <string name="divay_thuno">Borrowing / Debt Collection</string>
+    <string name="search_by_items">Search by items</string>
 </resources>

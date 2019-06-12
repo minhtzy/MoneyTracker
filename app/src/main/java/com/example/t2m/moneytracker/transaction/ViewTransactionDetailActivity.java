@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.t2m.moneytracker.R;
 import com.example.t2m.moneytracker.common.Constants;
@@ -102,6 +103,7 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
 
     private void updateUI() {
         if(mTransaction != null) {
+            Toast.makeText(this, "" + mTransaction.getTransactionDate(), Toast.LENGTH_LONG).show();
             mTextCategory.setText(mTransaction.getCategory().getCategory());
             ImageView imageView = findViewById(R.id.image_transaction_category);
             // lấy ảnh từ asset

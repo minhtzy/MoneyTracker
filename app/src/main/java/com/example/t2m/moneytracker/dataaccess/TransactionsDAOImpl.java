@@ -115,6 +115,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
         return list_result;
     }
 
+
     @Override
     public List<Transaction> getAllTransactionByPeriod(int walletId, DateRange dateRange) {
         Cursor data = getAllTransactionDataByWalletId(walletId,dateRange);
@@ -151,6 +152,30 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
                         String.valueOf(dateRange.getDateTo().toDate().getTime())});
         return cursor;
     }
+    public List<Transaction> getAllTransactionDataByDate(long milisStart, long milisEnd){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        List<Transaction> list = new ArrayList<>();
+        String query = "SELECT * FROM " + TABLE_TRANSACTION_NAME +
+                " WHERE " + COLUMN_TRANSACTION_DATE + " >= ?" +
+                " AND " + COLUMN_TRANSACTION_DATE + " <= ?" ;
+        Cursor cursor = db.rawQuery(query,new String[]{
+                String.valueOf(milisStart),
+                String.valueOf(milisEnd)});
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            do {
+                Transaction transaction = getTransactionFromData(cursor);
+                list.add(transaction);
+            }
+            while (cursor.moveToNext());
+        }
+        return list;
+    }
+
+
+
+
+
     public List<Transaction> getAllTransaction() {
         Cursor data = getAllTransactionData();
         List<Transaction> list_result = new ArrayList<>();
@@ -228,6 +253,35 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
             list.add(data);
         }
         return list;
+    }
+    public List<Transaction> getAllTransactionDataByType(int type){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String sql = "SELECT "
+                + " tblt.trading AS trading "
+                + " ,tblc._id AS categoryId "
+                + " , tblc.type AS type "
+                + " , tblt._id AS _id"
+                + " , tblt.transaction_date AS transaction_date"
+                + " , tblt.note AS note"
+                + " , tblt.currency AS currency"
+                + " , tblt.location AS location"
+                + " , tblt.walletId AS walletId"
+                + " , tblt.media_uri AS media_uri"
+                + " FROM tbl_transactions tblt "
+                + " INNER JOIN tbl_categories tblc ON tblc._id = tblt.categoryId "
+                + " WHERE tblc.type = "+ type;
+        List<Transaction> list_result = new ArrayList<>();
+        Cursor cursor = db.rawQuery(sql,null);
+
+
+        if (cursor != null && cursor.getCount() >0){
+            cursor.moveToFirst();
+            do {
+                Transaction transaction = getTransactionFromData(cursor);
+                list_result.add(transaction);
+            }while (cursor.moveToNext());
+        }
+        return list_result;
     }
 
 }
