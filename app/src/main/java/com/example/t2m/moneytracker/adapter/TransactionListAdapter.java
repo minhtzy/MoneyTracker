@@ -85,8 +85,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         holder.item_label.setText(transaction.getCategory().getCategory());
         holder.item_note.setText(transaction.getTransactionNote());
 
-        String money = CurrencyUtils.formatVnCurrence(String.format("%.2f",transaction.getMoneyTrading()) );
-        holder.item_money_trading.setText(money);
+        holder.item_money_trading.setText(String.valueOf(transaction.getMoneyTrading()));
 
 
         // lấy ảnh từ asset
@@ -98,7 +97,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
             e.printStackTrace();
         }
 
-        if (transaction.getMoneyTrading() >= 0)
+        if (transaction.getMoneyTradingWithSign() >= 0)
             holder.item_money_trading.setTextColor(parent.getResources().getColor(R.color.colorMoneyTradingPositive));
         else holder.item_money_trading.setTextColor(parent.getResources().getColor(R.color.colorMoneyTradingNegative));
         return layout;
@@ -113,6 +112,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         } else {
             layout = (RelativeLayout) convertView;
         }
+
         HeaderViewHolder holder = new HeaderViewHolder();
 
         holder.header_date = layout.findViewById(R.id.text_date_header);
@@ -133,14 +133,14 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         float moneyTrading = 0;
         List<Transaction> transactions = mItems.get(section).second;
         for(Transaction tran : transactions) {
-            moneyTrading += tran.getMoneyTrading();
+            moneyTrading += tran.getMoneyTradingWithSign();
         }
-        String moneyHeader = CurrencyUtils.formatVnCurrence(String.format("%.2f",moneyTrading) );
+        String moneyHeader = String.valueOf(moneyTrading);
         holder.header_money_trading.setText(moneyHeader);
 
-        if (moneyTrading >= 0)
-            holder.header_money_trading.setTextColor(parent.getResources().getColor(R.color.colorMoneyTradingPositive));
-        else holder.header_money_trading.setTextColor(parent.getResources().getColor(R.color.colorMoneyTradingNegative));
+//        if (moneyTrading >= 0)
+//            holder.header_money_trading.setTextColor(parent.getResources().getColor(R.color.colorMoneyTradingPositive));
+//        else holder.header_money_trading.setTextColor(parent.getResources().getColor(R.color.colorMoneyTradingNegative));
 
 
         return layout;

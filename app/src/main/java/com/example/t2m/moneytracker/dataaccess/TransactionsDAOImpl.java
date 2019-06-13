@@ -89,6 +89,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
     public boolean deleteTransaction(Transaction transaction) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(TABLE_TRANSACTION_NAME,COLUMN_TRANSACTION_ID + " = ?",new String[]{String.valueOf(transaction.getTransactionId())});
+
         return true;
     }
 
@@ -282,6 +283,39 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
             }while (cursor.moveToNext());
         }
         return list_result;
+    }
+
+    public List<Transaction> getStatisticalByCategoryInRange(int wallet_id ,int categoryId , DateRange dateRange) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String sql = "SELECT "
+                + " tblt.trading AS trading "
+                + " ,tblc._id AS categoryId "
+                + " ,tblc.type AS type "
+                + " ,tblt.transaction_date as t_date"
+                + " FROM tbl_transactions tblt "
+                + " INNER JOIN tbl_categories tblc ON tblc._id = tblt.categoryId "
+                + " WHERE (tblt.categoryId = " + categoryId + " OR tblc.parentId = " + categoryId +" )"
+                + " AND tblt.walletId = "+ wallet_id
+                + " AND tblt.transaction_date >= " + dateRange.getDateFrom().getMillis()
+                + " AND tblt.transaction_date <= " + dateRange.getDateTo().getMillis();
+        List<Transaction> list = new ArrayList<Transaction>();
+        Cursor cursor = db.rawQuery(sql,null);
+
+        while(cursor.moveToNext()) {
+            Category cat = new Category();
+            Float column1 = cursor.getFloat(cursor.getColumnIndex("trading"));
+            int column2 = cursor.getInt(cursor.getColumnIndex("categoryId"));
+            int column3 = cursor.getInt(cursor.getColumnIndex("type"));
+            long column4 = cursor.getLong(cursor.getColumnIndex("t_date"));
+            Transaction data = new Transaction();
+            data.setMoneyTrading(column1);
+            cat.setId(column2);
+            cat.setType(column3);
+            data.setCategory(cat);
+            data.setTransactionDate(new Date(column4));
+            list.add(data);
+        }
+        return list;
     }
 
 }

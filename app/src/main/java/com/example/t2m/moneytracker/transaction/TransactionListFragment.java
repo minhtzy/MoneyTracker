@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -54,6 +55,12 @@ public class TransactionListFragment extends Fragment {
         fragment.setArguments(bundle);
         return fragment;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,8 +101,14 @@ public class TransactionListFragment extends Fragment {
 
             }
         });
-        new loadTransactions(getActivity()).execute();
+        new loadTransactions(this.getActivity()).execute();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //new loadTransactions(this.getActivity()).execute();
     }
 
     private void onClickItem(Transaction transaction) {
@@ -106,11 +119,6 @@ public class TransactionListFragment extends Fragment {
 
     public void setItems(List<Transaction> items) {
         mItems = items;
-    }
-
-    public void add(Transaction transaction) {
-        mItems.add(transaction);
-        new loadTransactions(getActivity()).execute();
     }
 
     private void filterPairTransactions(List<Transaction> transactions) {
@@ -155,7 +163,7 @@ public class TransactionListFragment extends Fragment {
 
     }
 
-    // =====================================================
+// =====================================================
 
 
     protected class loadTransactions extends AsyncTask<Void, Void, Void> {
@@ -230,7 +238,7 @@ public class TransactionListFragment extends Fragment {
 
         if(headerView  != null) {
             for(Transaction tran : mItems) {
-                if(tran.getMoneyTrading() < 0) {
+                if(tran.getMoneyTradingWithSign() < 0) {
                     tienTieu += Math.abs(tran.getMoneyTrading());
                 }
                 else {
@@ -241,9 +249,9 @@ public class TransactionListFragment extends Fragment {
             TextView textTieu = headerView.findViewById(R.id.fts_so_du_cuoi);
             TextView textConLai = headerView.findViewById(R.id.fts_con_lai);
 
-            String moneyChi = CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienChi));
-            String moneyTieu = CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienTieu));
-            String moneyConLai = CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienChi - tienTieu));
+            String moneyChi = String.valueOf(tienChi);//CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienChi));
+            String moneyTieu = String.valueOf(tienTieu);// CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienTieu));
+            String moneyConLai = String.valueOf(tienChi - tienTieu);//CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienChi - tienTieu));
             textChi.setText(moneyChi);
             textTieu.setText(moneyTieu);
             textConLai.setText(moneyConLai);

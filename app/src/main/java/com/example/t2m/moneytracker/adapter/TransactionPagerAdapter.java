@@ -1,5 +1,6 @@
 package com.example.t2m.moneytracker.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,7 @@ public class TransactionPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
+
         return mFragmentList.get(i).second;
     }
 

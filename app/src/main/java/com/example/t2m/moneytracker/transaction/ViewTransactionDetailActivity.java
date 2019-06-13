@@ -116,8 +116,8 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
             }
 
             mTextDate.setText(new MTDate(mTransaction.getTransactionDate()).toIsoDateShortTimeString());
-            mTextMoney.setText(CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,mTransaction.getMoneyTrading())));
-            if(mTransaction.getMoneyTrading() >= 0) {
+            mTextMoney.setText(String.valueOf(mTransaction.getMoneyTrading()));
+            if(mTransaction.getMoneyTradingWithSign() >= 0) {
                 mTextMoney.setTextColor(getResources().getColor(R.color.colorMoneyTradingPositive));
             }
             else {

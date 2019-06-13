@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="edit_transaction_mark_remove_message">remove message</string>
+</resources>

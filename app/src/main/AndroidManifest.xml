@@ -15,6 +15,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <receiver android:name=".sync.NetworkMonitor">
+            <intent-filter>
+                <action android:name="android.net.conn.CONECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+
         <activity
             android:name=".wallet.SelectCategoryActivity"
             android:label="@string/select_category_name"
@@ -37,6 +45,7 @@
             android:name=".transaction.AddTransactionActivity"
             android:label="@string/add_transaction_name"
             android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".WelcomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -60,6 +69,13 @@
             android:name=".statistical.StatisticalActivity"
             android:label="@string/report"
             android:theme="@style/AppTheme" />
+
+        <activity android:name=".budget.AddBudgetActivity"
+            android:label="@string/add_budget"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".budget.DetailBudgetActivity" />
+        <activity android:name=".budget.SelectBudgetTimeRangeActivity"
+            android:label="@string/time_empty"></activity>
     </application>
 
 </manifest>

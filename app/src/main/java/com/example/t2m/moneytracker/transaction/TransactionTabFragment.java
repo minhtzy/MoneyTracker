@@ -68,7 +68,7 @@ public class TransactionTabFragment extends Fragment {
         mTabLayout = view.findViewById(R.id.tab_layout);
         mViewPager = view.findViewById(R.id.page_view);
         mFabAddTransaction = view.findViewById(R.id.fab_add_transaction);
-        addEvents();
+
         dateUtils = new DateUtils();
         mTabFragment = new ArrayList<>();
         mCurrentWallet = WalletsManager.getInstance(this.getContext()).getCurrentWallet();
@@ -78,7 +78,10 @@ public class TransactionTabFragment extends Fragment {
 
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        new loadTabs(getActivity()).execute();
+
+        addEvents();
+
+        //new loadTabs(getActivity()).execute();
         return view;
     }
 
@@ -94,7 +97,6 @@ public class TransactionTabFragment extends Fragment {
     private void scrollToTabIndex(int index,float positionOffset,boolean updateSelectedText) {
         mTabLayout.setScrollPosition(index,positionOffset,updateSelectedText);
         mViewPager.setCurrentItem(index);
-
     }
 
 
@@ -112,6 +114,23 @@ public class TransactionTabFragment extends Fragment {
                 startActivityForResult(intent,FAB_ADD_TRANSACTION_REQUEST_CODE);
             }
         });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                mAdapter.getItem(i);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
     }
 
     private void addTabs(DateRange dateRange) {
@@ -122,6 +141,7 @@ public class TransactionTabFragment extends Fragment {
         int to_month = dateRange.getDateTo().getMonth();
         int to_year = dateRange.getDateTo().getYear();
 
+        List<DateRange> periods = new ArrayList<>();
         for (year = from_year; year <= to_year; ++year) {
             for( month = 0; month < 12 ; ++month ) {
                 if(year == from_year && month < from_month) continue;
@@ -146,13 +166,12 @@ public class TransactionTabFragment extends Fragment {
         List<Transaction> transactions = filterTransactions(dateRange,mListTransaction);
 
         String title = getTitle(dateRange.getDateFrom().toDate());
-        Date currentDate = Calendar.getInstance().getTime();
         Fragment fragment =  TransactionListFragment.newInstance(transactions);
         mTabFragment.add(new Pair<>(title,fragment));
 
     }
 
-    // TODO: lay title ngay theo range
+    // lay title ngay theo range
     private String getTitle(DateRange range){
         MTDate mtDate = range.getDateFrom();
         String title = String.format("%d/%d",mtDate.getMonth() + 1,mtDate.getYear());
@@ -198,24 +217,22 @@ public class TransactionTabFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == FAB_ADD_TRANSACTION_REQUEST_CODE) {
             if(resultCode == Activity.RESULT_OK) {
-                Transaction transaction = (Transaction) data.getSerializableExtra(AddTransactionActivity.EXTRA_TRANSACTION);
-                this.addTransaction(transaction);
+                refreshTransaction();
             }
         }
     }
 
 
-    public void addTransaction(Transaction transaction) {
-        mListTransaction.add(transaction);
-        String title = getTitle(transaction.getTransactionDate());
-        for(Pair<String,Fragment> tab : mTabFragment) {
-            if(title.compareTo(tab.first) ==0) {
-                if(tab.second instanceof TransactionListFragment) {
-                    ((TransactionListFragment)tab.second).add(transaction);
+    public void refreshTransaction() {
+        mListTransaction = iTransactionsDAO.getAllTransactionByWalletId(mCurrentWallet.getWalletId());
+        mAdapter.notifyDataSetChanged();
+    }
 
-                }
-            }
-        }
+    @Override
+    public void onResume() {
+        Log.d(TransactionTabFragment.class.getSimpleName(),"On Resume");
+        super.onResume();
+        new loadTabs(this.getActivity()).execute();
     }
 
     // =====================================================

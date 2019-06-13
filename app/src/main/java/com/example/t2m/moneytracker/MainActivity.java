@@ -2,6 +2,8 @@ package com.example.t2m.moneytracker;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -20,12 +22,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import com.example.t2m.moneytracker.budget.BudgetFragment;
+import com.example.t2m.moneytracker.budget.DetailBudgetActivity;
 import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
-
-
 import com.example.t2m.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.example.t2m.moneytracker.model.Transaction;
+import com.example.t2m.moneytracker.model.Budget;
 import com.example.t2m.moneytracker.setting.Setting;
 
 import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
@@ -44,7 +46,7 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     TextView txtEmail,txtUsername;
     FirebaseAuth mAuth;
