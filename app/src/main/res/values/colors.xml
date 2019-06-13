@@ -28,6 +28,4 @@
     <color name="colorTabBackgroundSelected">@color/colorPrimary</color>
     <color name="colorTabTitle">@color/colorTextSecondaryDark</color>
     <color name="colorTabTitleSelected">@color/colorTextPrimaryDark</color>
-    <color name="Line">#ffcdcdcd</color>
-    <color name="BarHeader">#009688</color>
 </resources>

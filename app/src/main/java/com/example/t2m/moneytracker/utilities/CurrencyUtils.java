@@ -10,6 +10,19 @@ import java.util.Locale;
 
 public class CurrencyUtils {
 
+  public static class CurrencySymbols {
+    public static String NONE = "";
+    public static String MALAYSIA = "RM";
+    public static String INDONESIA = "Rp";
+    public static String SRILANKA = "Rs";
+    public static String USA = "$";
+    public static String UK = "£";
+    public static String INDIA = "₹";
+    public static String PHILIPPINES = "₱";
+    public static String PAKISTAN = "₨";
+    public static String VIETNAMDONG = "đ";
+  }
+
   /**
    * Get price with VietNam currency
    *

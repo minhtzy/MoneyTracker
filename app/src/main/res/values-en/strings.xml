@@ -74,5 +74,4 @@
     <string name="transaction_detail">Transaction Detail</string>
     <string name="no_write_note">No notes</string>
     <string name="no_transaction">No transactions</string>
-    <string name="ContentDescriptionImageNull">image null</string>
 </resources>

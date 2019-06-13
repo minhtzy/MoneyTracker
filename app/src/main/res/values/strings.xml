@@ -120,7 +120,5 @@
     <string name="no_write_note">Không có ghi chú</string>
 
     <string name="no_transaction">Không có giao dịch</string>
-    <string name="ContentDescriptionImageNull" translatable="false">image null</string>
-    <string name="NoImage" translatable="false">Imgage</string>
-    <string name="Cancel" translatable="false">thoát</string>
+
 </resources>
