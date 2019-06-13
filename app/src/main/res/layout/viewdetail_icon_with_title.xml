@@ -16,7 +16,7 @@
         android:layout_marginTop="@dimen/spacing_small" />
 
     <TextView
-        android:id="@id/title"
+        android:id="@+id/title"
         style="@style/Base.TextAppearance.AppCompat.Headline"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

@@ -28,7 +28,10 @@ import android.widget.Toast;
 
 import com.example.t2m.moneytracker.R;
 import com.example.t2m.moneytracker.adapter.WalletListAdapter;
+import com.example.t2m.moneytracker.dataaccess.BudgetDAOImpl;
+import com.example.t2m.moneytracker.dataaccess.IBudgetDAO;
 import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
+import com.example.t2m.moneytracker.model.Budget;
 import com.example.t2m.moneytracker.model.Category;
 import com.example.t2m.moneytracker.model.DateRange;
 import com.example.t2m.moneytracker.model.MTDate;
@@ -129,14 +132,14 @@ public class AddBudgetActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        onClickedCancle();
+        onClickedCancel();
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.menu.menu_save:
+            case R.id.action_save:
                 onClickedAdd();
                 return true;
             default:
@@ -158,10 +161,46 @@ public class AddBudgetActivity extends AppCompatActivity {
     }
 
     private void onClickedAdd() {
+        if(mCurrentCategory == null) {
+            mTextCategory.requestFocus();
+            mTextCategory.setError("Chọn nhóm");
+            return;
+        }
+        if(mTextAmount.getCleanDoubleValue() <= 0) {
+            mTextAmount.requestFocus();
+            mTextAmount.setError("Số tiền phải lớn hơn 0");
+            return;
+        }
+        if(mCurrentWallet == null) {
+            mTextWallet.requestFocus();
+            mTextWallet.setError("Chọn ví");
+            return;
+        }
+        if(mDateRange == null) {
+            mTextTimeRange.requestFocus();
+            mTextTimeRange.setError("Chọn khoảng thời gian");
+            return;
+        }
+        Budget budget = new Budget();
+        budget.setWallet(mCurrentWallet);
+        budget.setCategory(mCurrentCategory);
+        budget.setAmount((float) mTextAmount.getCleanDoubleValue());
+        budget.setSpent(0);
+        budget.setTimeStart(mDateRange.getDateFrom());
+        budget.setTimeEnd(mDateRange.getDateTo());
+        budget.setLoop(mCheckRepeatBudget.isChecked());
+        budget.setStatus("STARTED");
+        IBudgetDAO budgetDAO = new BudgetDAOImpl(this);
+        budgetDAO.insertBudget(budget);
+        budgetDAO.updateBudgetSpent(budget);
 
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_BUDGET,budget);
+        setResult(RESULT_OK,intent);
+        finish();
     }
 
-    private void onClickedCancle() {
+    private void onClickedCancel() {
         setResult(RESULT_CANCELED);
         finish();
     }
@@ -199,6 +238,8 @@ public class AddBudgetActivity extends AppCompatActivity {
 
     private void updateUI() {
         if (mCurrentCategory != null) {
+            mTextCategory.clearFocus();
+            mTextCategory.setError(null);
             mTextCategory.setText(mCurrentCategory.getCategory());
             ImageView imageView = findViewById(R.id.cate_icon);
             // lấy ảnh từ asset
@@ -212,10 +253,14 @@ public class AddBudgetActivity extends AppCompatActivity {
         }
 
         if (mCurrentWallet != null) {
+            mTextWallet.clearFocus();
+            mTextWallet.setError(null);
             mTextWallet.setText(mCurrentWallet.getWalletName());
         }
 
         if(mDateRange != null) {
+            mTextTimeRange.clearFocus();
+            mTextTimeRange.setError(null);
             mTextTimeRange.setText(mDateRange.toString());
         }
     }

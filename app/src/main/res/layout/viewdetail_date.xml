@@ -4,7 +4,6 @@
     android:id="@+id/viewdetail_date"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:minHeight="48.0dip"
     android:visibility="gone">
 
     <ImageView

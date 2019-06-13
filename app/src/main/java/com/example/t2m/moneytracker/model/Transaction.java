@@ -15,23 +15,23 @@ public class Transaction implements Serializable {
     private Category category;
     private CategoryBean categoryBean;
 
-  public void setCurrencyCode(String currencyCode) {
-    this.currencyCode = currencyCode;
-  }
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
 
-  public CategoryBean getCategoryBean() {
-    return categoryBean;
-  }
+    public CategoryBean getCategoryBean() {
+        return categoryBean;
+    }
 
-  public void setCategoryBean(CategoryBean categoryBean) {
-    this.categoryBean = categoryBean;
-  }
+    public void setCategoryBean(CategoryBean categoryBean) {
+        this.categoryBean = categoryBean;
+    }
 
-  public void setMediaUri(String mediaUri) {
-    this.mediaUri = mediaUri;
-  }
+    public void setMediaUri(String mediaUri) {
+        this.mediaUri = mediaUri;
+    }
 
-  //---------------------------
+    //---------------------------
     // update database v2
     private String mediaUri;
 
@@ -59,6 +59,7 @@ public class Transaction implements Serializable {
     public void setTransactionId(int transactionId) {
         this.transactionId = transactionId;
     }
+
     public String getLocation() {
         return location;
     }
@@ -100,14 +101,16 @@ public class Transaction implements Serializable {
     }
 
     public float getMoneyTrading() {
+        return moneyTrading;
+    }
+
+    public float getMoneyTradingWithSign() {
         int type = category.getType().getValue();
-        if(type == 1 || type == 3) {
+        if (type == 1 || type == 3) {
             return -1 * Math.abs(moneyTrading);
-        }
-        else {
+        } else {
             return Math.abs(moneyTrading);
         }
-
     }
 
     public void setMoneyTrading(float moneyTrading) {
@@ -145,6 +148,7 @@ public class Transaction implements Serializable {
             this.transactionId = transactionId;
             return this;
         }
+
         public TransactionBuilder setTransactionDate(Date transactionDate) {
             this.transactionDate = transactionDate;
             return this;

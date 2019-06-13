@@ -509,7 +509,7 @@
                 <ImageView android:layout_width="25.0dip"
                     android:layout_height="20.0dip"
                     android:src="@drawable/save_icon_button"
-                    android:contentDescription="@values/strings/strings/NoImage"
+                    android:contentDescription="@string/NoImage"
                     />
                 <TextView android:gravity="center_vertical"
                     android:layout_width="wrap_content"

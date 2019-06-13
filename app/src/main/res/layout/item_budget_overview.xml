@@ -3,9 +3,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorBackgroundPrimary"
+    android:background="@color/colorBackgroundItem"
     android:descendantFocusability="blocksDescendants"
-    android:minHeight="160.0dip">
+    android:minHeight="140.0dip">
 
     <ImageView
         android:id="@+id/icon_goal"
@@ -111,10 +111,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/spent_title"
         android:layout_alignLeft="@id/txtBudgetTitle"
-        android:layout_marginTop="@dimen/spacing_large"
+        android:layout_marginTop="@dimen/spacing_medium"
         android:text="@string/transaction_detail_cashback_left" />
 
-    <TextView
+    <com.example.t2m.moneytracker.view.CurrencyTextView
         android:id="@+id/txtAmountLeft"
         style="@style/TextAppearance.AppCompat.Body2"
         android:layout_width="wrap_content"
@@ -142,7 +142,7 @@
         android:layout_alignLeft="@id/txtBudgetTitle"
         android:layout_marginTop="28dp"
         android:layout_marginRight="@dimen/spacing_medium"
-        android:layout_marginBottom="@dimen/spacing_medium"
+        android:layout_marginBottom="@dimen/spacing_small"
         android:max="100" />
 
 </RelativeLayout>

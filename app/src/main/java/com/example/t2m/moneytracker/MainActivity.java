@@ -1,6 +1,7 @@
 package com.example.t2m.moneytracker;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,7 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.t2m.moneytracker.budget.BudgetFragment;
+import com.example.t2m.moneytracker.budget.DetailBudgetActivity;
 import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
+import com.example.t2m.moneytracker.model.Budget;
 import com.example.t2m.moneytracker.setting.Setting;
 
 import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
@@ -27,7 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     TextView txtEmail,txtUsername;
     FirebaseAuth mAuth;
@@ -121,8 +125,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_chart) {
             Log.d(MainActivity.class.getSimpleName(),"Start Transaction Activity");
             fragmentClass = StatisticalTabFragment.class;
-        } else if (id == R.id.nav_plan) {
-
         } else if (id == R.id.nav_manage) {
             Intent intent = new Intent(MainActivity.this, Setting.class);
             startActivity(intent);

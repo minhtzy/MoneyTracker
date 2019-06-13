@@ -4,39 +4,36 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.t2m.moneytracker.MainActivity;
 import com.example.t2m.moneytracker.R;
+import com.example.t2m.moneytracker.adapter.BudgetsAdapter;
+import com.example.t2m.moneytracker.dataaccess.BudgetDAOImpl;
+import com.example.t2m.moneytracker.model.Budget;
 
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link BudgetFragment.OnBudgetFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link BudgetFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class BudgetFragment extends Fragment {
+import static android.app.Activity.RESULT_OK;
+
+public class BudgetFragment extends Fragment implements OnBudgetItemClickListener {
 
     private static final int REQUEST_ADD_BUDGET = 1;
     FloatingActionButton mAddBudget;
     RecyclerView mListBudget;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    BudgetsAdapter budgetsAdapter;
+    List<Budget> mBudgets;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    //private OnBudgetFragmentInteractionListener mListener;
 
     public BudgetFragment() {
         // Required empty public constructor
@@ -46,16 +43,12 @@ public class BudgetFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment BudgetFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BudgetFragment newInstance(String param1, String param2) {
+    public static BudgetFragment newInstance() {
         BudgetFragment fragment = new BudgetFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,21 +56,29 @@ public class BudgetFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_budget, container, false);
+        View view = inflater.inflate(R.layout.fragment_budget, container, false);
         mAddBudget = view.findViewById(R.id.fab_add_budget);
         mListBudget = view.findViewById(R.id.list_budget);
         addEvents();
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_ADD_BUDGET) {
+                Budget budget = (Budget) data.getSerializableExtra(AddBudgetActivity.EXTRA_BUDGET);
+                mBudgets.add(budget);
+                budgetsAdapter.notifyItemInserted(mBudgets.size());
+            }
+        }
     }
 
     private void addEvents() {
@@ -87,29 +88,26 @@ public class BudgetFragment extends Fragment {
                 onClickAddBudget(v);
             }
         });
+
+        mBudgets = new BudgetDAOImpl(this.getContext()).getAllBudget();
+        budgetsAdapter = new BudgetsAdapter(mBudgets);
+        budgetsAdapter.setListener(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
+        mListBudget.setLayoutManager(mLayoutManager);
+        mListBudget.setItemAnimator(new DefaultItemAnimator());
+        mListBudget.setAdapter(budgetsAdapter);
+        mListBudget.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
     }
 
     private void onClickAddBudget(View v) {
         Intent intent = new Intent(BudgetFragment.this.getContext(), AddBudgetActivity.class);
-        startActivityForResult(intent,REQUEST_ADD_BUDGET);
+        startActivityForResult(intent, REQUEST_ADD_BUDGET);
     }
 
-    //    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnBudgetFragmentInteractionListener) {
-//            mListener = (OnBudgetFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnBudgetFragmentInteractionListener");
-//        }
     }
 
     @Override
@@ -118,18 +116,18 @@ public class BudgetFragment extends Fragment {
         //mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnBudgetFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onItemClick(View view, int position) {
+        if (position >= 0 && position < mBudgets.size()) {
+            Intent intent = new Intent(this.getActivity(), DetailBudgetActivity.class);
+            intent.putExtra(DetailBudgetActivity.EXTRA_BUDGET, mBudgets.get(position));
+            startActivity(intent);
+        }
     }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+
+    }
+
 }

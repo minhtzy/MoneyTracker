@@ -165,6 +165,7 @@ public class MTDate implements Serializable {
         return mCalendar.get(Calendar.HOUR_OF_DAY);
     }
 
+
     public long getMillis() {
         return mCalendar.getTimeInMillis();
     }

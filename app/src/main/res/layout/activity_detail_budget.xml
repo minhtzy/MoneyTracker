@@ -60,7 +60,7 @@
                         android:gravity="center"
                         android:text="@string/budget_detail_recommended_daily_spending" />
 
-                    <TextView
+                    <com.example.t2m.moneytracker.view.CurrencyTextView
                         android:id="@+id/txvAmountRecommended"
                         style="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="fill_parent"
@@ -84,7 +84,7 @@
                         android:gravity="center"
                         android:text="@string/budget_detail_projected_spending" />
 
-                    <TextView
+                    <com.example.t2m.moneytracker.view.CurrencyTextView
                         android:id="@+id/txvAmountProjected"
                         style="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="fill_parent"
@@ -104,7 +104,7 @@
                 android:paddingTop="@dimen/spacing_medium"
                 android:text="@string/budget_detail_actual_daily_spending" />
 
-            <TextView
+            <com.example.t2m.moneytracker.view.CurrencyTextView
                 android:id="@+id/txvAmountActual"
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="fill_parent"
@@ -114,40 +114,41 @@
 
             <include layout="@layout/viewdetail_divider_with_padding" />
 
-            <RelativeLayout
-                android:id="@+id/groupNotification"
-                android:layout_width="fill_parent"
-                android:layout_height="56.0dip"
-                android:layout_marginBottom="@dimen/spacing_small"
-                android:layout_marginTop="@dimen/spacing_small"
-                android:background="@color/colorBackgroundItem"
-                android:gravity="center_vertical">
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/groupNotification"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="56.0dip"-->
+                <!--android:layout_marginBottom="@dimen/spacing_small"-->
+                <!--android:layout_marginTop="@dimen/spacing_small"-->
+                <!--android:background="@color/colorBackgroundItem"-->
+                <!--android:gravity="center_vertical">-->
 
-                <Switch
-                    android:id="@+id/swtNotification"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:padding="@dimen/spacing_medium" />
+                <!--<Switch-->
+                    <!--android:id="@+id/swtNotification"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:padding="@dimen/spacing_medium" />-->
 
-                <TextView
-                    android:id="@+id/txvOnOffNotification"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/spacing_medium"
-                    android:text="@string/notification_budget_turn_off" />
+                <!--<TextView-->
+                    <!--android:id="@+id/txvOnOffNotification"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:padding="@dimen/spacing_medium"-->
+                    <!--android:text="@string/notification_budget_turn_off" />-->
 
-            </RelativeLayout>
+            <!--</RelativeLayout>-->
 
             <TextView
                 android:id="@+id/btnViewTransaction"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:background="@drawable/rounded"
                 android:textColor="@color/colorTextPrimaryDark"
-                android:layout_marginLeft="@dimen/spacing_medium"
-                android:layout_marginTop="@dimen/spacing_medium"
+                android:textSize="18sp"
                 android:layout_marginBottom="@dimen/spacing_medium"
+                android:layout_marginLeft="@dimen/spacing_medium"
                 android:paddingLeft="@dimen/spacing_medium"
                 android:paddingRight="@dimen/spacing_medium"
                 android:text="@string/budget_detail_list_transactions_title" />

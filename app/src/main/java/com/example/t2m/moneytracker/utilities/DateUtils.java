@@ -96,8 +96,8 @@ public class DateUtils {
             dateFrom = dateFrom.today().plusDays(1);
             dateTo = dateTo.today().plusYears(1000);
         } else if(period.equalsIgnoreCase(context.getString(R.string.thisweek))) {
-            dateFrom = dateFrom.today().firstDayOfWeek();
-            dateTo = dateTo.today().firstDayOfWeek().plusDays(6);
+            dateFrom = dateFrom.today().firstDayOfWeek().setTimeToBeginningOfDay();
+            dateTo = dateTo.today().firstDayOfWeek().plusDays(6).setTimeToEndOfDay();
         } else if(period.equalsIgnoreCase(context.getString(R.string.thismonth))) {
             dateFrom = dateFrom.today().firstDayOfMonth();
             dateTo = dateTo.today().lastDayOfMonth();
