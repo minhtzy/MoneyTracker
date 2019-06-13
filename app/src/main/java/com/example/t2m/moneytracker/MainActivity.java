@@ -21,6 +21,8 @@ import com.example.t2m.moneytracker.setting.Setting;
 
 import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
 
+import com.example.t2m.moneytracker.statistical.Fragment_ThongKe_Tab0;
+import com.example.t2m.moneytracker.statistical.Fragment_ThongKe_Tab1;
 import com.example.t2m.moneytracker.statistical.StatisticalTabFragment;
 import com.example.t2m.moneytracker.transaction.TransactionTabFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -120,7 +122,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_chart) {
             Log.d(MainActivity.class.getSimpleName(),"Start Transaction Activity");
-            fragmentClass = StatisticalTabFragment.class;
+            fragmentClass = Fragment_ThongKe_Tab0.class;
         } else if (id == R.id.nav_plan) {
 
         } else if (id == R.id.nav_manage) {
