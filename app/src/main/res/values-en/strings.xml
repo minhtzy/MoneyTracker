@@ -126,4 +126,8 @@
     <string name="in">In</string>
     <string name="notification_budget_overspending" translatable="false">Over spending</string>
     <string name="edit_transaction_mark_remove_message">remove message</string>
+    <string name="sync">Sync</string>
+    <string name="edit_transaction">Edit Transaction</string>
+    <string name="sync_in_progress">Đang đồng bộ</string>
+    <string name="try_again">Thử lại</string>
 </resources>

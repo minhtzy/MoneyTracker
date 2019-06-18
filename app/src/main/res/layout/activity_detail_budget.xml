@@ -38,6 +38,8 @@
                 android:id="@+id/group_item_budget_category_detail"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spacing_medium"
+                android:layout_marginRight="@dimen/spacing_medium"
                 android:paddingTop="@dimen/spacing_medium" />
 
             <LinearLayout

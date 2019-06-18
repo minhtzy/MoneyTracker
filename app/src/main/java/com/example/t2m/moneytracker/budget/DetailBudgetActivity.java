@@ -1,5 +1,6 @@
 package com.example.t2m.moneytracker.budget;
 
+import android.content.Entity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
@@ -17,12 +18,21 @@ import com.example.t2m.moneytracker.model.Budget;
 import com.example.t2m.moneytracker.model.DateRange;
 import com.example.t2m.moneytracker.model.MTDate;
 import com.example.t2m.moneytracker.model.Transaction;
+import com.example.t2m.moneytracker.transaction.ViewTransactionDetailActivity;
+import com.example.t2m.moneytracker.transaction.ViewTransactionListActivity;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +61,7 @@ public class DetailBudgetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_budget);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         if (intent != null) {
             mBudget = (Budget) intent.getSerializableExtra(EXTRA_BUDGET);
@@ -61,6 +71,15 @@ public class DetailBudgetActivity extends AppCompatActivity {
         addEvents();
     }
 
+    public boolean onSupportNavigateUp() {
+        onClickedCancle();
+        return true;
+    }
+
+    private void onClickedCancle() {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
     private void addControls() {
 
         textGoal = findViewById(R.id.title);
@@ -86,6 +105,14 @@ public class DetailBudgetActivity extends AppCompatActivity {
         textListTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TransactionsDAOImpl iTransactionsDAO = new TransactionsDAOImpl(DetailBudgetActivity.this);
+                List<Transaction> transactions = iTransactionsDAO.getAllTransactionByCategoryInRange(
+                        mBudget.getWallet().getWalletId(),
+                        mBudget.getCategory().getId(),
+                        new DateRange(mBudget.getTimeStart(),mBudget.getTimeEnd()));
+                Intent intent = new Intent(DetailBudgetActivity.this,ViewTransactionListActivity.class);
+                intent.putExtra(ViewTransactionListActivity.BUNDLE_LIST_ITEM, (ArrayList<Transaction>) transactions);
+                startActivity(intent);
 
             }
         });
@@ -163,13 +190,44 @@ public class DetailBudgetActivity extends AppCompatActivity {
                 new DateRange(mBudget.getTimeStart(),mBudget.getTimeEnd()));
         List<Entry> entries = filterAmountByDates(transactions);
 
-        chartTransactions.setDrawGridBackground(false);
+        chartTransactions.setDrawGridBackground(true);
         chartTransactions.getDescription().setEnabled(false);
 
-        LineDataSet dataSet = new LineDataSet(entries,"đ");
+        LineDataSet dataSet = new LineDataSet(entries,"Chi tiêu");
+
+
+        ArrayList<ILineDataSet> datasets = new ArrayList<ILineDataSet>();
+        datasets.add(dataSet);
+
         LineData lineData = new LineData(dataSet);
         chartTransactions.setData(lineData);
+        chartTransactions.setMinimumHeight(500);
         chartTransactions.invalidate();
+
+        String values[] = new String[entries.size()];
+        for(int i = 0 ; i < values.length; ++i) {
+            values[i] = " ";
+        }
+
+        values[0] = mBudget.getTimeStart().toIsoDateString();
+        values[values.length - 1] = mBudget.getTimeEnd().toIsoDateString();
+        XAxis xAxis = chartTransactions.getXAxis();
+        xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(values));
+
+        chartTransactions.setMaxHighlightDistance(mBudget.getAmount());
+
+        chartTransactions.getAxisLeft().setAxisMinimum(0.0f);
+        chartTransactions.getAxisLeft().setAxisMaximum(entries.get(entries.size() - 1).getY() + 200);
+
+        chartTransactions.getAxisRight().setEnabled(false);
+
+        LimitLine limitLine = new LimitLine(mBudget.getAmount(),"Ngân sách");
+        limitLine.setLineWidth(4f);
+        limitLine.enableDashedLine(10f, 10f, 0f);
+        limitLine.setTextSize(10f);
+        chartTransactions.getAxisLeft().addLimitLine(limitLine);
 
 
     }
@@ -181,7 +239,7 @@ public class DetailBudgetActivity extends AppCompatActivity {
         int total_day = (int) Math.ceil((end - start) / 24 / 60/60/1000.0f);
         List<Entry> entries = new ArrayList<>();
         for(int i = 0; i <= total_day; ++i) {
-            entries.add(new Entry(i+1,0.0f));
+            entries.add(new Entry(i,0.0f));
         }
 
         for(Transaction t : transactions) {

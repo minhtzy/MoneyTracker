@@ -1,8 +1,8 @@
 package com.example.t2m.moneytracker.model;
 
-import java.util.List;
+import java.io.Serializable;
 
-public class CategoryBean {
+public class CategoryBean implements Serializable {
   private int id;
   private TransactionTypes type;
   private String icon;
@@ -59,4 +59,6 @@ public class CategoryBean {
   public void setParentId(int parentId) {
     this.parentId = parentId;
   }
+
+
 }

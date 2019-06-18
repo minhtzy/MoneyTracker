@@ -38,12 +38,13 @@ class BudgetsManager {
         }
     }
 
-    public void updateBudget(Transaction transaction) {
+    public void updateBudget(Transaction transaction, float sign, boolean pushNoitification) {
         // update budget
         List<Budget> budgets = iBudgetDAO.getBudgetByCategory(transaction.getWallet().getWalletId(),transaction.getCategory().getId());
         for(Budget budget : budgets) {
-            iBudgetDAO.updateBudgetSpent(budget);
-            if(budget.getSpent() > budget.getAmount()) {
+            budget.setSpent(budget.getSpent() + sign * transaction.getMoneyTrading());
+            iBudgetDAO.updateBudget(budget);
+            if(pushNoitification && budget.getSpent() > budget.getAmount()) {
                 new BudgetNotifications(getContext()).notifyBudgetOverSpending(budget);
             }
         }
@@ -52,8 +53,11 @@ class BudgetsManager {
         if(transaction.getCategory().getParentCategory() != null) {
             List<Budget> parentBudgets = iBudgetDAO.getBudgetByCategory(transaction.getWallet().getWalletId(),transaction.getCategory().getParentCategory().getId());
             for(Budget budget : parentBudgets) {
-                iBudgetDAO.updateBudgetSpent(budget);
-                new BudgetNotifications(getContext()).notifyBudgetOverSpending(budget);
+                budget.setSpent(budget.getSpent() + sign * transaction.getMoneyTrading());
+                iBudgetDAO.updateBudget(budget);
+                if(pushNoitification && budget.getSpent() > budget.getAmount()) {
+                    new BudgetNotifications(getContext()).notifyBudgetOverSpending(budget);
+                }
             }
         }
     }
