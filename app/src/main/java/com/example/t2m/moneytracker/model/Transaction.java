@@ -143,6 +143,7 @@ public class Transaction implements Serializable {
         values.put("amount",moneyTrading);
         values.put("currencyCode",currencyCode);
         values.put("categoryId",category.getId());
+        values.put("tranType",category.getType().getValue());
         values.put("walletId",wallet.getWalletId());
         values.put("mediaUri",mediaUri);
         values.put("timestamp",Timestamp.now());
@@ -154,7 +155,7 @@ public class Transaction implements Serializable {
         TransactionBuilder builder = new TransactionBuilder();
         Category category = new Category();
         category.setId(((Long) data.get("categoryId")).intValue());
-
+        category.setType(((Long)data.get("tranType")).intValue());
         Wallet wallet = new Wallet();
         wallet.setWalletId(((Long) data.get("walletId")));
 

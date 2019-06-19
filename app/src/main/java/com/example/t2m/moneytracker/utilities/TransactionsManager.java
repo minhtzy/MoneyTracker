@@ -47,6 +47,7 @@ public class TransactionsManager {
         if(context != null) {
             this.mContext = context;
             iTransactionsDAO = new TransactionsDAOImpl(context);
+            iWalletsDAO = new WalletsDAOImpl(context);
         }
     }
 
@@ -82,24 +83,25 @@ public class TransactionsManager {
         }
         transactions.add(transaction);
         iTransactionsDAO.insertTransaction(transaction,updateTimestamp);
-
-        Transaction tranInfo = iTransactionsDAO.getTransactionById(transaction.getTransactionId());
-        if(tranInfo == null) return false;
+        
+        if(transaction == null) return false;
         // update wallet
-        tranInfo.getWallet().setCurrentBalance(tranInfo.getWallet().getCurrentBalance() + tranInfo.getMoneyTradingWithSign());
-        WalletsManager.getInstance(mContext).updateWallet(tranInfo.getWallet());
-        if(tranInfo.getCategory().getType() == TransactionTypes.EXPENSE || tranInfo.getCategory().getType() == TransactionTypes.DEBIT) {
-            BudgetsManager.getInstance(mContext).updateBudget(tranInfo, 1,true);
+        Wallet wallet = iWalletsDAO.getWalletById(transaction.getWallet().getWalletId());
+        wallet.setCurrentBalance(wallet.getCurrentBalance() + transaction.getMoneyTradingWithSign());
+        WalletsManager.getInstance(mContext).updateWallet(wallet);
+        if(transaction.getCategory().getType() == TransactionTypes.EXPENSE || transaction.getCategory().getType() == TransactionTypes.DEBIT) {
+            BudgetsManager.getInstance(mContext).updateBudget(transaction, 1,true);
         }
         return true;
     }
     public boolean updateTransaction(Transaction transaction, Transaction oldTransaction,boolean updateTimestamp) {
-        if(transaction == null) return  false;
+        if(transaction == null) return false;
         iTransactionsDAO.updateTransaction(transaction,updateTimestamp);
 
-        float walletBalance = transaction.getWallet().getCurrentBalance() - oldTransaction.getMoneyTradingWithSign() + transaction.getMoneyTradingWithSign();
-        transaction.getWallet().setCurrentBalance(walletBalance);
-        WalletsManager.getInstance(mContext).updateWallet(transaction.getWallet());
+        Wallet wallet = iWalletsDAO.getWalletById(transaction.getWallet().getWalletId());
+        float walletBalance = wallet.getCurrentBalance() - oldTransaction.getMoneyTradingWithSign() + transaction.getMoneyTradingWithSign();
+        wallet.setCurrentBalance(walletBalance);
+        WalletsManager.getInstance(mContext).updateWallet(wallet);
         if(oldTransaction.getCategory().getType() == TransactionTypes.EXPENSE || oldTransaction.getCategory().getType() == TransactionTypes.DEBIT) {
             BudgetsManager.getInstance(mContext).updateBudget(oldTransaction, -1,false);
         }
