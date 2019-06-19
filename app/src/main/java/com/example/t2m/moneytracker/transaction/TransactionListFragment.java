@@ -24,6 +24,8 @@ import com.example.t2m.moneytracker.R;
 
 import com.example.t2m.moneytracker.adapter.TransactionListAdapter;
 import com.example.t2m.moneytracker.common.Constants;
+import com.example.t2m.moneytracker.dataaccess.TransactionsDAOImpl;
+import com.example.t2m.moneytracker.model.DateRange;
 import com.example.t2m.moneytracker.model.MTDate;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.pinnedlistview.PinnedHeaderListView;
@@ -37,6 +39,7 @@ import java.util.List;
 public class TransactionListFragment extends Fragment {
 
     private static final String LOG_TAG = "TransactionList.LOG_TAG";
+    private static final int REQUEST_VIEW_DETAIL = 100;
     private PinnedHeaderListView mLViewTransaction;
     private TransactionListAdapter mAdapter;
     private LinearLayout mBlankLayout;
@@ -49,6 +52,17 @@ public class TransactionListFragment extends Fragment {
     public static TransactionListFragment newInstance(List<Transaction> items) {
         Log.d(LOG_TAG,"create new instance "+ items.size());
         TransactionListFragment fragment = new TransactionListFragment();
+        fragment.setItems(items);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(BUNDLE_LIST_ITEM,(ArrayList<Transaction>)items);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static TransactionListFragment newInstance(int wallet_id ,DateRange dateRange) {
+        Log.d(LOG_TAG,"create new instance "+ dateRange);
+        TransactionListFragment fragment = new TransactionListFragment();
+        List<Transaction> items = new TransactionsDAOImpl(fragment.getContext()).getAllTransactionByPeriod(wallet_id,dateRange);
         fragment.setItems(items);
         Bundle bundle = new Bundle();
         bundle.putSerializable(BUNDLE_LIST_ITEM,(ArrayList<Transaction>)items);
@@ -114,7 +128,15 @@ public class TransactionListFragment extends Fragment {
     private void onClickItem(Transaction transaction) {
         Intent data = new Intent(TransactionListFragment.this.getContext(),ViewTransactionDetailActivity.class);
         data.putExtra(ViewTransactionDetailActivity.EXTRA_TRANSACTION,transaction);
-        startActivity(data);
+        startActivityForResult(data,REQUEST_VIEW_DETAIL);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_VIEW_DETAIL) {
+
+        }
     }
 
     public void setItems(List<Transaction> items) {
@@ -181,7 +203,7 @@ public class TransactionListFragment extends Fragment {
             mDialog.setContentView(R.layout.loading_view);
 
             mDialog.setCancelable(false);
-            mDialog.show();
+            //mDialog.show();
         }
 
         protected Void doInBackground(Void... unused) {
@@ -194,7 +216,7 @@ public class TransactionListFragment extends Fragment {
 
         protected void onPostExecute(Void unused) {
 
-            mDialog.dismiss();
+            //mDialog.dismiss();
         }
     }
 
@@ -208,7 +230,7 @@ public class TransactionListFragment extends Fragment {
         }
     };
 
-    private void updateUI() {
+    public void updateUI() {
         if(mItems.size() == 0) {
             mLViewTransaction.setVisibility(View.INVISIBLE);
             mLViewTransaction.removeHeaderView(headerView);

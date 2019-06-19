@@ -51,7 +51,8 @@ public class BudgetNotifications {
                     .setContentText(getContext().getString(R.string.notification_budget_overspending) + " " + CurrencyUtils.formatVnCurrence(String.valueOf(budget.getSpent() - budget.getAmount())))
                     .setSubText(getContext().getString(R.string.in) + " " + budget.getWallet().getWalletName())
                     .setSmallIcon(R.drawable.logo)
-                    .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | Notification.VISIBILITY_PUBLIC)
                     .build();
 
             notificationManager.cancel(ID_NOTIFICATION);

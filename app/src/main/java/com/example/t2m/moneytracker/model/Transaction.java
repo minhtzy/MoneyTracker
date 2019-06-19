@@ -1,12 +1,17 @@
 package com.example.t2m.moneytracker.model;
 
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.ServerTimestamp;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Transaction implements Serializable {
 
     private Wallet wallet;
-    private int transactionId;
+    private long transactionId;
     private Date transactionDate;
     private String transactionNote;
     private float moneyTrading;
@@ -52,11 +57,11 @@ public class Transaction implements Serializable {
         this.mediaUri = builder.mediaUri;
     }
 
-    public int getTransactionId() {
+    public long getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactionId(int transactionId) {
+    public void setTransactionId(long transactionId) {
         this.transactionId = transactionId;
     }
 
@@ -129,8 +134,45 @@ public class Transaction implements Serializable {
         return mediaUri;
     }
 
+    public Map<String,Object> toMap() {
+        Map<String,Object> values = new HashMap<>();
+
+        values.put("_id",transactionId);
+        values.put("date",transactionDate.getTime());
+        values.put("note",transactionNote);
+        values.put("amount",moneyTrading);
+        values.put("currencyCode",currencyCode);
+        values.put("categoryId",category.getId());
+        values.put("walletId",wallet.getWalletId());
+        values.put("mediaUri",mediaUri);
+        values.put("timestamp",Timestamp.now());
+
+        return values;
+    }
+
+    public static Transaction fromMap(Map<String,Object> data) {
+        TransactionBuilder builder = new TransactionBuilder();
+        Category category = new Category();
+        category.setId(((Long) data.get("categoryId")).intValue());
+
+        Wallet wallet = new Wallet();
+        wallet.setWalletId(((Long) data.get("walletId")));
+
+        builder
+                .setTransactionId((Long) data.get("_id"))
+                .setTransactionDate(new Date((Long) data.get("date")))
+        .setTransactionNote((String) data.get("note"))
+        .setMoneyTrading(((Double) data.get("amount")).floatValue())
+        .setCurrencyCode((String) data.get("currencyCode"))
+        .setCategory(category)
+        .setWallet(wallet )
+        .setMediaUri((String) data.get("mediaUri"));
+
+
+        return builder.build();
+    }
     public static class TransactionBuilder {
-        int transactionId;
+        long transactionId;
         private Date transactionDate;
         private String transactionNote;
         private float moneyTrading;
@@ -144,7 +186,7 @@ public class Transaction implements Serializable {
         public TransactionBuilder() {
         }
 
-        public TransactionBuilder setTransactionId(int transactionId) {
+        public TransactionBuilder setTransactionId(long transactionId) {
             this.transactionId = transactionId;
             return this;
         }

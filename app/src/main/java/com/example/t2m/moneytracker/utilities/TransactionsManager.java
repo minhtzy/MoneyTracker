@@ -52,7 +52,7 @@ public class TransactionsManager {
 
     public void setCurrentWallet(Wallet wallet) {
         this.mWallet = wallet;
-        updateTransactions(wallet);
+        getAllTransactions(wallet);
     }
 
     public List<Transaction> getAllTransactions() {
@@ -74,26 +74,59 @@ public class TransactionsManager {
     }
 
     public boolean addTransaction(Transaction transaction) {
+        if(transaction == null) return  false;
+        Transaction hasTran = iTransactionsDAO.getTransactionById(transaction.getTransactionId());
+        if(hasTran != null) {
+            return false;
+        }
         transactions.add(transaction);
         iTransactionsDAO.insertTransaction(transaction);
-        WalletsManager.getInstance(mContext).updateWallet(transaction);
-        if(transaction.getCategory().getType() == TransactionTypes.EXPENSE || transaction.getCategory().getType() == TransactionTypes.DEBIT)
-        if(transaction.getMoneyTradingWithSign() < 0)
-            BudgetsManager.getInstance(mContext).updateBudget(transaction);
+
+        Transaction tranInfo = iTransactionsDAO.getTransactionById(transaction.getTransactionId());
+        if(tranInfo == null) return false;
+        // update wallet
+        tranInfo.getWallet().setCurrentBalance(tranInfo.getWallet().getCurrentBalance() + tranInfo.getMoneyTradingWithSign());
+        WalletsManager.getInstance(mContext).updateWallet(tranInfo.getWallet());
+        if(tranInfo.getCategory().getType() == TransactionTypes.EXPENSE || tranInfo.getCategory().getType() == TransactionTypes.DEBIT) {
+            BudgetsManager.getInstance(mContext).updateBudget(tranInfo, 1,true);
+        }
         return true;
     }
-    private boolean updateTransaction(Transaction transaction) {
+    public boolean updateTransaction(Transaction transaction, Transaction oldTransaction) {
+        if(transaction == null) return  false;
+        iTransactionsDAO.updateTransaction(transaction);
+
+        float walletBalance = transaction.getWallet().getCurrentBalance() - oldTransaction.getMoneyTradingWithSign() + transaction.getMoneyTradingWithSign();
+        transaction.getWallet().setCurrentBalance(walletBalance);
+        WalletsManager.getInstance(mContext).updateWallet(transaction.getWallet());
+        if(oldTransaction.getCategory().getType() == TransactionTypes.EXPENSE || oldTransaction.getCategory().getType() == TransactionTypes.DEBIT) {
+            BudgetsManager.getInstance(mContext).updateBudget(oldTransaction, -1,false);
+        }
+        if(transaction.getCategory().getType() == TransactionTypes.EXPENSE || transaction.getCategory().getType() == TransactionTypes.DEBIT) {
+            BudgetsManager.getInstance(mContext).updateBudget(transaction, 1,true);
+        }
         return true;
     }
 
-    private boolean deleteTransaction(Transaction transaction) {
+    public boolean deleteTransaction(Transaction transaction) {
+        if(transaction == null) return  false;
+        iTransactionsDAO.deleteTransaction(transaction);
+        transaction.getWallet().setCurrentBalance(transaction.getWallet().getCurrentBalance() - transaction.getMoneyTradingWithSign());
+        WalletsManager.getInstance(mContext).updateWallet(transaction.getWallet());
+        if(transaction.getCategory().getType() == TransactionTypes.EXPENSE || transaction.getCategory().getType() == TransactionTypes.DEBIT) {
+            BudgetsManager.getInstance(mContext).updateBudget(transaction, -1,false);
+        }
         return true;
     }
 
-    private void updateTransactions(Wallet wallet) {
+    private void getAllTransactions(Wallet wallet) {
         transactions.clear();
         if(wallet != null){
             transactions = iTransactionsDAO.getAllTransactionByWalletId(wallet.getWalletId());
         }
+    }
+
+    public void updateTimestamp(int transactionId, long timestamp) {
+        iTransactionsDAO.updateTimeStamp(transactionId,timestamp);
     }
 }

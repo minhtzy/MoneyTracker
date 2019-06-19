@@ -19,7 +19,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
 
 
     public static final String LOG_TAG = "MONEY_TRACKER_DB_HELPER";
-    public static final int DB_VERSION = 3;
+    public static final int DB_VERSION = 4;
 
     private Context mContext;
 

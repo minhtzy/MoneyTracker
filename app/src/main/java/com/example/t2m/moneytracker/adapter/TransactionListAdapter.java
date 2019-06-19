@@ -35,6 +35,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
 
     public CurrencyUtils currencyUtils;
 
+
     public void updateValues(List<Pair<Date,List<Transaction>>> items) {
         mItems = items;
         notifyDataSetChanged();

@@ -40,12 +40,12 @@ public class WalletsManager {
         return null;
     }
 
-    public boolean updateWallet(Transaction transaction) {
-        Wallet wallet = transaction.getWallet();
-        float balance = wallet.getCurrentBalance();
-        balance -= transaction.getMoneyTradingWithSign();
-        wallet.setCurrentBalance(balance);
-        iWalletsDAO.updateWallet(wallet);
-        return true;
+    public boolean updateWallet(Wallet wallet) {
+        return  iWalletsDAO.updateWallet(wallet);
+    }
+
+    public void updateTimestamp(int walletId, long time) {
+        iWalletsDAO.updateTimeStamp(walletId,time);
+
     }
 }
