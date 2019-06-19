@@ -32,6 +32,9 @@ import com.example.t2m.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.example.t2m.moneytracker.model.Category;
 import com.example.t2m.moneytracker.model.MTDate;
 import com.example.t2m.moneytracker.model.Transaction;
+import com.example.t2m.moneytracker.model.Wallet;
+import com.example.t2m.moneytracker.utilities.TransactionsManager;
+import com.example.t2m.moneytracker.utilities.WalletsManager;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
@@ -57,7 +60,9 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StatisticalTabFragment extends Fragment implements OnChartValueSelectedListener {
   private PieChart mChart;
@@ -86,7 +91,6 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
   protected static String[] nhom = new String[] {
           "Khoản chi", "Nợ/Cho vay", "Khoản thu"
   };
-
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.activity_statistical_tab,container,false);
@@ -95,6 +99,7 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     this.addControls(view);
     this.methodDate();
     this.methodSpinner2();
+    this.getMapData();
     return view;
   }
 
@@ -169,7 +174,7 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
         long item = parent.getItemIdAtPosition(position);
 
         if(item == 1) {
-         methodMChartChi();
+         methodMChartChi(item);
          methodSetVisiable(view.INVISIBLE , view.INVISIBLE, view.VISIBLE, view.VISIBLE);
         } else if (item == 0) {
           methodMChart();
@@ -232,16 +237,43 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     mChart.setOnChartValueSelectedListener(this);
   }
 
-  private static void addDataSet(PieChart pieChart) {
+  private void addDataSet(PieChart pieChart) {
     ArrayList<PieEntry> yEntrys = new ArrayList<>();
     ArrayList<String> xEntrys = new ArrayList<>();
+    List<Transaction> listChi = new ArrayList<Transaction>();
+    List<Transaction> listThu = new ArrayList<Transaction>();
+    List<Transaction> listVayNo = new ArrayList<Transaction>();
+    Map<String, List<Transaction>> mapAll = getMapData();
+    int sum = 0;
     List<Category> listCat = categoriesDAOImpl.getAllCategory();
     if(listCat != null && listCat.size() > 0) {
       actionCalucator(listCat);
     }
-    for (int i = 0; i < 3 ; i++) {
-      yEntrys.add(new PieEntry((float) ((Math.random() * 100) + 100 / 5), nhom[i % nhom.length]));
+
+    if ( !mapAll.isEmpty() && mapAll != null) {
+        listChi = mapAll.get("Khoản Chi");
+        listThu = mapAll.get("Khoản Thu");
+        listVayNo = mapAll.get("Cho Vay/Nợ");
+        sum = listChi.size() + listThu.size() + listVayNo.size();
     }
+//    for (int i = 0; i < 3 ; i++) {
+//      yEntrys.add(new PieEntry((float) ((Math.random() * 100) + 100 / 5), nhom[i % nhom.length]));
+//    }
+      if (!listChi.isEmpty() && listChi != null) {
+          int size = listChi.size();
+          float tiLe = (float)size/sum;
+          yEntrys.add(new PieEntry(tiLe*100 , "Chi"));
+      }
+      if (!listThu.isEmpty() && listThu != null) {
+          int size = listThu.size();
+          float tiLe = (float)size/sum;
+          yEntrys.add(new PieEntry(tiLe*100, "Thu"));
+      }
+      if (!listVayNo.isEmpty() && listVayNo != null) {
+          int size = listVayNo.size();
+          float tiLe = (float)size/sum;
+          yEntrys.add(new PieEntry(tiLe*100, "Cho vay/ nợ"));
+      }
 
     PieDataSet pieDataSet=new PieDataSet(yEntrys,"Ghi chú");
     pieDataSet.setSliceSpace(2);
@@ -263,42 +295,44 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     pieChart.invalidate();
   }
 
-  public void methodMChartChi() {
+  public void methodMChartChi(long item) {
+    List<Transaction> listChi = new ArrayList<Transaction>();
+    List<Transaction> listThu = new ArrayList<Transaction>();
+    List<Transaction> listVayNo = new ArrayList<Transaction>();
+    Map<String, List<Transaction>> mapAll = getMapData();
+
+    if ( !mapAll.isEmpty() && mapAll != null) {
+      listChi = mapAll.get("Khoản Chi");
+      listThu = mapAll.get("Khoản Thu");
+      listVayNo = mapAll.get("Cho Vay/Nợ");
+    }
+
     mChartChi.setUsePercentValues(true);
     mChartChi.setExtraOffsets(5, 10, 5, 5);
-
     mChartChi.setDragDecelerationFrictionCoef(0.95f);
-
     mChartChi.setCenterTextTypeface(mTfLight);
     mChartChi.setCenterText(generateCenterSpannableText());
-
     mChartChi.setDrawHoleEnabled(true);
     mChartChi.setHoleColor(Color.WHITE);
-
     mChartChi.setTransparentCircleColor(Color.WHITE);
     mChartChi.setTransparentCircleAlpha(110);
-
     mChartChi.setHoleRadius(58f);
     mChartChi.setTransparentCircleRadius(61f);
-
     mChartChi.setDrawCenterText(true);
-
     mChartChi.setRotationAngle(0);
-    // enable rotation of the chart by touch
     mChartChi.setRotationEnabled(true);
     mChartChi.setHighlightPerTapEnabled(true);
-
-    // mChart.setUnit(" €");
-    // mChart.setDrawUnitsInChart(true);
-
-    // add a selection listener
     mChartChi.setOnChartValueSelectedListener(this);
 
-    setData(5, 100);
+    if (item == 1 ) {
+      setData(5, 100, listChi);
+    } else if (item == 2) {
+      setData(5, 100, listThu);
+    } else if (item == 3){
+      setData(5, 100, listVayNo);
+    }
 
     mChartChi.animateY(1400, Easing.EaseInOutQuad);
-    // mChart.spin(2000, 0, 360);
-
     Legend l = mChartChi.getLegend();
     l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
     l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
@@ -307,8 +341,6 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     l.setXEntrySpace(7f);
     l.setYEntrySpace(0f);
     l.setYOffset(0f);
-
-    // entry label styling
     mChartChi.setEntryLabelColor(Color.WHITE);
     mChartChi.setEntryLabelTypeface(mTfRegular);
     mChartChi.setEntryLabelTextSize(12f);
@@ -319,23 +351,13 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     s.setSpan(new RelativeSizeSpan(1.7f), 0, 18, 0);
     return s;
   }
-  private void setData(int count, float range) {
-
+  private void setData(int count, float range, List<Transaction> listTrans) {
     float mult = range;
-
     ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
-
-    // NOTE: The order of the entries when being added to the entries array determines their position around the center of
-    // the chart.
-    for (int i = 0; i < count ; i++) {
-      entries.add(new PieEntry((float) ((Math.random() * mult) + mult / 5), nhom[i % nhom.length]));
-    }
-
+    entries = setPieEntryThongKeKhoanChi(listTrans);
     PieDataSet dataSet = new PieDataSet(entries, "Election Results");
     dataSet.setSliceSpace(3f);
     dataSet.setSelectionShift(5f);
-
-    // add a lot of colors
 
     ArrayList<Integer> colors = new ArrayList<Integer>();
 
@@ -357,7 +379,6 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     colors.add(ColorTemplate.getHoloBlue());
 
     dataSet.setColors(colors);
-    //dataSet.setSelectionShift(0f);
 
     PieData data = new PieData(dataSet);
     data.setValueFormatter(new PercentFormatter());
@@ -365,10 +386,7 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     data.setValueTextColor(Color.WHITE);
     data.setValueTypeface(mTfLight);
     mChartChi.setData(data);
-
-    // undo all highlights
     mChartChi.highlightValues(null);
-
     mChartChi.invalidate();
   }
   private void methodSetVisiable(int set1 , int set2, int set3, int set4) {
@@ -500,6 +518,146 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
   }
   /* Vẽ biểu đồ cột - end */
 
-  /* load trang khác */
+  /* xứ lý logic */
+  private Map<String, List<Transaction>> getMapData() {
+    Wallet wallet = WalletsManager.getInstance(getContext()).getCurrentWallet();
+    Map<String, List<Transaction>> mapAll = new HashMap<String, List<Transaction>>();
+    List<Transaction> listAll = transactionsDAOImpl.getAllTransactionByWalletId(wallet.getWalletId());
+    List<Transaction> listChi = new ArrayList<Transaction>();
+    List<Transaction> listThu = new ArrayList<Transaction>();
+    List<Transaction> listVayNo = new ArrayList<Transaction>();
+    for (Transaction trans : listAll) {
+      Category cat = trans.getCategory();
+      int type = cat.getType().getValue();
+      if (type == 1) {
+        listChi.add(trans);
+      } else if (type == 2 ) {
+        listThu.add(trans);
+      } else if (type == 3 ) {
+        listVayNo.add(trans);
+      }
+    }
+    mapAll.put("Khoản Chi", listChi);
+    mapAll.put("Khoản Thu", listThu);
+    mapAll.put("Cho Vay/Nợ", listVayNo);
+    return mapAll;
+  }
 
+  private Map<String, List<Category>> thongKeKhoanChi(List<Transaction> listChi) {
+    Map<String, List<Category>> mapChi = new HashMap<>();
+    List<Category> anUong = new ArrayList<Category>();
+    List<Category> hoaDonTienIch = new ArrayList<Category>();
+    List<Category> diChuyen = new ArrayList<Category>();
+    List<Category> muaSam = new ArrayList<Category>();
+    List<Category> giaTri = new ArrayList<Category>();
+    List<Category> sucKhoe = new ArrayList<Category>();
+    List<Category> quaTang = new ArrayList<Category>();
+    List<Category> giaDinh = new ArrayList<Category>();
+    List<Category> khac = new ArrayList<Category>();
+    for (Transaction trans: listChi) {
+      Category cat = trans.getCategory();
+      int parentId = cat.getParentCategory().getId();
+      if (parentId == 1) {
+        anUong.add(cat);
+      } else if (parentId == 5) {
+        hoaDonTienIch.add(cat);
+      } else if (parentId == 13) {
+        diChuyen.add(cat);
+      } else if (parentId == 18) {
+        muaSam.add(cat);
+      } else if (parentId == 24) {
+        giaTri.add(cat);
+      } else if (parentId == 28) {
+        sucKhoe.add(cat);
+      } else if (parentId == 33) {
+        quaTang.add(cat);
+      } else if (parentId == 37) {
+        giaDinh.add(cat);
+      } else {
+        khac.add(cat);
+      }
+    }
+
+    mapChi.put("Ăn uống", anUong);
+    mapChi.put("Hóa đơn & Tiện ích", hoaDonTienIch);
+    mapChi.put("Di chuyển", diChuyen);
+    mapChi.put("Mua sắm", muaSam);
+    mapChi.put("Giải trí", giaTri);
+    mapChi.put("Sức khỏe", sucKhoe);
+    mapChi.put("Quà tặng & Quyên góp", quaTang);
+    mapChi.put("Gia đình", giaDinh);
+    mapChi.put("Khác", khac);
+    return mapChi;
+  }
+
+  private ArrayList<PieEntry> setPieEntryThongKeKhoanChi (List<Transaction> listChi) {
+    ArrayList<PieEntry> entries = new ArrayList<>();
+    List<Category> anUong = new ArrayList<Category>();
+    List<Category> hoaDonTienIch = new ArrayList<Category>();
+    List<Category> diChuyen = new ArrayList<Category>();
+    List<Category> muaSam = new ArrayList<Category>();
+    List<Category> giaTri = new ArrayList<Category>();
+    List<Category> sucKhoe = new ArrayList<Category>();
+    List<Category> quaTang = new ArrayList<Category>();
+    List<Category> giaDinh = new ArrayList<Category>();
+    List<Category> khac = new ArrayList<Category>();
+
+    for (Transaction trans: listChi) {
+      Category cat = trans.getCategory();
+      int parentId = cat.getParentCategory().getId();
+      if (parentId == 1) {
+        anUong.add(cat);
+      } else if (parentId == 5) {
+        hoaDonTienIch.add(cat);
+      } else if (parentId == 13) {
+        diChuyen.add(cat);
+      } else if (parentId == 18) {
+        muaSam.add(cat);
+      } else if (parentId == 24) {
+        giaTri.add(cat);
+      } else if (parentId == 28) {
+        sucKhoe.add(cat);
+      } else if (parentId == 33) {
+        quaTang.add(cat);
+      } else if (parentId == 37) {
+        giaDinh.add(cat);
+      } else {
+        khac.add(cat);
+      }
+    }
+
+    long sum = anUong.size() + hoaDonTienIch.size()+ diChuyen.size()+ muaSam.size()
+            + giaTri.size()+ sucKhoe.size()+ quaTang.size()+ giaDinh.size()+ khac.size();
+    float anUongPT = phanTram(sum, anUong);
+    entries.add(new PieEntry(anUongPT, "Ăn uống"));
+
+    float hoaDonTienIchPT = phanTram(sum, hoaDonTienIch);
+    entries.add(new PieEntry(hoaDonTienIchPT, "Hóa đơn & Tiện ích"));
+    float diChuyenPT = phanTram(sum, diChuyen);
+    entries.add(new PieEntry(diChuyenPT, "Di chuyển"));
+    float muaSamPT = phanTram(sum, muaSam);
+    entries.add(new PieEntry(muaSamPT, "Mua sắm"));
+    float giaTriPT = phanTram(sum, giaTri);
+    entries.add(new PieEntry(giaTriPT, "Giải trí"));
+    float sucKhoePT = phanTram(sum, sucKhoe);
+    entries.add(new PieEntry(sucKhoePT, "Sức khỏe"));
+    float quaTangPT = phanTram(sum, quaTang);
+    entries.add(new PieEntry(quaTangPT, "Quà tặng & Quyên góp"));
+    float giaDinhPT = phanTram(sum, giaDinh);
+    entries.add(new PieEntry(giaDinhPT, "Gia đình"));
+    float khacPT = phanTram(sum, khac);
+    entries.add(new PieEntry(khacPT, "Khác"));
+
+    return entries;
+  }
+
+  private float phanTram(long sum, List<Category> list) {
+    float phanTram = 0;
+    if (!list.isEmpty() && list != null) {
+      int size = list.size();
+      float tiLe = (float)size/sum;
+      phanTram = tiLe*100;
+    }
+    return phanTram;
+  }
 }
