@@ -73,14 +73,15 @@ public class TransactionsManager {
 
     }
 
-    public boolean addTransaction(Transaction transaction) {
+    public boolean addTransaction(Transaction transaction,boolean updateTimestamp) {
         if(transaction == null) return  false;
         Transaction hasTran = iTransactionsDAO.getTransactionById(transaction.getTransactionId());
         if(hasTran != null) {
-            return false;
+            updateTransaction(transaction,hasTran,updateTimestamp);
+            return true;
         }
         transactions.add(transaction);
-        iTransactionsDAO.insertTransaction(transaction);
+        iTransactionsDAO.insertTransaction(transaction,updateTimestamp);
 
         Transaction tranInfo = iTransactionsDAO.getTransactionById(transaction.getTransactionId());
         if(tranInfo == null) return false;
@@ -92,9 +93,9 @@ public class TransactionsManager {
         }
         return true;
     }
-    public boolean updateTransaction(Transaction transaction, Transaction oldTransaction) {
+    public boolean updateTransaction(Transaction transaction, Transaction oldTransaction,boolean updateTimestamp) {
         if(transaction == null) return  false;
-        iTransactionsDAO.updateTransaction(transaction);
+        iTransactionsDAO.updateTransaction(transaction,updateTimestamp);
 
         float walletBalance = transaction.getWallet().getCurrentBalance() - oldTransaction.getMoneyTradingWithSign() + transaction.getMoneyTradingWithSign();
         transaction.getWallet().setCurrentBalance(walletBalance);

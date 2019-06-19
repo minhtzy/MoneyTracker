@@ -90,7 +90,7 @@ public class AddWalletActivity extends AppCompatActivity {
                 .setWallet(wallet)
                 .setCurrencyCode("VND")
                 .build();
-        boolean added_transactin =iTransactionsDAO.insertTransaction(transaction);
+        boolean added_transactin =iTransactionsDAO.insertTransaction(transaction,true);
         if(added_wallet && added_transactin) {
             Intent intent = new Intent(AddWalletActivity.this,MainActivity.class);
             startActivity(intent);
