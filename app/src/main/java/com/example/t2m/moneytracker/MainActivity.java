@@ -379,15 +379,9 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_chart) {
-
-
             Log.d(MainActivity.class.getSimpleName(),"Start Transaction Activity");
             fragmentClass = StatisticalTabFragment.class;
-        } else if (id == R.id.nav_plan) {
-
-//        }else if (id == R.id.nav_search){
-//          fragmentClass = SearchTransaction.class;
-        } else if (id == R.id.nav_manage) {
+        }  else if (id == R.id.nav_manage) {
             Intent intent = new Intent(MainActivity.this, Setting.class);
             startActivity(intent);
             finish();

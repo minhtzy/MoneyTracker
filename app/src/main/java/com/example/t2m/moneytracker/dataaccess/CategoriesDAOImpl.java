@@ -174,4 +174,14 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
         return cursor;
     }
 
+    public int getCountCategoryParent(int type) {
+        List<Category> list = getCategoriesByType(type);
+        int count = 0;
+        for (Category c : list) {
+            if (c.getId() > 0) {
+                count = count + 1;
+            }
+        }
+        return count;
+    }
 }

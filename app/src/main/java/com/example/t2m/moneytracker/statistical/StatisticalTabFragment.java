@@ -1,20 +1,26 @@
 package com.example.t2m.moneytracker.statistical;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
+import android.text.SpannableString;
 import android.text.format.DateUtils;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -22,15 +28,14 @@ import android.widget.Toast;
 import com.example.t2m.moneytracker.R;
 import com.example.t2m.moneytracker.dataaccess.CategoriesDAOImpl;
 import com.example.t2m.moneytracker.dataaccess.ITransactionsDAO;
-import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
 import com.example.t2m.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.example.t2m.moneytracker.model.Category;
 import com.example.t2m.moneytracker.model.MTDate;
 import com.example.t2m.moneytracker.model.Transaction;
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -38,19 +43,16 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.CombinedData;
-import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,6 +61,7 @@ import java.util.List;
 
 public class StatisticalTabFragment extends Fragment implements OnChartValueSelectedListener {
   private PieChart mChart;
+  private PieChart mChartChi;
   private CombinedChart comChart;
   private EditText mTextFromDate;
   private EditText mTextToDate;
@@ -68,18 +71,29 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
   private BarChart barChart;
   private RelativeLayout relativeLayoutBarChart;
   private RelativeLayout relativeLayoutMchart;
+  private RelativeLayout spinnerThongKeTheoNhon;
+  private RelativeLayout relativeLayoutMchartChi;
+  private RelativeLayout relativeLayoutMchartThu;
+  private RelativeLayout relativeLayoutMchartVayNo;
   ITransactionsDAO iTransactionsDAO;
   static TransactionsDAOImpl transactionsDAOImpl;
   static CategoriesDAOImpl categoriesDAOImpl;
+  private LinearLayout textDateLinearLayout;
+  protected Typeface mTfLight;
+  protected Typeface mTfRegular;
+  Button btnanim;
+  View view;
+  protected static String[] nhom = new String[] {
+          "Khoản chi", "Nợ/Cho vay", "Khoản thu"
+  };
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.activity_statistical_tab,container,false);
+    view = inflater.inflate(R.layout.activity_statistical_tab,container,false);
     transactionsDAOImpl = new TransactionsDAOImpl(getContext());
     categoriesDAOImpl = new CategoriesDAOImpl(getContext());
     this.addControls(view);
     this.methodDate();
-    this.methodSpinner();
     this.methodSpinner2();
     return view;
   }
@@ -90,12 +104,15 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     dropdown = view.findViewById(R.id.spinner1);
     dropdown2 = view.findViewById(R.id.spinner2);
     mChart = view.findViewById(R.id.piechart);
+    mChartChi = view.findViewById(R.id.chartChi1);
     mCalendar = Calendar.getInstance();
     comChart =  view.findViewById(R.id.combinedChart);
     barChart = view.findViewById(R.id.bar_chart);
     relativeLayoutBarChart = view.findViewById(R.id.bar_chart_relative_layout);
     relativeLayoutMchart = view.findViewById(R.id.piechart_relative_layout);
-
+    spinnerThongKeTheoNhon = view.findViewById(R.id.spinner1_relative_layout);
+    textDateLinearLayout = view.findViewById(R.id.dateId);
+    relativeLayoutMchartChi = view.findViewById(R.id.piechart_relative_layout_chi);
   }
   /* Xử lý thời gian - start*/
   public void methodDate () {
@@ -146,6 +163,25 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
     dropdown.setAdapter(adapter);
+    dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        long item = parent.getItemIdAtPosition(position);
+
+        if(item == 1) {
+         methodMChartChi();
+         methodSetVisiable(view.INVISIBLE , view.INVISIBLE, view.VISIBLE, view.VISIBLE);
+        } else if (item == 0) {
+          methodMChart();
+          methodSetVisiable(view.VISIBLE , view.INVISIBLE, view.INVISIBLE, view.VISIBLE );
+        }
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+
+      }
+    });
   }
   public void methodSpinner2 () {
     ArrayAdapter<java.lang.CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(),
@@ -160,16 +196,11 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
          long item = parent.getItemIdAtPosition(position);
          if(item > 0) {
            methodMChart();
-           mChart.setVisibility(view.VISIBLE);
-           relativeLayoutMchart.setVisibility(view.VISIBLE);
-           barChart.setVisibility(view.INVISIBLE);
-           relativeLayoutBarChart.setVisibility(view.INVISIBLE);
+           methodSetVisiable(view.VISIBLE , view.INVISIBLE, view.INVISIBLE, view.VISIBLE);
+           methodSpinner();
          } else if (item == 0) {
            methodBarchart();
-           mChart.setVisibility(view.INVISIBLE);
-           relativeLayoutMchart.setVisibility(view.INVISIBLE);
-           barChart.setVisibility(view.VISIBLE);
-           relativeLayoutBarChart.setVisibility(view.VISIBLE);
+           methodSetVisiable(view.INVISIBLE , view.VISIBLE, view.INVISIBLE, view.INVISIBLE);
          }
       }
 
@@ -184,9 +215,6 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
 
   @Override
   public void onValueSelected(Entry e, Highlight h) {
-//    int dur = Toast.LENGTH_SHORT;
-//    Toast.makeText(, "Value: " + e.getY() + ", index: " + h.getX() + ", DataSet index: " + h.getDataSetIndex(),dur).show();
-//    Toast.
   }
 
   /* Xử lý biểu đồ tròn - start*/
@@ -195,7 +223,7 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     mChart.setDescription(new Description());
     mChart.setHoleRadius(35f);
     mChart.setTransparentCircleAlpha(0);
-    mChart.setCenterText("PieChart");
+    mChart.setCenterText("Tổng hợp");
     mChart.setCenterTextSize(10);
     mChart.setDrawEntryLabels(true);
 
@@ -211,18 +239,11 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     if(listCat != null && listCat.size() > 0) {
       actionCalucator(listCat);
     }
-
-    float[] yData = { 25, 40, 35};
-    String[] xData = { "January", "February", "January" };
-
-    for (int i = 0; i < yData.length;i++){
-      yEntrys.add(new PieEntry(yData[i],i));
-    }
-    for (int i = 0; i < xData.length;i++){
-      xEntrys.add(xData[i]);
+    for (int i = 0; i < 3 ; i++) {
+      yEntrys.add(new PieEntry((float) ((Math.random() * 100) + 100 / 5), nhom[i % nhom.length]));
     }
 
-    PieDataSet pieDataSet=new PieDataSet(yEntrys,"Report");
+    PieDataSet pieDataSet=new PieDataSet(yEntrys,"Ghi chú");
     pieDataSet.setSliceSpace(2);
     pieDataSet.setValueTextSize(12);
 
@@ -240,6 +261,132 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     PieData pieData=new PieData(pieDataSet);
     pieChart.setData(pieData);
     pieChart.invalidate();
+  }
+
+  public void methodMChartChi() {
+    mChartChi.setUsePercentValues(true);
+    mChartChi.setExtraOffsets(5, 10, 5, 5);
+
+    mChartChi.setDragDecelerationFrictionCoef(0.95f);
+
+    mChartChi.setCenterTextTypeface(mTfLight);
+    mChartChi.setCenterText(generateCenterSpannableText());
+
+    mChartChi.setDrawHoleEnabled(true);
+    mChartChi.setHoleColor(Color.WHITE);
+
+    mChartChi.setTransparentCircleColor(Color.WHITE);
+    mChartChi.setTransparentCircleAlpha(110);
+
+    mChartChi.setHoleRadius(58f);
+    mChartChi.setTransparentCircleRadius(61f);
+
+    mChartChi.setDrawCenterText(true);
+
+    mChartChi.setRotationAngle(0);
+    // enable rotation of the chart by touch
+    mChartChi.setRotationEnabled(true);
+    mChartChi.setHighlightPerTapEnabled(true);
+
+    // mChart.setUnit(" €");
+    // mChart.setDrawUnitsInChart(true);
+
+    // add a selection listener
+    mChartChi.setOnChartValueSelectedListener(this);
+
+    setData(5, 100);
+
+    mChartChi.animateY(1400, Easing.EaseInOutQuad);
+    // mChart.spin(2000, 0, 360);
+
+    Legend l = mChartChi.getLegend();
+    l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+    l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+    l.setOrientation(Legend.LegendOrientation.VERTICAL);
+    l.setDrawInside(false);
+    l.setXEntrySpace(7f);
+    l.setYEntrySpace(0f);
+    l.setYOffset(0f);
+
+    // entry label styling
+    mChartChi.setEntryLabelColor(Color.WHITE);
+    mChartChi.setEntryLabelTypeface(mTfRegular);
+    mChartChi.setEntryLabelTextSize(12f);
+  }
+
+  private SpannableString generateCenterSpannableText() {
+    SpannableString s = new SpannableString("Thống kê Theo Loại");
+    s.setSpan(new RelativeSizeSpan(1.7f), 0, 18, 0);
+    return s;
+  }
+  private void setData(int count, float range) {
+
+    float mult = range;
+
+    ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
+
+    // NOTE: The order of the entries when being added to the entries array determines their position around the center of
+    // the chart.
+    for (int i = 0; i < count ; i++) {
+      entries.add(new PieEntry((float) ((Math.random() * mult) + mult / 5), nhom[i % nhom.length]));
+    }
+
+    PieDataSet dataSet = new PieDataSet(entries, "Election Results");
+    dataSet.setSliceSpace(3f);
+    dataSet.setSelectionShift(5f);
+
+    // add a lot of colors
+
+    ArrayList<Integer> colors = new ArrayList<Integer>();
+
+    for (int c : ColorTemplate.VORDIPLOM_COLORS)
+      colors.add(c);
+
+    for (int c : ColorTemplate.JOYFUL_COLORS)
+      colors.add(c);
+
+    for (int c : ColorTemplate.COLORFUL_COLORS)
+      colors.add(c);
+
+    for (int c : ColorTemplate.LIBERTY_COLORS)
+      colors.add(c);
+
+    for (int c : ColorTemplate.PASTEL_COLORS)
+      colors.add(c);
+
+    colors.add(ColorTemplate.getHoloBlue());
+
+    dataSet.setColors(colors);
+    //dataSet.setSelectionShift(0f);
+
+    PieData data = new PieData(dataSet);
+    data.setValueFormatter(new PercentFormatter());
+    data.setValueTextSize(11f);
+    data.setValueTextColor(Color.WHITE);
+    data.setValueTypeface(mTfLight);
+    mChartChi.setData(data);
+
+    // undo all highlights
+    mChartChi.highlightValues(null);
+
+    mChartChi.invalidate();
+  }
+  private void methodSetVisiable(int set1 , int set2, int set3, int set4) {
+    mChart.setVisibility(set1);
+    relativeLayoutMchart.setVisibility(set1);
+
+    barChart.setVisibility(set2);
+    relativeLayoutBarChart.setVisibility(set2);
+
+    spinnerThongKeTheoNhon.setVisibility(set4);
+    dropdown.setVisibility(set4);
+
+    textDateLinearLayout.setVisibility(set2);
+    mTextFromDate.setVisibility(set2);
+    mTextToDate.setVisibility(set2);
+
+    relativeLayoutMchartChi.setVisibility(set3);
+    mChartChi.setVisibility(set3);
   }
   /* Xử lý biểu đồ tròn - end*/
 
@@ -353,5 +500,6 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
   }
   /* Vẽ biểu đồ cột - end */
 
+  /* load trang khác */
 
 }

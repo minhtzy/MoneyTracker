@@ -19,6 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.t2m.moneytracker.R;
+import com.example.t2m.moneytracker.dataaccess.CategoriesDAOImpl;
+import com.example.t2m.moneytracker.dataaccess.TransactionsDAOImpl;
+import com.example.t2m.moneytracker.model.Transaction;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -33,6 +36,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Fragment_ThongKe_Tab1 extends Fragment implements SeekBar.OnSeekBarChangeListener, OnChartValueSelectedListener {
     View view;
@@ -64,11 +68,16 @@ public class Fragment_ThongKe_Tab1 extends Fragment implements SeekBar.OnSeekBar
         tvX = (TextView) view.findViewById(R.id.tvXMax);
         tvY = (TextView) view.findViewById(R.id.tvYMax);
         btnanim=(Button)view.findViewById(R.id.btnanim);
+        CategoriesDAOImpl categoriesDAOImpl = new CategoriesDAOImpl(getContext());
+        TransactionsDAOImpl transactionsDAO = new TransactionsDAOImpl(getContext());
 
+        int countCategoryChi = categoriesDAOImpl.getCountCategoryParent(1);
+        int countCategoryThu = categoriesDAOImpl.getCountCategoryParent(2);
+        int countCategoryVay = categoriesDAOImpl.getCountCategoryParent(3);
 
-        mSeekBarX = (SeekBar) view.findViewById(R.id.seekBar1);
-
-        mSeekBarX.setProgress(4);
+//        List<Transaction> listChi = transactionsDAO.getTransactionByType(1);
+//        List<Transaction> listThu = transactionsDAO.getTransactionByType(2);
+//        List<Transaction> listVay = transactionsDAO.getTransactionByType(3);
 
         mChart = (PieChart) view.findViewById(R.id.chart1);
         mChart.setUsePercentValues(true);
@@ -101,12 +110,10 @@ public class Fragment_ThongKe_Tab1 extends Fragment implements SeekBar.OnSeekBar
         // add a selection listener
         mChart.setOnChartValueSelectedListener(this);
 
-        setData(4, 100);
+        setData(countCategoryChi, 100);
 
         mChart.animateY(1400, Easing.EaseInOutQuad);
         // mChart.spin(2000, 0, 360);
-
-        mSeekBarX.setOnSeekBarChangeListener(this);
 
         Legend l = mChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
@@ -121,93 +128,12 @@ public class Fragment_ThongKe_Tab1 extends Fragment implements SeekBar.OnSeekBar
         mChart.setEntryLabelColor(Color.WHITE);
         mChart.setEntryLabelTypeface(mTfRegular);
         mChart.setEntryLabelTextSize(12f);
-        registerForContextMenu(btnanim);
-        btnanim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PopupMenu popupMenu = new PopupMenu(getContext(),  view);
-                popupMenu.getMenuInflater().inflate(R.menu.pie, popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
 
-                        switch (menuItem.getItemId()) {
-                            case R.id.actionToggleValues: {
-                                for (IDataSet<?> set : mChart.getData().getDataSets())
-                                    set.setDrawValues(!set.isDrawValuesEnabled());
-
-                                mChart.invalidate();
-                                break;
-                            }
-                            case R.id.actionToggleHole: {
-                                if (mChart.isDrawHoleEnabled())
-                                    mChart.setDrawHoleEnabled(false);
-                                else
-                                    mChart.setDrawHoleEnabled(true);
-                                mChart.invalidate();
-                                break;
-                            }
-                            case R.id.actionDrawCenter: {
-                                if (mChart.isDrawCenterTextEnabled())
-                                    mChart.setDrawCenterText(false);
-                                else
-                                    mChart.setDrawCenterText(true);
-                                mChart.invalidate();
-                                break;
-                            }
-                            case R.id.actionToggleXVals: {
-
-                                mChart.setDrawEntryLabels(!mChart.isDrawEntryLabelsEnabled());
-                                mChart.invalidate();
-                                break;
-                            }
-                            case R.id.actionSave: {
-                                // mChart.saveToGallery("title"+System.currentTimeMillis());
-                                mChart.saveToPath("title" + System.currentTimeMillis(), "");
-                                break;
-                            }
-                            case R.id.actionTogglePercent:
-                                mChart.setUsePercentValues(!mChart.isUsePercentValuesEnabled());
-                                mChart.invalidate();
-                                break;
-                            case R.id.animateX: {
-                                mChart.animateX(1400);
-                                break;
-                            }
-                            case R.id.animateY: {
-                                mChart.animateY(1400);
-                                break;
-                            }
-                            case R.id.animateXY: {
-                                mChart.animateXY(1400, 1400);
-                                break;
-                            }
-                            case R.id.actionToggleSpin: {
-                                mChart.spin(1000, mChart.getRotationAngle(), mChart.getRotationAngle() + 360, Easing.EaseInCubic);
-                                break;
-                            }
-                        }
-                        return  true;
-                    }
-                });
-                try {
-                    popupMenu.show();
-                }catch (Exception e){
-                    Toast.makeText(getContext(),e.getMessage().toString(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
         return view;
     }
     private SpannableString generateCenterSpannableText() {
-
-        SpannableString s = new SpannableString("Thống kê Theo Mục \n developed by Phạm Hoàng Huy");
-        s.setSpan(new RelativeSizeSpan(1.7f), 0, 14, 0);
-        s.setSpan(new StyleSpan(Typeface.NORMAL), 14, s.length() - 15, 0);
-        s.setSpan(new ForegroundColorSpan(Color.GRAY), 14, s.length() - 15, 0);
-        s.setSpan(new RelativeSizeSpan(.8f), 14, s.length() - 15, 0);
-        s.setSpan(new StyleSpan(Typeface.ITALIC), s.length() - 14, s.length(), 0);
-        s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length() - 14, s.length(), 0);
+        SpannableString s = new SpannableString("Thống kê Theo Loại");
+        s.setSpan(new RelativeSizeSpan(1.7f), 0, 18, 0);
         return s;
     }
 

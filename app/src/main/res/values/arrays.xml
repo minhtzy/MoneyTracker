@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string-array name="planets_array">
+    <item>Tất cả</item>
     <item>Khoản chi</item>
     <item>Khoản thu</item>
     <item>Thu nhập ròng</item>
