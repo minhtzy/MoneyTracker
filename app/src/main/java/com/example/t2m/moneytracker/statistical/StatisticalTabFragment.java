@@ -355,7 +355,7 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     float mult = range;
     ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
     entries = setPieEntryThongKeKhoanChi(listTrans);
-    PieDataSet dataSet = new PieDataSet(entries, "Election Results");
+    PieDataSet dataSet = new PieDataSet(entries, null);
     dataSet.setSliceSpace(3f);
     dataSet.setSelectionShift(5f);
 
@@ -383,7 +383,7 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     PieData data = new PieData(dataSet);
     data.setValueFormatter(new PercentFormatter());
     data.setValueTextSize(11f);
-    data.setValueTextColor(Color.WHITE);
+    data.setValueTextColor(Color.BLACK);
     data.setValueTypeface(mTfLight);
     mChartChi.setData(data);
     mChartChi.highlightValues(null);
@@ -629,25 +629,41 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     long sum = anUong.size() + hoaDonTienIch.size()+ diChuyen.size()+ muaSam.size()
             + giaTri.size()+ sucKhoe.size()+ quaTang.size()+ giaDinh.size()+ khac.size();
     float anUongPT = phanTram(sum, anUong);
-    entries.add(new PieEntry(anUongPT, "Ăn uống"));
-
+    if (anUongPT > 0) {
+      entries.add(new PieEntry(anUongPT, "Ăn uống"));
+    }
     float hoaDonTienIchPT = phanTram(sum, hoaDonTienIch);
-    entries.add(new PieEntry(hoaDonTienIchPT, "Hóa đơn & Tiện ích"));
+    if (hoaDonTienIchPT > 0) {
+      entries.add(new PieEntry(hoaDonTienIchPT, "Hóa đơn & Tiện ích"));
+    }
     float diChuyenPT = phanTram(sum, diChuyen);
-    entries.add(new PieEntry(diChuyenPT, "Di chuyển"));
+    if (diChuyenPT > 0) {
+      entries.add(new PieEntry(diChuyenPT, "Di chuyển"));
+    }
     float muaSamPT = phanTram(sum, muaSam);
-    entries.add(new PieEntry(muaSamPT, "Mua sắm"));
+    if (muaSamPT > 0) {
+      entries.add(new PieEntry(muaSamPT, "Mua sắm"));
+    }
     float giaTriPT = phanTram(sum, giaTri);
-    entries.add(new PieEntry(giaTriPT, "Giải trí"));
+    if (giaTriPT > 0) {
+      entries.add(new PieEntry(giaTriPT, "Giải trí"));
+    }
     float sucKhoePT = phanTram(sum, sucKhoe);
-    entries.add(new PieEntry(sucKhoePT, "Sức khỏe"));
+    if (sucKhoePT > 0) {
+      entries.add(new PieEntry(sucKhoePT, "Sức khỏe"));
+    }
     float quaTangPT = phanTram(sum, quaTang);
-    entries.add(new PieEntry(quaTangPT, "Quà tặng & Quyên góp"));
+    if (quaTangPT > 0) {
+      entries.add(new PieEntry(quaTangPT, "Quà tặng & Quyên góp"));
+    }
     float giaDinhPT = phanTram(sum, giaDinh);
-    entries.add(new PieEntry(giaDinhPT, "Gia đình"));
+    if (giaDinhPT > 0) {
+      entries.add(new PieEntry(giaDinhPT, "Gia đình"));
+    }
     float khacPT = phanTram(sum, khac);
-    entries.add(new PieEntry(khacPT, "Khác"));
-
+    if (khacPT > 0) {
+      entries.add(new PieEntry(khacPT, "Khác"));
+    }
     return entries;
   }
 
