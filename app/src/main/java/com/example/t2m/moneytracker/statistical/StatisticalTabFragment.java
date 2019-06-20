@@ -565,7 +565,9 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     List<Category> khac = new ArrayList<Category>();
     for (Transaction trans: listChi) {
       Category cat = trans.getCategory();
-      int parentId = cat.getParentCategory().getId();
+      int parentId = cat.getId();
+      if(cat.getParentCategory() != null) 
+        parentId = cat.getParentCategory().getId();
       if (parentId == 1) {
         anUong.add(cat);
       } else if (parentId == 5) {
@@ -613,7 +615,9 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
 
     for (Transaction trans: listChi) {
       Category cat = trans.getCategory();
-      int parentId = cat.getParentCategory().getId();
+      int parentId = cat.getId();
+      if(cat.getParentCategory() != null) 
+        parentId = cat.getParentCategory().getId();
       if (parentId == 1) {
         anUong.add(cat);
       } else if (parentId == 5) {
