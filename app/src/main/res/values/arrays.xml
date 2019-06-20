@@ -7,7 +7,7 @@
     <item>Thu nhập ròng</item>
   </string-array>
   <string-array name="planets_array2">
-    <item>Theo thời gian</item>
     <item>Theo nhóm</item>
+    <item>Theo thời gian</item>
   </string-array>
 </resources>

@@ -52,16 +52,7 @@ public class Fragment_ThongKe_Tab2 extends Fragment implements SeekBar.OnSeekBar
         view= inflater.inflate(R.layout.activity_layout_thongke_tab2, container, false);
 //        mTfRegular = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Regular.ttf");
 //        mTfLight = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Light.ttf");
-        tvX = (TextView) view.findViewById(R.id.tvXMax);
         tvY = (TextView) view.findViewById(R.id.tvYMax);
-        mSeekBarX = (SeekBar) view.findViewById(R.id.seekBar1);
-        mSeekBarY = (SeekBar) view.findViewById(R.id.seekBar2);
-
-        mSeekBarX.setProgress(45);
-        mSeekBarY.setProgress(100);
-
-        mSeekBarY.setOnSeekBarChangeListener(this);
-        mSeekBarX.setOnSeekBarChangeListener(this);
 
         mChart = (LineChart) view.findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);

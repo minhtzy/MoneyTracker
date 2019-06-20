@@ -65,29 +65,19 @@ import java.util.List;
 import java.util.Map;
 
 public class StatisticalTabFragment extends Fragment implements OnChartValueSelectedListener {
-  private PieChart mChart;
-  private PieChart mChartChi;
-  private PieChart mChartThu;
-  private PieChart mChartVayNo;
+  private PieChart mChart, mChartChi, mChartThu, mChartVayNo;
+
   private CombinedChart comChart;
-  private EditText mTextFromDate;
-  private EditText mTextToDate;
+  private EditText mTextFromDate, mTextToDate;
   private Calendar mCalendar;
-  private Spinner dropdown;
-  private Spinner dropdown2;
+  private Spinner dropdown, dropdown2;
   private BarChart barChart;
-  private RelativeLayout relativeLayoutBarChart;
-  private RelativeLayout relativeLayoutMchart;
-  private RelativeLayout spinnerThongKeTheoNhon;
-  private RelativeLayout relativeLayoutMchartChi;
-  private RelativeLayout relativeLayoutMchartThu;
-  private RelativeLayout relativeLayoutMchartVayNo;
+  private RelativeLayout relativeLayoutBarChart, relativeLayoutMchart, spinnerThongKeTheoNhon, relativeLayoutMchartChi, relativeLayoutMchartThu, relativeLayoutMchartVayNo;
   ITransactionsDAO iTransactionsDAO;
   static TransactionsDAOImpl transactionsDAOImpl;
   static CategoriesDAOImpl categoriesDAOImpl;
   private LinearLayout textDateLinearLayout;
-  protected Typeface mTfLight;
-  protected Typeface mTfRegular;
+  protected Typeface mTfLight, mTfRegular;
   View view;
   protected static String[] nhom = new String[] {
           "Khoản chi", "Nợ/Cho vay", "Khoản thu"
@@ -210,11 +200,11 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
          long item = parent.getItemIdAtPosition(position);
-         if(item > 0) {
+         if(item == 0) {
            methodMChart();
            methodSetVisiable(view.VISIBLE , view.INVISIBLE, view.INVISIBLE, view.VISIBLE,view.INVISIBLE,view.INVISIBLE );
            methodSpinner();
-         } else if (item == 0) {
+         } else if (item > 0) {
            methodBarchart();
            methodSetVisiable(view.INVISIBLE , view.VISIBLE, view.INVISIBLE, view.INVISIBLE,view.INVISIBLE,view.INVISIBLE );
          }
@@ -364,7 +354,7 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     } else if (item == 2) {
       entries = setPieEntryThongKeKhoanThu(listThu);
     } else if (item == 3){
-      //entries = setPieEntryThongKeKhoanVayNo(listVayNo);
+      entries = setPieEntryThongKeKhoanVayNo(listVayNo);
     }
 
 
@@ -552,7 +542,7 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
         listChi.add(trans);
       } else if (type == 2 ) {
         listThu.add(trans);
-      } else if (type == 3 ) {
+      } else if (type == 3 || type == 4) {
         listVayNo.add(trans);
       }
     }

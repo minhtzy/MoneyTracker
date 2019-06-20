@@ -65,7 +65,6 @@ public class Fragment_ThongKe_Tab1 extends Fragment implements SeekBar.OnSeekBar
 
 //        mTfRegular = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Regular.ttf");
         // mTfLight = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Light.ttf");
-        tvX = (TextView) view.findViewById(R.id.tvXMax);
         tvY = (TextView) view.findViewById(R.id.tvYMax);
         btnanim=(Button)view.findViewById(R.id.btnanim);
         CategoriesDAOImpl categoriesDAOImpl = new CategoriesDAOImpl(getContext());
