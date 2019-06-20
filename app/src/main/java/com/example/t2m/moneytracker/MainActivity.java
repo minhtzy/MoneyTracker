@@ -39,6 +39,7 @@ import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
 
 import com.example.t2m.moneytracker.statistical.StatisticalTabFragment;
 import com.example.t2m.moneytracker.sync.SyncCloudFirestore;
+import com.example.t2m.moneytracker.transaction.TransactionListFragment;
 import com.example.t2m.moneytracker.transaction.TransactionListSearch;
 import com.example.t2m.moneytracker.transaction.TransactionTabFragment;
 import com.example.t2m.moneytracker.utilities.WalletsManager;
@@ -194,7 +195,7 @@ public class MainActivity extends AppCompatActivity
                                 TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
                                 List list = trans.getAllTransactionDataByDate(milisStart,milisEnd);
                                 listtrans.addAll(list);
-                                TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
+                                TransactionListFragment transactionListFragment = TransactionListFragment.newInstance(listtrans);
                                 getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,transactionListFragment).addToBackStack(null).commit();
 
                             } catch (ParseException e) {
@@ -289,7 +290,7 @@ public class MainActivity extends AppCompatActivity
                                 TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
                                 List list = trans.getAllTransactionDataByDate(milisStart, milisEnd);
                                 listtrans.addAll(list);
-                                TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
+                                TransactionListFragment transactionListFragment = TransactionListFragment.newInstance(listtrans);
 
                                 getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
 
@@ -326,7 +327,7 @@ public class MainActivity extends AppCompatActivity
                     TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
                     List list = trans.getAllTransactionDataByType(2);
                     listtrans.addAll(list);
-                    TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
+                    TransactionListFragment transactionListFragment = TransactionListFragment.newInstance(listtrans);
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
                 }
@@ -340,7 +341,7 @@ public class MainActivity extends AppCompatActivity
                     TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
                     List list = trans.getAllTransactionDataByType(4);
                     listtrans.addAll(list);
-                    TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
+                    TransactionListFragment transactionListFragment =  TransactionListFragment.newInstance(listtrans);
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
                 }
@@ -354,7 +355,7 @@ public class MainActivity extends AppCompatActivity
                     TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
                     List list = trans.getAllTransactionDataByType(1);
                     listtrans.addAll(list);
-                    TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
+                    TransactionListFragment transactionListFragment =  TransactionListFragment.newInstance(listtrans);
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
                 }
@@ -368,7 +369,7 @@ public class MainActivity extends AppCompatActivity
                     TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
                     List list = trans.getAllTransactionDataByType(3);
                     listtrans.addAll(list);
-                    TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
+                    TransactionListFragment transactionListFragment =  TransactionListFragment.newInstance(listtrans);
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
                 }
