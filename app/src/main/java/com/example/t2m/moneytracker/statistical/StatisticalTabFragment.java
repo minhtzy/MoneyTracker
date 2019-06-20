@@ -67,6 +67,8 @@ import java.util.Map;
 public class StatisticalTabFragment extends Fragment implements OnChartValueSelectedListener {
   private PieChart mChart;
   private PieChart mChartChi;
+  private PieChart mChartThu;
+  private PieChart mChartVayNo;
   private CombinedChart comChart;
   private EditText mTextFromDate;
   private EditText mTextToDate;
@@ -86,7 +88,6 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
   private LinearLayout textDateLinearLayout;
   protected Typeface mTfLight;
   protected Typeface mTfRegular;
-  Button btnanim;
   View view;
   protected static String[] nhom = new String[] {
           "Khoản chi", "Nợ/Cho vay", "Khoản thu"
@@ -110,6 +111,8 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     dropdown2 = view.findViewById(R.id.spinner2);
     mChart = view.findViewById(R.id.piechart);
     mChartChi = view.findViewById(R.id.chartChi1);
+    mChartThu = view.findViewById(R.id.chartThu);
+    mChartVayNo = view.findViewById(R.id.chartVayNo);
     mCalendar = Calendar.getInstance();
     comChart =  view.findViewById(R.id.combinedChart);
     barChart = view.findViewById(R.id.bar_chart);
@@ -118,6 +121,8 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     spinnerThongKeTheoNhon = view.findViewById(R.id.spinner1_relative_layout);
     textDateLinearLayout = view.findViewById(R.id.dateId);
     relativeLayoutMchartChi = view.findViewById(R.id.piechart_relative_layout_chi);
+    relativeLayoutMchartThu = view.findViewById(R.id.piechart_relative_layout_thu);
+    relativeLayoutMchartVayNo = view.findViewById(R.id.piechart_relative_layout_vayNo);
   }
   /* Xử lý thời gian - start*/
   public void methodDate () {
@@ -174,11 +179,17 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
         long item = parent.getItemIdAtPosition(position);
 
         if(item == 1) {
-         methodMChartChi(item);
-         methodSetVisiable(view.INVISIBLE , view.INVISIBLE, view.VISIBLE, view.VISIBLE);
+         methodMChartChi(item, mChartChi);
+         methodSetVisiable(view.INVISIBLE , view.INVISIBLE, view.VISIBLE, view.VISIBLE,view.INVISIBLE,view.INVISIBLE );
         } else if (item == 0) {
           methodMChart();
-          methodSetVisiable(view.VISIBLE , view.INVISIBLE, view.INVISIBLE, view.VISIBLE );
+          methodSetVisiable(view.VISIBLE , view.INVISIBLE, view.INVISIBLE, view.VISIBLE ,view.INVISIBLE,view.INVISIBLE );
+        } else if (item == 2) {
+          methodMChartChi(item, mChartThu);
+          methodSetVisiable(view.INVISIBLE , view.INVISIBLE, view.INVISIBLE, view.VISIBLE,view.VISIBLE,view.INVISIBLE );
+        } else if (item == 3) {
+          methodMChartChi(item, mChartVayNo);
+          methodSetVisiable(view.INVISIBLE , view.INVISIBLE, view.INVISIBLE, view.VISIBLE,view.INVISIBLE,view.VISIBLE );
         }
       }
 
@@ -201,11 +212,11 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
          long item = parent.getItemIdAtPosition(position);
          if(item > 0) {
            methodMChart();
-           methodSetVisiable(view.VISIBLE , view.INVISIBLE, view.INVISIBLE, view.VISIBLE);
+           methodSetVisiable(view.VISIBLE , view.INVISIBLE, view.INVISIBLE, view.VISIBLE,view.INVISIBLE,view.INVISIBLE );
            methodSpinner();
          } else if (item == 0) {
            methodBarchart();
-           methodSetVisiable(view.INVISIBLE , view.VISIBLE, view.INVISIBLE, view.INVISIBLE);
+           methodSetVisiable(view.INVISIBLE , view.VISIBLE, view.INVISIBLE, view.INVISIBLE,view.INVISIBLE,view.INVISIBLE );
          }
       }
 
@@ -295,7 +306,48 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     pieChart.invalidate();
   }
 
-  public void methodMChartChi(long item) {
+  public void methodMChartChi(long item, PieChart chart) {
+
+
+    chart.setUsePercentValues(true);
+    chart.setExtraOffsets(5, 10, 5, 5);
+    chart.setDragDecelerationFrictionCoef(0.95f);
+    chart.setCenterTextTypeface(mTfLight);
+    chart.setCenterText(generateCenterSpannableText());
+    chart.setDrawHoleEnabled(true);
+    chart.setHoleColor(Color.WHITE);
+    chart.setTransparentCircleColor(Color.WHITE);
+    chart.setTransparentCircleAlpha(110);
+    chart.setHoleRadius(58f);
+    chart.setTransparentCircleRadius(61f);
+    chart.setDrawCenterText(true);
+    chart.setRotationAngle(0);
+    chart.setRotationEnabled(true);
+    chart.setHighlightPerTapEnabled(true);
+    chart.setOnChartValueSelectedListener(this);
+
+    setData(item, chart);
+
+    chart.animateY(1400, Easing.EaseInOutQuad);
+    Legend l = chart.getLegend();
+    l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+    l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+    l.setOrientation(Legend.LegendOrientation.VERTICAL);
+    l.setDrawInside(false);
+    l.setXEntrySpace(7f);
+    l.setYEntrySpace(0f);
+    l.setYOffset(0f);
+    chart.setEntryLabelColor(Color.WHITE);
+    chart.setEntryLabelTypeface(mTfRegular);
+    chart.setEntryLabelTextSize(12f);
+  }
+
+  private SpannableString generateCenterSpannableText() {
+    SpannableString s = new SpannableString("Thống kê Theo Loại");
+    s.setSpan(new RelativeSizeSpan(1.7f), 0, 18, 0);
+    return s;
+  }
+  private void setData(long item, PieChart chart) {
     List<Transaction> listChi = new ArrayList<Transaction>();
     List<Transaction> listThu = new ArrayList<Transaction>();
     List<Transaction> listVayNo = new ArrayList<Transaction>();
@@ -306,75 +358,36 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
       listThu = mapAll.get("Khoản Thu");
       listVayNo = mapAll.get("Cho Vay/Nợ");
     }
-
-    mChartChi.setUsePercentValues(true);
-    mChartChi.setExtraOffsets(5, 10, 5, 5);
-    mChartChi.setDragDecelerationFrictionCoef(0.95f);
-    mChartChi.setCenterTextTypeface(mTfLight);
-    mChartChi.setCenterText(generateCenterSpannableText());
-    mChartChi.setDrawHoleEnabled(true);
-    mChartChi.setHoleColor(Color.WHITE);
-    mChartChi.setTransparentCircleColor(Color.WHITE);
-    mChartChi.setTransparentCircleAlpha(110);
-    mChartChi.setHoleRadius(58f);
-    mChartChi.setTransparentCircleRadius(61f);
-    mChartChi.setDrawCenterText(true);
-    mChartChi.setRotationAngle(0);
-    mChartChi.setRotationEnabled(true);
-    mChartChi.setHighlightPerTapEnabled(true);
-    mChartChi.setOnChartValueSelectedListener(this);
-
+    ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
     if (item == 1 ) {
-      setData(5, 100, listChi);
+      entries = setPieEntryThongKeKhoanChi(listChi);
     } else if (item == 2) {
-      setData(5, 100, listThu);
+      entries = setPieEntryThongKeKhoanThu(listThu);
     } else if (item == 3){
-      setData(5, 100, listVayNo);
+      //entries = setPieEntryThongKeKhoanVayNo(listVayNo);
     }
 
-    mChartChi.animateY(1400, Easing.EaseInOutQuad);
-    Legend l = mChartChi.getLegend();
-    l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-    l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-    l.setOrientation(Legend.LegendOrientation.VERTICAL);
-    l.setDrawInside(false);
-    l.setXEntrySpace(7f);
-    l.setYEntrySpace(0f);
-    l.setYOffset(0f);
-    mChartChi.setEntryLabelColor(Color.WHITE);
-    mChartChi.setEntryLabelTypeface(mTfRegular);
-    mChartChi.setEntryLabelTextSize(12f);
-  }
 
-  private SpannableString generateCenterSpannableText() {
-    SpannableString s = new SpannableString("Thống kê Theo Loại");
-    s.setSpan(new RelativeSizeSpan(1.7f), 0, 18, 0);
-    return s;
-  }
-  private void setData(int count, float range, List<Transaction> listTrans) {
-    float mult = range;
-    ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
-    entries = setPieEntryThongKeKhoanChi(listTrans);
     PieDataSet dataSet = new PieDataSet(entries, null);
     dataSet.setSliceSpace(3f);
     dataSet.setSelectionShift(5f);
 
     ArrayList<Integer> colors = new ArrayList<Integer>();
 
-    for (int c : ColorTemplate.VORDIPLOM_COLORS)
+   /* for (int c : ColorTemplate.VORDIPLOM_COLORS)
       colors.add(c);
 
     for (int c : ColorTemplate.JOYFUL_COLORS)
-      colors.add(c);
+      colors.add(c);*/
 
     for (int c : ColorTemplate.COLORFUL_COLORS)
       colors.add(c);
 
-    for (int c : ColorTemplate.LIBERTY_COLORS)
+    /*for (int c : ColorTemplate.LIBERTY_COLORS)
       colors.add(c);
 
     for (int c : ColorTemplate.PASTEL_COLORS)
-      colors.add(c);
+      colors.add(c);*/
 
     colors.add(ColorTemplate.getHoloBlue());
 
@@ -385,11 +398,11 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     data.setValueTextSize(11f);
     data.setValueTextColor(Color.BLACK);
     data.setValueTypeface(mTfLight);
-    mChartChi.setData(data);
-    mChartChi.highlightValues(null);
-    mChartChi.invalidate();
+    chart.setData(data);
+    chart.highlightValues(null);
+    chart.invalidate();
   }
-  private void methodSetVisiable(int set1 , int set2, int set3, int set4) {
+  private void methodSetVisiable(int set1 , int set2, int setChi, int set4, int setThu, int setVayNo) {
     mChart.setVisibility(set1);
     relativeLayoutMchart.setVisibility(set1);
 
@@ -403,8 +416,14 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     mTextFromDate.setVisibility(set2);
     mTextToDate.setVisibility(set2);
 
-    relativeLayoutMchartChi.setVisibility(set3);
-    mChartChi.setVisibility(set3);
+    relativeLayoutMchartChi.setVisibility(setChi);
+    mChartChi.setVisibility(setChi);
+
+    relativeLayoutMchartThu.setVisibility(setThu);
+    mChartThu.setVisibility(setThu);
+
+    relativeLayoutMchartVayNo.setVisibility(setVayNo);
+    mChartVayNo.setVisibility(setVayNo);
   }
   /* Xử lý biểu đồ tròn - end*/
 
@@ -675,5 +694,104 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
       phanTram = tiLe*100;
     }
     return phanTram;
+  }
+
+  private ArrayList<PieEntry> setPieEntryThongKeKhoanThu (List<Transaction> listThu) {
+    ArrayList<PieEntry> entries = new ArrayList<>();
+    List<Category> thuong = new ArrayList<Category>();
+    List<Category> tienLai = new ArrayList<Category>();
+    List<Category> luong = new ArrayList<Category>();
+    List<Category> duocTang = new ArrayList<Category>();
+    List<Category> banDo = new ArrayList<Category>();
+    List<Category> khoanThuKhac = new ArrayList<Category>();
+
+
+    for (Transaction trans: listThu) {
+      Category cat = trans.getCategory();
+      int id = cat.getId();
+      if (id == 51) {
+        thuong.add(cat);
+      } else if (id == 52) {
+        tienLai.add(cat);
+      } else if (id == 53) {
+        luong.add(cat);
+      } else if (id == 54) {
+        duocTang.add(cat);
+      } else if (id == 55) {
+        banDo.add(cat);
+      } else if (id == 56) {
+        khoanThuKhac.add(cat);
+      }
+    }
+
+    long sum = thuong.size() + tienLai.size()+ luong.size()+ duocTang.size()
+            + banDo.size()+ khoanThuKhac.size();
+    float thuongPT = phanTram(sum, thuong);
+    if (thuongPT > 0) {
+      entries.add(new PieEntry(thuongPT, "Thưởng"));
+    }
+    float tienLaiPT = phanTram(sum, tienLai);
+    if (tienLaiPT > 0) {
+      entries.add(new PieEntry(tienLaiPT, "Tiền lãi"));
+    }
+    float luongPT = phanTram(sum, luong);
+    if (luongPT > 0) {
+      entries.add(new PieEntry(luongPT, "Lương"));
+    }
+    float duocTangPT = phanTram(sum, duocTang);
+    if (duocTangPT > 0) {
+      entries.add(new PieEntry(duocTangPT, "Được tặng"));
+    }
+    float banDoPT = phanTram(sum, banDo);
+    if (banDoPT > 0) {
+      entries.add(new PieEntry(banDoPT, "Bán đồ"));
+    }
+    float khoanThuKhacPT = phanTram(sum, khoanThuKhac);
+    if (khoanThuKhacPT > 0) {
+      entries.add(new PieEntry(khoanThuKhacPT, "Khoản thu khác"));
+    }
+
+    return entries;
+  }
+  private ArrayList<PieEntry> setPieEntryThongKeKhoanVayNo (List<Transaction> listVayNo) {
+    ArrayList<PieEntry> entries = new ArrayList<>();
+    List<Category> choVay = new ArrayList<Category>();
+    List<Category> traNo = new ArrayList<Category>();
+    List<Category> diVay = new ArrayList<Category>();
+    List<Category> thuNo = new ArrayList<Category>();
+
+    for (Transaction trans: listVayNo) {
+      Category cat = trans.getCategory();
+      int id = cat.getId();
+      if (id == 57) {
+        choVay.add(cat);
+      } else if (id == 58) {
+        traNo.add(cat);
+      } else if (id == 59) {
+        diVay.add(cat);
+      } else if (id == 60) {
+        thuNo.add(cat);
+      }
+    }
+
+    long sum = choVay.size() + traNo.size()+ diVay.size()+ thuNo.size();
+    float choVayPT = phanTram(sum, choVay);
+    if (choVayPT > 0) {
+      entries.add(new PieEntry(choVayPT, "Cho vay"));
+    }
+    float traNoPT = phanTram(sum, traNo);
+    if (traNoPT > 0) {
+      entries.add(new PieEntry(traNoPT, "Trả nợ"));
+    }
+    float diVayPT = phanTram(sum, diVay);
+    if (diVayPT > 0) {
+      entries.add(new PieEntry(diVayPT, "Đi vay"));
+    }
+    float thuNoPT = phanTram(sum, thuNo);
+    if (thuNoPT > 0) {
+      entries.add(new PieEntry(thuNoPT, "Thu nợ"));
+    }
+
+    return entries;
   }
 }

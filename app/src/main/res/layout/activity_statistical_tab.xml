@@ -137,6 +137,66 @@
                 android:layout_height="wrap_content" />
           </LinearLayout>
         </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/piechart_relative_layout_thu"
+            android:background="@color/colorBackgroundItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+          <com.github.mikephil.charting.charts.PieChart
+              android:id="@+id/chartThu"
+              android:layout_width="match_parent"
+              android:layout_height="250dp"
+              android:layout_marginTop="10dp"
+              android:layout_above="@+id/seekBar1" />
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_alignParentBottom="true"
+              android:layout_alignParentLeft="true"
+              android:layout_margin="8dp"
+              android:layout_toLeftOf="@+id/tvYMax"
+              android:layout_marginRight="5dp"
+              android:max="200"
+              android:paddingBottom="12dp"
+              android:orientation="horizontal">
+            <Button
+                android:visibility="gone"
+                android:text="Load"
+                android:background="@drawable/selector_common_gray"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+          </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/piechart_relative_layout_vayNo"
+            android:background="@color/colorBackgroundItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+          <com.github.mikephil.charting.charts.PieChart
+              android:id="@+id/chartVayNo"
+              android:layout_width="match_parent"
+              android:layout_height="250dp"
+              android:layout_marginTop="10dp"
+              android:layout_above="@+id/seekBar1" />
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_alignParentBottom="true"
+              android:layout_alignParentLeft="true"
+              android:layout_margin="8dp"
+              android:layout_toLeftOf="@+id/tvYMax"
+              android:layout_marginRight="5dp"
+              android:max="200"
+              android:paddingBottom="12dp"
+              android:orientation="horizontal">
+            <Button
+                android:visibility="gone"
+                android:text="Load"
+                android:background="@drawable/selector_common_gray"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+          </LinearLayout>
+        </RelativeLayout>
       </RelativeLayout>
     </LinearLayout>
   </ScrollView>
