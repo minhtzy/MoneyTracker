@@ -54,7 +54,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
     }
     // Transaction
 
-    public boolean insertTransaction(Transaction transaction) {
+    public boolean insertTransaction(Transaction transaction,boolean updateTimestamp) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         long id = transaction.getTransactionId();
@@ -73,11 +73,11 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
         transaction.setTransactionId(id);
         db.close();
 
-        updateTimeStamp(id, com.google.firebase.Timestamp.now().toDate().getTime());
+        if(updateTimestamp) updateTimeStamp(id, com.google.firebase.Timestamp.now().toDate().getTime());
         return true;
     }
 
-    public boolean updateTransaction(Transaction transaction) {
+    public boolean updateTransaction(Transaction transaction,boolean updateTimestamp) {
         //    COLUMN_WALLET_ID_FK                   + " INTEGER NOT NULL," +
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -92,7 +92,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
         values.put(COLUMN_WALLET_ID_FK, transaction.getWallet().getWalletId());
         db.update(TABLE_TRANSACTION_NAME,values,COLUMN_TRANSACTION_ID + " = ?" ,new String[]{String.valueOf(transaction.getTransactionId())});
         db.close();
-        updateTimeStamp(transaction.getTransactionId(), com.google.firebase.Timestamp.now().toDate().getTime());
+        if(updateTimestamp)updateTimeStamp(transaction.getTransactionId(), com.google.firebase.Timestamp.now().toDate().getTime());
         return true;
     }
 

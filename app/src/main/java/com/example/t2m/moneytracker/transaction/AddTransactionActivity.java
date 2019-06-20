@@ -198,7 +198,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 .build();
 
 
-        TransactionsManager.getInstance(this).addTransaction(transaction);
+        TransactionsManager.getInstance(this).addTransaction(transaction,true);
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_TRANSACTION,transaction);

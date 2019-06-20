@@ -212,7 +212,7 @@ public class EditTransactionActivity extends AppCompatActivity {
                 .build();
 
 
-        TransactionsManager.getInstance(this).updateTransaction(transaction,oldTransaction);
+        TransactionsManager.getInstance(this).updateTransaction(transaction,oldTransaction,true);
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_TRANSACTION, transaction);

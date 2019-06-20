@@ -1,8 +1,11 @@
 package com.example.t2m.moneytracker;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -28,13 +32,16 @@ import com.example.t2m.moneytracker.dataaccess.IWalletsDAO;
 import com.example.t2m.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.example.t2m.moneytracker.model.Transaction;
 import com.example.t2m.moneytracker.model.Budget;
+import com.example.t2m.moneytracker.model.Wallet;
 import com.example.t2m.moneytracker.setting.Setting;
 
 import com.example.t2m.moneytracker.dataaccess.WalletsDAOImpl;
 
 import com.example.t2m.moneytracker.statistical.StatisticalTabFragment;
+import com.example.t2m.moneytracker.sync.SyncCloudFirestore;
 import com.example.t2m.moneytracker.transaction.TransactionListSearch;
 import com.example.t2m.moneytracker.transaction.TransactionTabFragment;
+import com.example.t2m.moneytracker.utilities.WalletsManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -103,6 +110,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void onSyncAction() {
+        new syncTransactions(this).execute();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu_save; this adds items to the action bar if it is present.
@@ -118,7 +129,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(id == R.id.action_sync) {
+            onSyncAction();
+        }
+        else if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, Setting.class);
             startActivityForResult(intent,REQUEST_SETTING_CODE);
             return true;
@@ -393,6 +407,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        }else if (id == R.id.nav_budget) {
+            fragmentClass = BudgetFragment.class;
+        } else if (id == R.id.nav_periodic_transaction) {
         }
 
         try {
@@ -400,7 +417,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = (Fragment) fragmentClass.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,fragment).addToBackStack(null).commit();
                 // Highlight the selected item has been done by NavigationView
-                item.setChecked(true);
+                //item.setChecked(true);
                 // Set action bar title
                 setTitle(item.getTitle());
             }
@@ -425,4 +442,51 @@ public class MainActivity extends AppCompatActivity
             MainActivity.recreateAppMain(this);
         }
     }
+
+    // =====================================================
+
+    protected class syncTransactions extends AsyncTask<Void, Void, Void> {
+        private Dialog mDialog;
+        private Activity activity;
+
+        private syncTransactions(Activity activity) {
+            this.activity = activity;
+        }
+        @Override
+        protected void onPreExecute() {
+            mDialog = new Dialog(activity);
+            // chu y phai dat truoc setcontentview
+            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mDialog.setContentView(R.layout.loading_view);
+            mDialog.setTitle(getResources().getString(R.string.sync_in_progress));
+            mDialog.setCancelable(false);
+            mDialog.show();
+        }
+
+        protected Void doInBackground(Void... unused) {
+
+            // su dung phuong thuc de update lai adapter
+            activity.runOnUiThread(runnableSyncTransaction);
+
+            return (null);
+        }
+
+        protected void onPostExecute(Void unused) {
+
+            mDialog.dismiss();
+        }
+    }
+
+
+    private Runnable runnableSyncTransaction = new Runnable() {
+
+        @Override
+        public void run() {
+            SyncCloudFirestore sync = new SyncCloudFirestore(getApplicationContext());
+            Wallet wallet = WalletsManager.getInstance(getApplicationContext()).getCurrentWallet();
+            sync.onSync(wallet);
+            //sync.addWallet(user.getUid(), wallet);
+        }
+    };
+
 }

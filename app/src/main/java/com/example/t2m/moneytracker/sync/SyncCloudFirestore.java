@@ -110,7 +110,7 @@ public class SyncCloudFirestore {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG_LOG, document.getId() + " => " + document.getData());
                                 Transaction transaction = Transaction.fromMap(document.getData());
-                                TransactionsManager.getInstance(context).addTransaction(transaction);
+                                TransactionsManager.getInstance(context).addTransaction(transaction,false);
                             }
                             long timestamp = Timestamp.now().toDate().getTime();
                             SharedPrefs.getInstance().put(SharedPrefs.KEY_PULL_TIME,timestamp);

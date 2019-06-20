@@ -9,8 +9,8 @@ import java.time.Period;
 import java.util.List;
 
 public interface ITransactionsDAO {
-    public boolean insertTransaction(Transaction transaction);
-    public boolean updateTransaction(Transaction transaction);
+    public boolean insertTransaction(Transaction transaction, boolean updateTimestamp);
+    public boolean updateTransaction(Transaction transaction,boolean updateTimestamp);
     public boolean deleteTransaction(Transaction transaction);
 
     public Transaction getTransactionById(long transactionId);
