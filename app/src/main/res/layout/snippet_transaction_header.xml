@@ -39,7 +39,7 @@
         android:textSize="16sp"
         android:layout_marginLeft="8dp"
         android:layout_toRightOf="@id/text_date_header" />
-    <com.example.t2m.moneytracker.view.CurrencyTextView
+    <com.minhtzy.moneytrackerview.CurrencyTextView
         android:id="@+id/text_money_trading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -6,28 +6,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".wallet.AddWalletActivity">
-
-    <!--<TextView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="2dp"-->
-    <!--android:background="#44474c"/>-->
-
-    <!--<TextView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="2dp"-->
-    <!--android:background="#44474c"/>-->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/popup_menu_item_text_margin_left">
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="" />
+                android:layout_height="1dp"
+                android:background="@color/Line"
+                android:paddingTop="@dimen/padding_small"
+                android:paddingBottom="@dimen/padding_small"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,68 +24,73 @@
 
                 <ImageView
                     android:id="@+id/imageView2"
-                    android:layout_width="0dp"
-                    android:layout_height="44dp"
+                    android:layout_width="@dimen/icon_bar_size"
+                    android:layout_height="@dimen/icon_bar_size"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/margin_left"
+                    android:layout_marginRight="@dimen/margin_right"
                     app:srcCompat="@drawable/wallett" />
 
                 <EditText
                     android:id="@+id/txtTen"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:ems="10"
                     android:hint="@string/name_wallet"
                     android:inputType="textPersonName"
                     android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
-
-                    />
+                    android:paddingBottom="20dp" />
             </LinearLayout>
-            <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="2dp"-->
-            <!--android:background="#44474c"/>-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Line"
+                android:paddingTop="@dimen/padding_small"
+                android:paddingBottom="@dimen/padding_small"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_width="@dimen/icon_bar_size"
+                    android:layout_height="@dimen/icon_bar_size"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/luongt" />
+                    android:layout_marginLeft="@dimen/margin_left"
+                    android:layout_marginRight="@dimen/margin_right"
+                    android:src="@drawable/ic_currency" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
                     android:gravity="left"
-                    android:padding="15dp"
+                    android:paddingTop="@dimen/padding_medium"
+                    android:paddingBottom="@dimen/padding_medium"
                     android:text="@string/name_currency"
                     android:textSize="20dp" />
-
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/Line"
+                android:paddingTop="@dimen/padding_small"
+                android:paddingBottom="@dimen/padding_small"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <View
+                    android:layout_width="@dimen/icon_bar_size"
                     android:layout_height="60dp"
                     android:layout_gravity="bottom"
-                    android:layout_weight="1"
-                    android:src="@drawable/cubest" />
+                    android:layout_marginLeft="@dimen/margin_left"
+                    android:layout_marginRight="@dimen/margin_right"/>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
                     android:orientation="vertical">
 
                     <TextView
@@ -104,84 +98,21 @@
                         android:layout_height="wrap_content"
                         android:text="@string/current_amount" />
 
-                    <EditText
+                    <com.minhtzy.moneytrackerview.CurrencyEditText
                         android:id="@+id/txtSotien"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="0"
                         android:inputType="number" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/group" />
-
-                    <Button
-                        android:id="@+id/btnNhom"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:paddingTop="15dp"
-                        android:text="@string/standard_group"
-                        android:textAllCaps="false" />
                 </LinearLayout>
             </LinearLayout>
-
-            <TextView
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@drawable/vien"
-                android:text=""
+                android:layout_height="1dp"
+                android:background="@color/Line"
+                android:paddingTop="@dimen/padding_small"
+                android:paddingBottom="@dimen/padding_small"/>
 
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="@string/service_link"
-                android:textColor="#00bb27"
-                android:textSize="20dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/vien"
-                android:gravity="left"
-                android:padding="15dp"
-
-                android:text="@string/connect_the_service_right_in_moneytracher"
-                android:textSize="15sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:padding="10dp"
-                    android:text="@string/not_total"
-                    android:textColor="#000000"
-                    android:textSize="20sp" />
-
-                <Switch
-                    android:id="@+id/swtTichtong"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:padding="10dp" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/vien"
-                android:paddingTop="6dp"
-                android:paddingLeft="10dp"
-                android:text="@string/ignore_this_wallet_and_the_balance_from_the_total" />
         </LinearLayout>
-    </ScrollView>
 </LinearLayout>

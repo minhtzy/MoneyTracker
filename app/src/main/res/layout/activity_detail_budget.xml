@@ -62,7 +62,7 @@
                         android:gravity="center"
                         android:text="@string/budget_detail_recommended_daily_spending" />
 
-                    <com.example.t2m.moneytracker.view.CurrencyTextView
+                    <com.minhtzy.moneytrackerview.CurrencyTextView
                         android:id="@+id/txvAmountRecommended"
                         style="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="fill_parent"
@@ -86,7 +86,7 @@
                         android:gravity="center"
                         android:text="@string/budget_detail_projected_spending" />
 
-                    <com.example.t2m.moneytracker.view.CurrencyTextView
+                    <com.minhtzy.moneytrackerview.CurrencyTextView
                         android:id="@+id/txvAmountProjected"
                         style="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="fill_parent"
@@ -106,7 +106,7 @@
                 android:paddingTop="@dimen/spacing_medium"
                 android:text="@string/budget_detail_actual_daily_spending" />
 
-            <com.example.t2m.moneytracker.view.CurrencyTextView
+            <com.minhtzy.moneytrackerview.CurrencyTextView
                 android:id="@+id/txvAmountActual"
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="fill_parent"

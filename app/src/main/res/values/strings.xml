@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MoneyTracker</string>
+    <string name="app_name" translatable="false">Quản Lý Chi Tiêu</string>
 
     <string name="title_activity_main_drawer" translatable="false">Main Drawer Activity</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
@@ -74,30 +74,19 @@
     <string name="language_japanese_code" translatable="false">ja</string>
 
 
-    <string-array name="language_names">
-        <item>@string/language_vietnamese</item>
-        <item>@string/language_english</item>
-        <item>@string/language_japanese</item>
-    </string-array>
-
-    <string-array name="language_codes">
-        <item>@string/language_vietnamese_code</item>
-        <item>@string/language_english_code</item>
-        <item>@string/language_japanese_code</item>
-
-    </string-array>
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
-    <!-- title category type  -->
     <string name="income_category_title">Khoản thu</string>
     <string name="expense_category_title">Khoản chi</string>
+
+    <!-- title category type  -->
     <string name="debt_loan_category_title">Nợ/Cho vay</string>
     <string name="chovay_trano">Cho vay/Trả nợ</string>
     <string name="divay_thuno">Đi vay/Thu nợ</string>
-
-    <!-- transaction list periods -->
     <string name="all_transaction">Tất cả giao dịch</string>
     <string name="all_time">Tất cả thời gian</string>
+
+    <!-- transaction list periods -->
     <string name="today">Hôm nay</string>
     <string name="last7days">7 ngày trước</string>
     <string name="last15days">2 tuần trước</string>
@@ -109,9 +98,9 @@
     <string name="last_year">Năm trước</string>
     <string name="current_year">Năm nay</string>
     <string name="future_transactions">Tương lai</string>
-
     <string name="loading">Loading...</string>
     <string name="so_du_dau">Số dư đầu</string>
+
     <string name="so_du_cuoi">Số dư cuối</string>
     <string name="view_statistic">Xem báo cáo cho giai đoạn này</string>
     <string name="init_zero">0</string>
@@ -125,18 +114,14 @@
     <string name="select_date_start">Ngày bắt đầu</string>
     <string name="select_date_end">Ngày kết thúc</string>
     <string name="no_transaction">Không có giao dịch</string>
-
-    <string-array name="search_array">
-        <item>Tìm kiếm theo ngày</item>
-        <item>Tìm kiếm theo thời gian</item>
-    </string-array>
     <string name="search_by_date">Tìm kiếm theo ngày</string>
     <string name="search_by_time">Tìm kiếm theo thời gian</string>
-    <string name="search_by_items">Tìm kiếm theo khoản mục</string>
 
+    <string name="search_by_items">Tìm kiếm theo khoản mục</string>
     <string name="budget">Ngân sách</string>
     <string name="periodic_transaction">Giao dịch định kỳ</string>
     <string name="remain">Còn lại</string>
+
     <string name="goal">Số tiền</string>
     <string name="create_budget_time_range">Khoảng thời gian</string>
     <string name="select_wallet">Chọn ví</string>
@@ -154,11 +139,11 @@
     <string name="to">Ngày kết thúc</string>
     <string name="start" translatable="false">Start</string>
     <string name="end" translatable="false">End</string>
-
-
     <string name="thismonth">Tháng này</string>
     <string name="thisquarter">Quý này</string>
     <string name="thisweek">Tuần này</string>
+
+
     <string name="thisyear">Năm nay</string>
     <string name="time">Thời lượng</string>
     <string name="time_empty">Chọn khoảng thời gian</string>
@@ -172,20 +157,36 @@
     <string name="nextyear">Năm tới</string>
     <string name="add_budget">Thêm Ngân Sách</string>
     <string name="remain_prefix">Còn</string>
-
     <string name="day">ngày</string>
     <string name="month">tháng</string>
     <string name="year">năm</string>
+
     <string name="finnished">Đã kết thúc</string>
     <string name="notification_budget_overspending">Chi vượt mức</string>
     <string name="in">Trong</string>
-
     <string name="ContentDescriptionImageNull" translatable="false">image null</string>
     <string name="NoImage" translatable="false">Imgage</string>
     <string name="Cancel" translatable="false">thoát</string>
+
     <string name="edit_transaction_mark_remove_message">remove message</string>
     <string name="sync">Đồng bộ</string>
     <string name="edit_transaction">Sửa giao dịch</string>
     <string name="sync_in_progress">Đang đồng bộ</string>
     <string name="try_again">Thử lại</string>
+    <string name="forgor_password_name">Quên mật khẩu</string>
+    <string-array name="language_names">
+        <item>@string/language_vietnamese</item>
+        <item>@string/language_english</item>
+        <item>@string/language_japanese</item>
+    </string-array>
+    <string-array name="language_codes">
+        <item>@string/language_vietnamese_code</item>
+        <item>@string/language_english_code</item>
+        <item>@string/language_japanese_code</item>
+
+    </string-array>
+    <string-array name="search_array">
+        <item>Tìm kiếm theo ngày</item>
+        <item>Tìm kiếm theo thời gian</item>
+    </string-array>
 </resources>

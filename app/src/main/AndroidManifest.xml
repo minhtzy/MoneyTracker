@@ -1,51 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.t2m.moneytracker">
+    package="com.minhtzy.moneytracker">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <application
-        android:name=".App"
+        android:name="com.minhtzy.moneytracker.App"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher_ml"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <receiver android:name=".sync.NetworkMonitor">
-            <intent-filter>
-                <action android:name="android.net.conn.CONECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
+        <activity android:name="com.minhtzy.moneytracker.wallet.EditWalletActivity"></activity>
 
         <activity
-            android:name=".wallet.SelectCategoryActivity"
+            android:name="com.minhtzy.moneytracker.wallet.SelectCategoryActivity"
             android:label="@string/select_category_name"
             android:theme="@style/AppTheme" />
+
         <activity
-            android:name=".wallet.AddWalletActivity"
+            android:name="com.minhtzy.moneytracker.wallet.AddWalletActivity"
             android:label="@string/add_wallet"
             android:theme="@style/AppTheme" />
-        <activity android:name=".account.ForgotPasswordActivity" />
-        <activity android:name=".account.RegistrationActivity" />
         <activity
-            android:name=".account.LoginActivity"
+            android:name="com.minhtzy.moneytracker.account.ForgotPasswordActivity"
+            android:label="@string/forgor_password_name"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.minhtzy.moneytracker.account.RegistrationActivity"
+            android:label="@string/register_name"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.minhtzy.moneytracker.account.LoginActivity"
             android:label="@string/login_name"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.minhtzy.moneytracker.MainActivity"
             android:label="Main Activity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".transaction.AddTransactionActivity"
+            android:name="com.minhtzy.moneytracker.transaction.AddTransactionActivity"
             android:label="@string/add_transaction_name"
             android:theme="@style/AppTheme" />
-        android:theme="@style/AppTheme" />
         <activity
-            android:name=".WelcomeActivity"
+            android:name="com.minhtzy.moneytracker.WelcomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,41 +51,55 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".setting.Setting"
+            android:name="com.minhtzy.moneytracker.setting.Setting"
+            android:label="@string/action_settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".changelanguage.ChangeLanguageActivity"
+            android:name="com.minhtzy.moneytracker.changelanguage.ChangeLanguageActivity"
+            android:label="@string/change_language"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".transaction.ViewTransactionDetailActivity"
+            android:name="com.minhtzy.moneytracker.transaction.ViewTransactionDetailActivity"
             android:label="@string/transaction_detail"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".transaction.ViewTransactionListActivity"
+            android:name="com.minhtzy.moneytracker.transaction.ViewTransactionListActivity"
             android:label="@string/budget_detail_list_transactions_title"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".statistical.StatisticalActivity"
+            android:name="com.minhtzy.moneytracker.statistical.StatisticalActivity"
             android:label="@string/report"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".budget.AddBudgetActivity"
+            android:name="com.minhtzy.moneytracker.budget.AddBudgetActivity"
             android:label="@string/add_budget"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".budget.DetailBudgetActivity"
+            android:name="com.minhtzy.moneytracker.budget.DetailBudgetActivity"
             android:label="@string/budget"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".budget.SelectBudgetTimeRangeActivity"
+            android:name="com.minhtzy.moneytracker.budget.SelectBudgetTimeRangeActivity"
             android:label="@string/time_empty" />
         <activity
-            android:name=".transaction.EditTransactionActivity"
+            android:name="com.minhtzy.moneytracker.transaction.EditTransactionActivity"
             android:label="@string/edit_transaction"
             android:theme="@style/AppTheme" />
-        <activity android:name=".sync.SyncActivity"
-            android:theme="@style/AppTheme"
-            android:label="@string/sync"></activity>
+        <activity
+            android:name="com.minhtzy.moneytracker.sync.SyncActivity"
+            android:label="@string/sync"
+            android:theme="@style/AppTheme" />
+        <receiver android:name="com.minhtzy.moneytracker.sync.NetworkMonitor">
+            <intent-filter>
+                <action android:name="android.net.conn.CONECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

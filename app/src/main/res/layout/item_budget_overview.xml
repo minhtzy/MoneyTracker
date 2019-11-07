@@ -114,7 +114,7 @@
         android:layout_marginTop="@dimen/spacing_medium"
         android:text="@string/transaction_detail_cashback_left" />
 
-    <com.example.t2m.moneytracker.view.CurrencyTextView
+    <com.minhtzy.moneytrackerview.CurrencyTextView
         android:id="@+id/txtAmountLeft"
         style="@style/TextAppearance.AppCompat.Body2"
         android:layout_width="wrap_content"

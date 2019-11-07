@@ -590,4 +590,5 @@
     <dimen name="wight_change_log">320.0dip</dimen>
 
     <dimen name="wrap_content_custom">-2.0px</dimen>
+    <dimen name="margin_left">16dp</dimen>
 </resources>

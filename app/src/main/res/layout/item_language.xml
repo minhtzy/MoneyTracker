@@ -5,7 +5,7 @@
     <data>
         <variable
             name="holder"
-            type="com.example.t2m.moneytracker.changelanguage.LanguageAdapter.LanguageHolder"
+            type="com.minhtzy.moneytracker.changelanguage.LanguageAdapter"
             />
     </data>
     <FrameLayout

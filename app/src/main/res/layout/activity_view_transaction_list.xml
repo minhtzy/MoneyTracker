@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".transaction.ViewTransactionListActivity">
-    <com.example.t2m.moneytracker.pinnedlistview.PinnedHeaderListView
+    <com.minhtzy.moneytrackerpinnedlistview.PinnedHeaderListView
         android:id="@+id/list_view_transaction"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="50dp"
         android:clipToPadding="false">
 
-    </com.example.t2m.moneytracker.pinnedlistview.PinnedHeaderListView>
+    </com.minhtzy.moneytrackerpinnedlistview.PinnedHeaderListView>
 
     <LinearLayout
         android:id="@+id/layout_transaction_empty"
