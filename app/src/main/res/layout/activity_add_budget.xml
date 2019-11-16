@@ -88,7 +88,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/goal" />
 
-                        <com.minhtzy.moneytrackerview.CurrencyEditText
+                        <com.minhtzy.moneytracker.view.CurrencyEditText
                             android:id="@+id/amount_budget"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"

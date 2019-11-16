@@ -268,9 +268,9 @@ public class TransactionListFragment extends Fragment {
             TextView textTieu = headerView.findViewById(R.id.fts_so_du_cuoi);
             TextView textConLai = headerView.findViewById(R.id.fts_con_lai);
 
-            String moneyChi = String.valueOf(tienChi);//CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienChi));
-            String moneyTieu = String.valueOf(tienTieu);// CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienTieu));
-            String moneyConLai = String.valueOf(tienChi - tienTieu);//CurrencyUtils.formatVnCurrence(String.format(Constants.PRICE_FORMAT,tienChi - tienTieu));
+            String moneyChi = String.valueOf(tienChi);//CurrencyUtils.formatVnCurrency(String.format(Constants.PRICE_FORMAT,tienChi));
+            String moneyTieu = String.valueOf(tienTieu);// CurrencyUtils.formatVnCurrency(String.format(Constants.PRICE_FORMAT,tienTieu));
+            String moneyConLai = String.valueOf(tienChi - tienTieu);//CurrencyUtils.formatVnCurrency(String.format(Constants.PRICE_FORMAT,tienChi - tienTieu));
             textChi.setText(moneyChi);
             textTieu.setText(moneyTieu);
             textConLai.setText(moneyConLai);

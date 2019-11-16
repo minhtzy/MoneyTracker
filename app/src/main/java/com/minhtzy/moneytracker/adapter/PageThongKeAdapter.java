@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.minhtzy.moneytracker.statistical.Fragment_ThongKe_Tab0;
+import com.minhtzy.moneytracker.statistical.Fragment_Statistical_Tab0;
 
 public class PageThongKeAdapter extends FragmentStatePagerAdapter {
     public PageThongKeAdapter(FragmentManager fm) {
@@ -17,7 +17,7 @@ public class PageThongKeAdapter extends FragmentStatePagerAdapter {
         Fragment frag=null;
         switch (position){
             case 0:
-                frag=new Fragment_ThongKe_Tab0();
+                frag=new Fragment_Statistical_Tab0();
                 break;
 
 

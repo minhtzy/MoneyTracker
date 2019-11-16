@@ -48,7 +48,7 @@ public class BudgetNotifications {
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
                     .setContentTitle(getContext().getString(R.string.app_name))
-                    .setContentText(getContext().getString(R.string.notification_budget_overspending) + " " + CurrencyUtils.formatVnCurrence(String.valueOf(budget.getSpent() - budget.getAmount())))
+                    .setContentText(getContext().getString(R.string.notification_budget_overspending) + " " + CurrencyUtils.formatVnCurrency(String.valueOf(budget.getSpent() - budget.getAmount())))
                     .setSubText(getContext().getString(R.string.in) + " " + budget.getWallet().getWalletName())
                     .setSmallIcon(R.drawable.logo)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)

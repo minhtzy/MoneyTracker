@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.data.ItemClickListener;
+import com.minhtzy.moneytracker.view.ItemClickListener;
 import com.minhtzy.moneytracker.databinding.ActivityChangeLanguageBinding;
 import com.minhtzy.moneytracker.model.Language;
 import com.minhtzy.moneytracker.utils.LanguageUtils;

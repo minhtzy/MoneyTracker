@@ -1,6 +1,7 @@
 package com.minhtzy.moneytracker.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,6 @@ public class WalletListAdapter extends ArrayAdapter<Wallet> {
         this.resource = resource;
         this.objects = objects;
     }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

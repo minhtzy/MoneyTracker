@@ -174,16 +174,16 @@
     <string name="sync_in_progress">Đang đồng bộ</string>
     <string name="try_again">Thử lại</string>
     <string name="forgor_password_name">Quên mật khẩu</string>
+    <string name="edit_wallet">Sửa ví</string>
+    <string name="hint_username">Nhập tên người dùng</string>
+    <string name="hint_password">Nhập password</string>
     <string-array name="language_names">
         <item>@string/language_vietnamese</item>
         <item>@string/language_english</item>
-        <item>@string/language_japanese</item>
     </string-array>
     <string-array name="language_codes">
         <item>@string/language_vietnamese_code</item>
         <item>@string/language_english_code</item>
-        <item>@string/language_japanese_code</item>
-
     </string-array>
     <string-array name="search_array">
         <item>Tìm kiếm theo ngày</item>

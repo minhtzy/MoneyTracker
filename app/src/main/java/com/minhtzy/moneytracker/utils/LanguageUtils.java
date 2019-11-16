@@ -5,7 +5,7 @@ import android.content.res.Resources;
 
 import com.minhtzy.moneytracker.App;
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.data.Constants;
+import com.minhtzy.moneytracker.model.Constants;
 import com.minhtzy.moneytracker.model.Language;
 
 import java.util.ArrayList;

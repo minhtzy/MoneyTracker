@@ -28,7 +28,7 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
         rawText = text.toString();
         String currency = text.toString();
         try {
-            currency = CurrencyUtils.formatVnCurrence(currency);
+            currency = CurrencyUtils.formatVnCurrency(currency);
         }catch (Exception e){}
 
         super.setText(currency, type);

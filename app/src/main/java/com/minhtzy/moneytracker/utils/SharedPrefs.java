@@ -12,6 +12,7 @@ public class SharedPrefs {
     public static final String KEY_IS_FIRST_TIME = "moneytracker.sharedprefs.key.is_first_time";
     public static final String KEY_PUSH_TIME = "moneytracker.sharedprefs.key.push_time";
     public static final String KEY_PULL_TIME = "moneytracker.sharedprefs.key.pull_time";
+    public static final String KEY_CURRENT_WALLET = "moneytracker.sharedprefs.key.current.wallet";
     private static SharedPrefs mInstance;
     private SharedPreferences mSharedPreferences;
 

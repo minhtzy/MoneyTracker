@@ -2,6 +2,8 @@ package com.minhtzy.moneytracker.utilities;
 
 import android.text.TextUtils;
 
+import com.minhtzy.moneytracker.entity.CurrencyFormat;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Currency;
@@ -22,18 +24,13 @@ public class CurrencyUtils {
         public static String VIETNAMDONG = "đ";
     }
 
-    //properties
-    private String Separator = ",";
-    private Boolean Spacing = false;
-    private Boolean Delimiter = false;
-    private Boolean Decimals = true;
 
     /**
      * Get price with VietNam currency
      *
      * @param price
      */
-    public static String formatVnCurrence(String price) {
+    public static String formatVnCurrency(String price) {
 
         NumberFormat format = new DecimalFormat("#,##0.00");
         format.setCurrency(Currency.getInstance(Locale.US));
@@ -53,36 +50,33 @@ public class CurrencyUtils {
         return price;
     }
 
-    public String getSeparator() {
-        return Separator;
-    }
+    public static String formatCurrency(String price, CurrencyFormat currencyFormat) {
+        String cleanString = price.replaceAll("[$,.]", "").replaceAll(currencyFormat.getCurrencySymbol(), "").replaceAll("\\s+", "");
 
-    public void setSeparator(String separator) {
-        Separator = separator;
-    }
+        boolean spacing = false;
+        boolean Decimals = !currencyFormat.getDecimalPoint().isEmpty();
+        if (cleanString.length() != 0) {
+            try {
+                String currencyString = "";
+                currencyString = currencyFormat.getGroupSeparator() + (spacing ? " " : "") + currencyFormat.getCurrencySymbol();
 
-    public Boolean getSpacing() {
-        return Spacing;
-    }
+                double parsed;
+                int parsedInt;
+                String formatted;
 
-    public void setSpacing(Boolean spacing) {
-        Spacing = spacing;
-    }
+                if (Decimals) {
+                    parsed = Double.parseDouble(cleanString);
+                    formatted = NumberFormat.getCurrencyInstance().format((parsed / 100)).replace(NumberFormat.getCurrencyInstance().getCurrency().getSymbol(), currencyString);
+                } else {
+                    parsedInt = Integer.parseInt(cleanString);
+                    formatted = currencyFormat + NumberFormat.getNumberInstance(Locale.US).format(parsedInt);
+                }
 
-    public Boolean getDelimiter() {
-        return Delimiter;
+                return formatted;
+            } catch (NumberFormatException e) {
+                return "0" + currencyFormat.getCurrencySymbol();
+            }
+        }
+        return "0" + currencyFormat.getCurrencySymbol();
     }
-
-    public void setDelimiter(Boolean delimiter) {
-        Delimiter = delimiter;
-    }
-
-    public Boolean getDecimals() {
-        return Decimals;
-    }
-
-    public void setDecimals(Boolean decimals) {
-        Decimals = decimals;
-    }
-
 }

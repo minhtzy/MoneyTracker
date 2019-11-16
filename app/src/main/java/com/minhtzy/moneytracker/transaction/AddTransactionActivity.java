@@ -115,7 +115,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         iWalletsDAO = new WalletsDAOImpl(this);
         iTransactionsDAO = new TransactionsDAOImpl(this);
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        mListWallet = iWalletsDAO.getAllWalletByUser(mCurrentUser.getUid());
+        //mListWallet = iWalletsDAO.getAllWalletByUser(mCurrentUser.getUid());
     }
 
     private void addEvents() {

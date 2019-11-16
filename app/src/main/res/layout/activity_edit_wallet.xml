@@ -98,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/current_amount" />
 
-                <com.minhtzy.moneytrackerview.CurrencyEditText
+                <com.minhtzy.moneytracker.view.CurrencyEditText
                     android:id="@+id/txtSotien"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

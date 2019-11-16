@@ -11,7 +11,7 @@
         android:layout_width="141dp"
         android:layout_height="97dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         android:text="@string/signin_account"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -61,6 +61,7 @@
         android:layout_marginRight="8dp"
         android:ems="10"
         android:inputType="textPassword"
+        android:hint="@string/hint_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtEmailLo" />
@@ -113,5 +114,22 @@
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnForgotpasswordLo" />
+
+    <View
+        android:id="@+id/view"
+        android:background="@color/Line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btnSignupLo" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
 </android.support.constraint.ConstraintLayout>

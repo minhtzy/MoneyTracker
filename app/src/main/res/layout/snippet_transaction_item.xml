@@ -37,7 +37,7 @@
         android:textSize="12sp"
         android:layout_toRightOf="@+id/image_transaction_item"
         android:layout_marginLeft="8dp" />
-    <com.minhtzy.moneytrackerview.CurrencyTextView
+    <com.minhtzy.moneytracker.view.CurrencyTextView
         android:id="@+id/text_item_money_trading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

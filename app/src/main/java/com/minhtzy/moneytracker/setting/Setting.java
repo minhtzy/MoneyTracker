@@ -12,7 +12,7 @@ import com.minhtzy.moneytracker.MainActivity;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.account.LoginActivity;
 import com.minhtzy.moneytracker.changelanguage.ChangeLanguageActivity;
-import com.minhtzy.moneytracker.data.Constants;
+import com.minhtzy.moneytracker.model.Constants;
 import com.minhtzy.moneytracker.databinding.ActivitySettingBinding;
 import com.minhtzy.moneytracker.utils.LanguageUtils;
 import com.google.firebase.FirebaseApp;

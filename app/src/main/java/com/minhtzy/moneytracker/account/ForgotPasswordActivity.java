@@ -23,19 +23,19 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     EditText txt_reset_email;
-    Button btn_reset_password, btnBack;
-    // [START declare_auth]
+    Button btn_reset_password;
+
     private FirebaseAuth mAuth;
-    // [END declare_auth]
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
-        FirebaseApp.initializeApp(ForgotPasswordActivity.this);
-        // [START initialize_auth]
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         // Initialize Firebase Auth
+        FirebaseApp.initializeApp(ForgotPasswordActivity.this);
         mAuth = FirebaseAuth.getInstance();
-// [END initialize_auth]
 
         addControls();
         addEvents();
@@ -44,7 +44,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private void addControls() {
         txt_reset_email = (EditText)findViewById(R.id.txt_reset_email);
         btn_reset_password = (Button)findViewById(R.id.btn_reset_password);
-        btnBack = (Button)findViewById(R.id.btnBack);
     }
 
     private void addEvents() {
@@ -88,14 +87,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 }
             }
         });
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-
-            }
-        });
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        setResult(RESULT_CANCELED);
+        finish();
+        return true;
+    }
+
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();

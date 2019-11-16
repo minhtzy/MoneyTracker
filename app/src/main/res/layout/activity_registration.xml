@@ -8,15 +8,16 @@
 
     <ImageView
         android:id="@+id/imgUserLoginRe"
-        android:layout_width="141dp"
-        android:layout_height="97dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="fitXY"
         app:srcCompat="@drawable/logo" />
 
     <TextView
@@ -24,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         android:text="@string/signup_account"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -65,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:ems="10"
+            android:hint="@string/hint_username"
             android:inputType="textPersonName"
              />
 
@@ -101,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="textEmailAddress"
             android:hint="@string/enter_your_email" />
 
     </LinearLayout>
@@ -139,6 +141,7 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:password="true"
+            android:hint="@string/hint_password"
             android:text="" />
 
     </LinearLayout>

@@ -4,9 +4,11 @@ import android.content.Context;
 
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.Wallet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.minhtzy.moneytracker.utils.SharedPrefs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,20 +32,23 @@ public class WalletsManager {
     private WalletsManager() {
         wallets = new ArrayList<>();
     }
-    public Wallet getCurrentWallet() {
+    public WalletEntity getCurrentWallet() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser != null) {
-            return iWalletsDAO.getAllWalletByUser(currentUser.getUid()).get(0);
+            long currentId = SharedPrefs.getInstance().get(SharedPrefs.KEY_CURRENT_WALLET,0);
+            return iWalletsDAO.getWalletById(currentId);
         }
         return null;
     }
 
-    public boolean updateWallet(Wallet wallet) {
-        return  iWalletsDAO.updateWallet(wallet);
+    public void switchWallet(long walletId)
+    {
+        long currentId = SharedPrefs.getInstance().get(SharedPrefs.KEY_CURRENT_WALLET,0);
+        if(currentId == walletId) return;
+        SharedPrefs.getInstance().put(SharedPrefs.KEY_CURRENT_WALLET,walletId);
     }
 
-    public void updateTimestamp(int walletId, long time) {
-        iWalletsDAO.updateTimeStamp(walletId,time);
-
+    public boolean updateWallet(WalletEntity wallet) {
+        return  iWalletsDAO.updateWallet(wallet);
     }
 }

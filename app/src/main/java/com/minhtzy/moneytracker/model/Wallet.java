@@ -8,11 +8,6 @@ import java.util.Map;
 
 public class Wallet implements Serializable {
 
-    public static final int BASIC_WALLET = 1;
-    public static final int CREDIT_WALLET = 2;
-    public static final int GOAL_WALLET = 3;
-    public static final int LINKED_WALLET = 4;
-
     private long walletId;
     private int walletType;
     private String walletName;

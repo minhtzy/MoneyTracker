@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.minhtzy.moneytrackerview.CurrencyEditText
+    <com.minhtzy.moneytracker.view.CurrencyEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/text_currency"

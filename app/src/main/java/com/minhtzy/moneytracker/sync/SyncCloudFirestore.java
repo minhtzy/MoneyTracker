@@ -1,12 +1,15 @@
 package com.minhtzy.moneytracker.sync;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.Transaction;
 import com.minhtzy.moneytracker.model.Wallet;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
@@ -74,8 +77,11 @@ public class SyncCloudFirestore {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG_LOG, document.getId() + " => " + document.getData());
-                                Wallet wallet = Wallet.fronMap(document.getData());
-                                iWalletsDAO.insertWallet(wallet);
+                                Parcel myParcel = Parcel.obtain();
+                                myParcel.writeMap(document.getData());
+                                myParcel.setDataPosition(0);
+                                ContentValues values = ContentValues.CREATOR.createFromParcel(myParcel);
+                                iWalletsDAO.insertWallet(new WalletEntity(values));
                                 //onPullTransactions(wallet);
                             }
                             if(syncEvents != null) {

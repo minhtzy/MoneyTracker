@@ -28,7 +28,7 @@
             android:contentDescription="@string/app_name"
             android:minWidth="40.0dip" />
 
-        <com.minhtzy.moneytrackerview.CurrencyTextView
+        <com.minhtzy.moneytracker.view.CurrencyTextView
             android:id="@+id/amount_text"
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="fill_parent"

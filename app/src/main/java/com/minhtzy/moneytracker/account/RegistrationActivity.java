@@ -36,46 +36,20 @@ public class RegistrationActivity extends AppCompatActivity {
     Button btnSignin, btnForgotPassword, btnRegistration;
     ProgressDialog progressDialog;
 
-    // [START declare_auth]
     private FirebaseAuth mAuth;
-// [END declare_auth]
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         addControls();
         addEvents();
-        FirebaseApp.initializeApp(RegistrationActivity.this);
-        // [START initialize_auth]
+
         // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-// [END initialize_auth]
+        FirebaseApp.initializeApp(RegistrationActivity.this);
 
     }
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        //updateUI(currentUser);
-//    }
-
-
-//    // [START on_start_check_user]
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        updateUI(currentUser);
-//    }
-//
-//    private void updateUI(FirebaseUser currentUser) {
-//
-//    }
 
     private void addEvents() {
         btnSignin.setOnClickListener(new View.OnClickListener() {
@@ -180,23 +154,23 @@ public class RegistrationActivity extends AppCompatActivity {
 
             }
         });
-//        btnForgotPassword.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(RegistrationActivity.this,ForgotPasswordActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
+
     }
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             mAuth.signOut();
             getIntent().putExtra("username", user.getEmail());
-            setResult(11,getIntent());
+            setResult(RESULT_OK,getIntent());
             finish();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        setResult(RESULT_CANCELED);
+        finish();
+        return true;
     }
 
     private void addControls() {
