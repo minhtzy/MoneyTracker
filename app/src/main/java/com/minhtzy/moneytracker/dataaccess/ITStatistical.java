@@ -1,7 +1,6 @@
 package com.minhtzy.moneytracker.dataaccess;
 
 import com.minhtzy.moneytracker.model.DateRange;
-import com.minhtzy.moneytracker.model.Statistical;
 
 import java.util.List;
 

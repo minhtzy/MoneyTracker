@@ -13,10 +13,8 @@ import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
-import com.minhtzy.moneytracker.model.Budget;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
-import com.minhtzy.moneytracker.model.Transaction;
 import com.minhtzy.moneytracker.transaction.ViewTransactionListActivity;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.LimitLine;

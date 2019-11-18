@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.minhtzy.moneytracker.entity.WalletEntity;
-import com.minhtzy.moneytracker.model.Wallet;
 
 import java.util.ArrayList;
 import java.util.List;

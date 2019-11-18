@@ -11,7 +11,6 @@ import android.widget.ExpandableListView;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.adapter.CategoryExpandableListAdapter;
-import com.minhtzy.moneytracker.model.Category;
 
 import java.util.List;
 

@@ -5,7 +5,6 @@ import android.content.Context;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 import com.minhtzy.moneytracker.entity.WalletEntity;
-import com.minhtzy.moneytracker.model.Wallet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.minhtzy.moneytracker.utils.SharedPrefs;

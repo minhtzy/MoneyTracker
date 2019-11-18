@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.budget.OnBudgetItemClickListener;
-import com.minhtzy.moneytracker.model.Budget;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
 

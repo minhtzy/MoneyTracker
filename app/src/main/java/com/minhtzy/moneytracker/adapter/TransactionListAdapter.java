@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.model.Transaction;
 import com.minhtzy.moneytracker.pinnedlistview.SectionedBaseAdapter;
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
 import com.minhtzy.moneytracker.utils.LanguageUtils;

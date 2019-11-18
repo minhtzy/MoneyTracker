@@ -25,7 +25,6 @@ import com.minhtzy.moneytracker.adapter.TransactionListAdapter;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
-import com.minhtzy.moneytracker.model.Transaction;
 import com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView;
 
 

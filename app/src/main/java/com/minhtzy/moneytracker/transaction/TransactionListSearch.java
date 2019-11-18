@@ -24,7 +24,6 @@ import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.adapter.TransactionListAdapter;
 import com.minhtzy.moneytracker.common.Constants;
 import com.minhtzy.moneytracker.model.MTDate;
-import com.minhtzy.moneytracker.model.Transaction;
 import com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView;
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
 

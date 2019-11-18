@@ -1,7 +1,6 @@
 package com.minhtzy.moneytracker.dataaccess;
 
 import com.minhtzy.moneytracker.entity.WalletEntity;
-import com.minhtzy.moneytracker.model.Wallet;
 
 import java.util.List;
 

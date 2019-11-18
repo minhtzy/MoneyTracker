@@ -2,7 +2,6 @@ package com.minhtzy.moneytracker.wallet;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.util.Currency;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,28 +16,18 @@ import android.widget.Toast;
 import com.minhtzy.moneytracker.MainActivity;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.adapter.CurrencyFormatAdapter;
-import com.minhtzy.moneytracker.adapter.WalletListAdapter;
 import com.minhtzy.moneytracker.dataaccess.CurrencyFormatDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.ICurrencyFormatDAO;
-import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
-import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 import com.minhtzy.moneytracker.entity.CurrencyFormat;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.entity.WalletType;
-import com.minhtzy.moneytracker.model.Category;
 import com.minhtzy.moneytracker.model.Constants;
-import com.minhtzy.moneytracker.model.MTDate;
-import com.minhtzy.moneytracker.model.Transaction;
-import com.minhtzy.moneytracker.model.TransactionTypes;
-import com.minhtzy.moneytracker.model.Wallet;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 public class AddWalletActivity extends AppCompatActivity {
 

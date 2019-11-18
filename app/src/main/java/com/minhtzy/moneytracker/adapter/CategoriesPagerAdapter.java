@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.CategoriesDAOImpl;
-import com.minhtzy.moneytracker.model.Category;
 import com.minhtzy.moneytracker.wallet.ListCategoryFragment;
 
 import java.util.ArrayList;

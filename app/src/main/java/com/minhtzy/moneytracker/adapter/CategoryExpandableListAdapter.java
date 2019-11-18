@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.model.Category;
 
 import java.io.IOException;
 import java.util.ArrayList;

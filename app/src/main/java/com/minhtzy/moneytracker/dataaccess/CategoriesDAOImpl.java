@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.minhtzy.moneytracker.model.Category;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +22,6 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
      */
 
     public static final String TABLE_CATEGORY_NAME = "tbl_categories";
-    public static final String COLUMN_CATEGORY_ID = "_id";
-    public static final String COLUMN_CATEGORY_TYPE = "type";
-    public static final String COLUMN_CATEGORY_ICON = "icon";
-    public static final String COLUMN_CATEGORY_CATEGORY = "category";
-    public static final String COLUMN_CATEGORY_PARENT_ID = "parentId";
 
     MoneyTrackerDBHelper dbHelper;
     public CategoriesDAOImpl(Context context) {
@@ -35,60 +30,52 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
 
     // Transaction Type DataAccess
 
-    public boolean insertCategory(Category category) {
+    public boolean insertCategory(CategoryEntity category) {
         if (category == null) return false;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_CATEGORY_TYPE, category.getType().getValue());
-        values.put(COLUMN_CATEGORY_CATEGORY, category.getCategory());
-        values.put(COLUMN_CATEGORY_ICON, category.getIcon());
-
-        int id = (int) db.insert(TABLE_CATEGORY_NAME, COLUMN_CATEGORY_PARENT_ID, values);
+        ContentValues values = category.getContentValues();
+        values.remove(CategoryEntity.CATEGORY_ID);
+        int id = (int) db.insert(TABLE_CATEGORY_NAME, CategoryEntity.CATEGORY_ID, values);
         db.close();
-        category.setId(id);
+        category.setCategoryId(id);
         return id != -1;
     }
 
-    public boolean updateCategory(Category category) {
+    public boolean updateCategory(CategoryEntity category) {
         if (category == null) return false;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_CATEGORY_TYPE, category.getType().getValue());
-        values.put(COLUMN_CATEGORY_CATEGORY, category.getCategory());
-        values.put(COLUMN_CATEGORY_ICON, category.getIcon());
-        //values.put(COLUMN_CATEGORY_PARENT_ID, category.getParentType().getId());
-        db.update(TABLE_CATEGORY_NAME, values, COLUMN_CATEGORY_ID + " = ?", new String[]{String.valueOf(category.getId())});
+        ContentValues values = category.getContentValues();
+        values.remove(CategoryEntity.CATEGORY_ID);
+        int updated = db.update(TABLE_CATEGORY_NAME, values, CategoryEntity.CATEGORY_ID + " = ?", new String[]{String.valueOf(category.getCategoryId())});
         db.close();
-        return true;
+        return updated > 0;
     }
 
     @Override
-    public boolean deleteCategory(Category category) {
+    public boolean deleteCategory(CategoryEntity category) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete(TABLE_CATEGORY_NAME,COLUMN_CATEGORY_ID + " = ?",new String[]{String.valueOf(category.getId())});
-        return true;
+        int deleted = db.delete(TABLE_CATEGORY_NAME,CategoryEntity.CATEGORY_ID + " = ?",new String[]{String.valueOf(category.getCategoryId())});
+        return deleted > 0;
     }
 
-    public Category getCategoryById(int id) {
+    public CategoryEntity getCategoryById(int id) {
         Cursor data = getCategoryDataById(id);
         if (data != null && data.getCount() > 0) {
             data.moveToFirst();
-            Category category = getCategoryFromData(data);
+            CategoryEntity category = getCategoryFromData(data);
             return category;
         } else {
             return null;
         }
     }
 
-    public List<Category> getAllCategory() {
+    public List<CategoryEntity> getAllCategory() {
         Cursor data = getAllCategoryData();
-        List<Category> list_result = new ArrayList<>();
+        List<CategoryEntity> list_result = new ArrayList<>();
         if (data != null && data.getCount() > 0) {
             data.moveToFirst();
             do {
-                Category category = getCategoryFromData(data);
-                List<Category> subCategories = getSubCategories(category.getId());
-                category.setSubCategories(subCategories);
+                CategoryEntity category = getCategoryFromData(data);
                 list_result.add(category);
             }
             while (data.moveToNext());
@@ -96,15 +83,13 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
         return list_result;
     }
 
-    public List<Category> getCategoriesByType(int type) {
+    public List<CategoryEntity> getCategoriesByType(int type) {
         Cursor data = getAllCategoryDataByType(type);
-        List<Category> list_result = new ArrayList<>();
+        List<CategoryEntity> list_result = new ArrayList<>();
         if (data != null && data.getCount() > 0) {
             data.moveToFirst();
             do {
-                Category category = getCategoryFromData(data);
-                List<Category> subCategories = getSubCategories(category.getId());
-                category.setSubCategories(subCategories);
+                CategoryEntity category = getCategoryFromData(data);
                 list_result.add(category);
             }
             while (data.moveToNext());
@@ -115,19 +100,19 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
     private Cursor getAllCategoryDataByType(int type) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_CATEGORY_NAME +
-                " WHERE " + COLUMN_CATEGORY_PARENT_ID + " IS NULL " +
-                " AND " + COLUMN_CATEGORY_TYPE + " = ?";
+                " WHERE " + CategoryEntity.PARENT_ID + " IS NULL " +
+                " AND " + CategoryEntity.CATEGORY_TYPE + " = ?";
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(type)});
         return cursor;
     }
 
-    public List<Category> getSubCategories(int parentId) {
+    public List<CategoryEntity> getSubCategories(int parentId) {
         Cursor data = getSubCategoriesData(parentId);
-        List<Category> list_result = new ArrayList<>();
+        List<CategoryEntity> list_result = new ArrayList<>();
         if (data != null && data.getCount() > 0) {
             data.moveToFirst();
             do {
-                Category category = getCategoryFromData(data);
+                CategoryEntity category = getCategoryFromData(data);
                 list_result.add(category);
             }
             while (data.moveToNext());
@@ -138,30 +123,21 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
     private Cursor getSubCategoriesData(int parentId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_CATEGORY_NAME +
-                " WHERE " + COLUMN_CATEGORY_PARENT_ID+ " = ?";
+                " WHERE " + CategoryEntity.PARENT_ID+ " = ?";
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(parentId)});
         return cursor;
     }
 
-    private Category getCategoryFromData(Cursor data) {
-        int id = data.getInt(data.getColumnIndex(COLUMN_CATEGORY_ID));
-        int type = data.getInt(data.getColumnIndex(COLUMN_CATEGORY_TYPE));
-        String category = data.getString(data.getColumnIndex(COLUMN_CATEGORY_CATEGORY));
-        String icon = data.getString(data.getColumnIndex(COLUMN_CATEGORY_ICON));
-        Category result = new Category(id, type, category, icon, new ArrayList<Category>());
-        if(!data.isNull(data.getColumnIndex(COLUMN_CATEGORY_PARENT_ID))) {
-            int parrentId = data.getInt(data.getColumnIndex(COLUMN_CATEGORY_PARENT_ID));
-            Category parent = getCategoryById(parrentId);
-            result.setParentCategory(parent);
-
-        }
-        return result;
+    private CategoryEntity getCategoryFromData(Cursor data) {
+        CategoryEntity category = new CategoryEntity();
+        category.loadFromCursor(data);
+        return category;
     }
 
     private Cursor getCategoryDataById(int id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_CATEGORY_NAME +
-                " WHERE " + COLUMN_CATEGORY_ID + " = ?";
+                " WHERE " + CategoryEntity.CATEGORY_ID + " = ?";
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
         return cursor;
     }
@@ -169,16 +145,16 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
     private Cursor getAllCategoryData() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_CATEGORY_NAME +
-                " WHERE " + COLUMN_CATEGORY_PARENT_ID + " IS NULL";
+                " WHERE " + CategoryEntity.PARENT_ID + " IS NULL";
         Cursor cursor = db.rawQuery(query, null);
         return cursor;
     }
 
     public int getCountCategoryParent(int type) {
-        List<Category> list = getCategoriesByType(type);
+        List<CategoryEntity> list = getCategoriesByType(type);
         int count = 0;
-        for (Category c : list) {
-            if (c.getId() > 0) {
+        for (CategoryEntity c : list) {
+            if (c.getCategoryId() > 0) {
                 count = count + 1;
             }
         }

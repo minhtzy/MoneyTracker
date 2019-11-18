@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.adapter.BudgetsAdapter;
 import com.minhtzy.moneytracker.dataaccess.BudgetDAOImpl;
-import com.minhtzy.moneytracker.model.Budget;
 
 import java.util.List;
 
