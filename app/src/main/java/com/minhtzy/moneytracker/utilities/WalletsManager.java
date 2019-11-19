@@ -14,7 +14,6 @@ import java.util.List;
 
 public class WalletsManager {
     private IWalletsDAO iWalletsDAO;
-    private List<Wallet> wallets;
     private static final WalletsManager ourInstance = new WalletsManager();
 
     public static WalletsManager getInstance(Context context) {
@@ -29,7 +28,7 @@ public class WalletsManager {
     }
 
     private WalletsManager() {
-        wallets = new ArrayList<>();
+
     }
     public WalletEntity getCurrentWallet() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -38,6 +37,11 @@ public class WalletsManager {
             return iWalletsDAO.getWalletById(currentId);
         }
         return null;
+    }
+
+    public WalletEntity getWalletById(long walletId)
+    {
+        return iWalletsDAO.getWalletById(walletId);
     }
 
     public void switchWallet(long walletId)

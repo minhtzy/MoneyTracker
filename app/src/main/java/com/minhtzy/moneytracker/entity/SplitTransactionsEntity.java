@@ -1,6 +1,8 @@
 package com.minhtzy.moneytracker.entity;
 
-public class SplitTransactionsEntity extends EntityBase {
+import java.io.Serializable;
+
+public class SplitTransactionsEntity extends EntityBase implements Serializable {
     public static final String ST_ID = "_id";
     public static final String TRAN_ID = "tranId";
     public static final String CAT_ID = "cateId";

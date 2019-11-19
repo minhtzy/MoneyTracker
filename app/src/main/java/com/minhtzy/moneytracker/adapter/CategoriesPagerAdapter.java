@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.CategoriesDAOImpl;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.wallet.ListCategoryFragment;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class CategoriesPagerAdapter extends FragmentPagerAdapter {
     }
     @Override
     public Fragment getItem(int i) {
-        List<Category> categories = new ArrayList<>();
+        List<CategoryEntity> categories = new ArrayList<>();
         CategoriesDAOImpl categoriesDAO = new CategoriesDAOImpl(mContext);
         switch (i) {
             case 0 :

@@ -2,11 +2,10 @@ package com.minhtzy.moneytracker.entity;
 
 import android.content.ContentValues;
 
-import org.parceler.Parcel;
+import java.io.Serializable;
 
-@Parcel
 public class UserEntity
-        extends EntityBase {
+        extends EntityBase  implements Serializable {
     public static final String USER_ID = "_id";
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";

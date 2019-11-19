@@ -1,6 +1,8 @@
 package com.minhtzy.moneytracker.entity;
 
-public enum  WalletType {
+import java.io.Serializable;
+
+public enum  WalletType implements Serializable {
     BASIC_WALLET("Basic"),LINKER_WALLET("LINKER");
 
     WalletType(String type) {

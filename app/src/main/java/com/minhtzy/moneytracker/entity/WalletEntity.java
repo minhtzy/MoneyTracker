@@ -4,11 +4,10 @@ import android.content.ContentValues;
 
 import com.minhtzy.moneytracker.model.Constants;
 
-import org.parceler.Parcel;
+import java.io.Serializable;
 
-@Parcel
 public class WalletEntity
-        extends EntityBase {
+        extends EntityBase implements Serializable {
 
     public static final String WALLET_ID = "_id";
     public static final String NAME = "name";

@@ -26,7 +26,7 @@ public interface ITransactionEntity {
 
     int getCategoryId();
 
-    int getWalletId();
+    long getWalletId();
 
     MTDate getTransactionTime() ;
 
@@ -44,7 +44,7 @@ public interface ITransactionEntity {
 
     void setCategoryId(int categoryId);
 
-    void setWalletId(int walletId);
+    void setWalletId(long walletId);
 
     void setTransactionTime(MTDate time);
 

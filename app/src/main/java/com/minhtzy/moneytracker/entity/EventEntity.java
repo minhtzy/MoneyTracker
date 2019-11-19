@@ -5,10 +5,9 @@ import android.content.ContentValues;
 import com.minhtzy.moneytracker.model.Constants;
 import com.minhtzy.moneytracker.model.MTDate;
 
-import org.parceler.Parcel;
+import java.io.Serializable;
 
-@Parcel
-public class EventEntity extends EntityBase {
+public class EventEntity extends EntityBase implements Serializable {
 
     public static final String EVENT_ID = "_id";
     public static final String EVENT_NAME = "name";

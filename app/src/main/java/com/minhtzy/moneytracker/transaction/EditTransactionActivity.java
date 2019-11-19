@@ -27,9 +27,14 @@ import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.utilities.BitmapUtils;
+import com.minhtzy.moneytracker.utilities.CategoryManager;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
 import com.minhtzy.moneytracker.wallet.SelectCategoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,12 +68,12 @@ public class EditTransactionActivity extends AppCompatActivity {
     private FirebaseUser mCurrentUser;
     private IWalletsDAO iWalletsDAO;
     private ITransactionsDAO iTransactionsDAO;
-    private List<Wallet> mListWallet;
-    private Category mCurrentCategory = null;
-    private Wallet mCurrentWallet = null;
+    private List<WalletEntity> mListWallet;
+    private CategoryEntity mCurrentCategory = null;
+    private WalletEntity mCurrentWallet = null;
     private Bitmap mCurrentImage = null;
 
-    Transaction oldTransaction = null;
+    TransactionEntity oldTransaction = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,15 +88,15 @@ public class EditTransactionActivity extends AppCompatActivity {
     }
 
     private void loadTransaction() {
-        oldTransaction= (Transaction) getIntent().getSerializableExtra(EXTRA_TRANSACTION);
+        oldTransaction= (TransactionEntity) getIntent().getSerializableExtra(EXTRA_TRANSACTION);
         if(oldTransaction != null) {
-            mCurrentWallet = oldTransaction.getWallet();
-            mCurrentCategory = oldTransaction.getCategory();
+            mCurrentWallet = WalletsManager.getInstance(this).getWalletById(oldTransaction.getWalletId());
+            mCurrentCategory = CategoryManager.getInstance(this).getCategoryById(oldTransaction.getCategoryId());
             updateUI();
             updateImagePreView(oldTransaction.getMediaUri());
-            mTextMoney.setText(String.valueOf((int)oldTransaction.getMoneyTrading()));
+            mTextMoney.setText(String.valueOf(oldTransaction.getTransactionAmount()));
             mTextNote.setText(oldTransaction.getTransactionNote());
-            mCalendar.setTime(oldTransaction.getTransactionDate());
+            mCalendar.setTime(oldTransaction.getTransactionTime().toDate());
         }
     }
 
@@ -197,22 +202,19 @@ public class EditTransactionActivity extends AppCompatActivity {
         float money = (float) ((CurrencyEditText) mTextMoney).getCleanDoubleValue();
         String note = mTextNote.getText().toString();
         Date date = mCalendar.getTime();
-        Transaction transaction = new Transaction.TransactionBuilder()
-                .setTransactionId(oldTransaction.getTransactionId())
-                .setTransactionDate(date)
-                .setCategory(mCurrentCategory)
-                .setWallet(mCurrentWallet)
-                .setCurrencyCode(mCurrentWallet.getCurrencyCode())
-                .setMoneyTrading(money)
-                .setTransactionNote(note)
-                .setMediaUri(mMediaUri)
-                .build();
+        TransactionEntity entity = new TransactionEntity();
+        entity.setTransactionId(oldTransaction.getTransactionId());
+        entity.setTransactionTime(new MTDate(date));
+        entity.setCategoryId(mCurrentCategory.getCategoryId());
+        entity.setWalletId(mCurrentWallet.getWalletId());
+        entity.setTransactionAmount(money);
+        entity.setTransactionNote(note);
+        entity.setMediaUri(mMediaUri);
 
-
-        TransactionsManager.getInstance(this).updateTransaction(transaction,oldTransaction);
+        TransactionsManager.getInstance(this).updateTransaction(entity,oldTransaction);
 
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_TRANSACTION, transaction);
+        intent.putExtra(EXTRA_TRANSACTION, entity);
         setResult(RESULT_OK, intent);
         finish();
     }

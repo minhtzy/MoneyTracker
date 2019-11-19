@@ -4,10 +4,9 @@ import android.content.ContentValues;
 
 import com.minhtzy.moneytracker.model.MTDate;
 
-import org.parceler.Parcel;
+import java.io.Serializable;
 
-@Parcel
-public class TransactionEntity extends EntityBase implements ITransactionEntity {
+public class TransactionEntity extends EntityBase implements ITransactionEntity, Serializable {
 
     public TransactionEntity() {
         super();
@@ -38,8 +37,8 @@ public class TransactionEntity extends EntityBase implements ITransactionEntity 
         return getInt(CATEGORY_ID);
     }
 
-    public int getWalletId() {
-        return getInt(WALLET_ID);
+    public long getWalletId() {
+        return getLong(WALLET_ID);
     }
 
     public MTDate getTransactionTime() {
@@ -75,8 +74,8 @@ public class TransactionEntity extends EntityBase implements ITransactionEntity 
         setInt(CATEGORY_ID,categoryId);
     }
 
-    public void setWalletId(int walletId) {
-        setInt(WALLET_ID,walletId);
+    public void setWalletId(long walletId) {
+        setLong(WALLET_ID,walletId);
     }
 
     public void setTransactionTime(MTDate time) {

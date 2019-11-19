@@ -23,6 +23,9 @@ import com.minhtzy.moneytracker.adapter.WalletListAdapter;
 import com.minhtzy.moneytracker.dataaccess.BudgetDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.IBudgetDAO;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
+import com.minhtzy.moneytracker.entity.BudgetEntity;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
 import com.minhtzy.moneytracker.wallet.SelectCategoryActivity;
@@ -48,10 +51,10 @@ public class AddBudgetActivity extends AppCompatActivity {
     TextView mTextWallet;
     TextView mTextTimeRange;
 
-    Wallet mCurrentWallet;
-    private List<Wallet> mListWallet;
+    WalletEntity mCurrentWallet;
+    private List<WalletEntity> mListWallet;
     FirebaseUser mCurrentUser;
-    Category mCurrentCategory;
+    CategoryEntity mCurrentCategory;
     CurrencyEditText mTextAmount;
     DateRange mDateRange;
 
@@ -163,14 +166,12 @@ public class AddBudgetActivity extends AppCompatActivity {
             mTextTimeRange.setError("Chọn khoảng thời gian");
             return;
         }
-        Budget budget = new Budget();
-        budget.setWallet(mCurrentWallet);
-        budget.setCategory(mCurrentCategory);
-        budget.setAmount((float) mTextAmount.getCleanDoubleValue());
-        budget.setSpent(0);
-        budget.setTimeStart(mDateRange.getDateFrom());
-        budget.setTimeEnd(mDateRange.getDateTo());
-        budget.setLoop(mCheckRepeatBudget.isChecked());
+        BudgetEntity budget = new BudgetEntity();
+        budget.setWalletId(mCurrentWallet.getWalletId());
+        budget.setCategoryId(mCurrentCategory.getCategoryId());
+        budget.setBudgetAmount((float) mTextAmount.getCleanDoubleValue());
+        budget.setPeriod(mDateRange);
+        //budget.setLoop(mCheckRepeatBudget.isChecked());
         budget.setStatus("STARTED");
         IBudgetDAO budgetDAO = new BudgetDAOImpl(this);
         budgetDAO.insertBudget(budget);
@@ -222,12 +223,12 @@ public class AddBudgetActivity extends AppCompatActivity {
         if (mCurrentCategory != null) {
             mTextCategory.clearFocus();
             mTextCategory.setError(null);
-            mTextCategory.setText(mCurrentCategory.getCategory());
+            mTextCategory.setText(mCurrentCategory.getCategoryName());
             ImageView imageView = findViewById(R.id.cate_icon);
             // lấy ảnh từ asset
             String base_path = "category/";
             try {
-                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + mCurrentCategory.getIcon()), null);
+                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + mCurrentCategory.getCategoryIcon()), null);
                 imageView.setImageDrawable(img);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -237,7 +238,7 @@ public class AddBudgetActivity extends AppCompatActivity {
         if (mCurrentWallet != null) {
             mTextWallet.clearFocus();
             mTextWallet.setError(null);
-            mTextWallet.setText(mCurrentWallet.getWalletName());
+            mTextWallet.setText(mCurrentWallet.getName());
         }
 
         if(mDateRange != null) {
@@ -252,7 +253,7 @@ public class AddBudgetActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE_CATEGORY) {
-                mCurrentCategory = (Category) data.getSerializableExtra(SelectCategoryActivity.EXTRA_CATEGORY);
+                mCurrentCategory = (CategoryEntity) data.getSerializableExtra(SelectCategoryActivity.EXTRA_CATEGORY);
                 updateUI();
             }
             if(requestCode == REQUEST_CODE_TIME_RANGE) {

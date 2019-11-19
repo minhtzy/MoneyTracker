@@ -2,6 +2,7 @@ package com.minhtzy.moneytracker.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +11,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.model.CategoryExpandableGroup;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context mContext;
-    private List<Category> mExpandableListDetail;
+    private List<CategoryExpandableGroup> mExpandableListDetail;
 
-    public CategoryExpandableListAdapter(Context context, List<Category> categories) {
+    public CategoryExpandableListAdapter(Context context,List<CategoryExpandableGroup> categories) {
         mContext = context;
         mExpandableListDetail = new ArrayList<>();
         mExpandableListDetail.addAll(categories);
@@ -34,12 +39,12 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return mExpandableListDetail.get(groupPosition).getSubCategories().size();
+        return mExpandableListDetail.get(groupPosition).getSubCatCount();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return mExpandableListDetail.get(groupPosition);
+        return mExpandableListDetail.get(groupPosition).getCategory();
     }
 
     @Override
@@ -65,7 +70,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
-        Category category = (Category) getGroup(groupPosition);
+        CategoryEntity category = (CategoryEntity) getGroup(groupPosition);
 
         if(convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext
@@ -76,12 +81,12 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
         ImageView imganhItem = (ImageView)convertView.findViewById(R.id.imgCategoryLogo);
         TextView txtTenitem = (TextView)convertView.findViewById(R.id.txtCategoryTitle);
 
-        txtTenitem.setText(category.getCategory());
+        txtTenitem.setText(category.getCategoryName());
 
         // lấy ảnh từ asset
         String base_path = "category/";
-        try {
-            Drawable img = Drawable.createFromStream(mContext.getAssets().open(base_path + category.getIcon()),null);
+        try{
+            Drawable img = Drawable.createFromStream(mContext.getAssets().open(base_path + category.getCategoryIcon()),null);
             imganhItem.setImageDrawable(img);
         } catch (IOException e) {
             e.printStackTrace();
@@ -92,7 +97,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Category category = (Category) getChild(groupPosition,childPosition);
+        CategoryEntity category = (CategoryEntity) getChild(groupPosition,childPosition);
 
         if(convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext
@@ -104,14 +109,14 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
         ImageView imganhItem = (ImageView)convertView.findViewById(R.id.imgCategoryLogo);
         TextView txtTenitem = (TextView)convertView.findViewById(R.id.txtCategoryTitle);
 
-        txtTenitem.setText(category.getCategory());
+        txtTenitem.setText(category.getCategoryName());
 
         // set lại size cho ảnh
         //imganhItem.setLayoutParams(new RelativeLayout.LayoutParams(R.dimen.item_category_child_size,R.dimen.item_category_child_size));
         // lấy ảnh từ asset
         String base_path = "category/";
         try {
-            Drawable img = Drawable.createFromStream(mContext.getAssets().open(base_path + category.getIcon()),null);
+            Drawable img = Drawable.createFromStream(mContext.getAssets().open(base_path + category.getCategoryIcon()),null);
             imganhItem.setImageDrawable(img);
         } catch (IOException e) {
             e.printStackTrace();

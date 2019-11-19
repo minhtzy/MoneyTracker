@@ -10,18 +10,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
 
 import java.io.IOException;
 import java.util.List;
 
 
-    public class CategoryListAdapter extends ArrayAdapter<Category> {
+    public class CategoryListAdapter extends ArrayAdapter<CategoryEntity> {
 
         Activity context;
         int resource;
-        public List<Category> objects;
+        public List<CategoryEntity> objects;
 
-        public CategoryListAdapter(Activity context, int resource, List<Category> objects) {
+        public CategoryListAdapter(Activity context, int resource, List<CategoryEntity> objects) {
             super(context, resource, objects);
             this.context = context;
             this.resource = resource;
@@ -38,13 +39,13 @@ import java.util.List;
             ImageView imganhItem = (ImageView) convertView.findViewById(R.id.imgCategoryLogo);
             TextView txtTenitem = (TextView) convertView.findViewById(R.id.txtCategoryTitle);
 
-            Category category = this.objects.get(position);
-            txtTenitem.setText(category.getCategory());
+            CategoryEntity category = this.objects.get(position);
+            txtTenitem.setText(category.getCategoryName());
 
             // lấy ảnh từ asset
             String base_path = "category/";
             try {
-                Drawable img = Drawable.createFromStream(context.getAssets().open(base_path + category.getIcon()), null);
+                Drawable img = Drawable.createFromStream(context.getAssets().open(base_path + category.getCategoryIcon()), null);
                 imganhItem.setImageDrawable(img);
             } catch (IOException e) {
                 e.printStackTrace();

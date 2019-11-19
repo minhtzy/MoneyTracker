@@ -11,22 +11,24 @@ import android.widget.ExpandableListView;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.adapter.CategoryExpandableListAdapter;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.model.CategoryExpandableGroup;
 
 import java.util.List;
 
 public class ListCategoryFragment extends Fragment {
 
-    private OnCategoryFragmenListener mListener;
+    private OnCategoryFragmentListener mListener;
     private ExpandableListAdapter mAdapter;
     private ExpandableListView mExpandableListView;
 
-    private List<Category> mCategories;
+    private List<CategoryExpandableGroup> mCategories;
 
     public ListCategoryFragment() {
 
     }
 
-    public static ListCategoryFragment newInstance(List<Category> categories) {
+    public static ListCategoryFragment newInstance(List<CategoryExpandableGroup> categories) {
         ListCategoryFragment fragment = new ListCategoryFragment();
         fragment.mCategories = categories;
         Bundle bundle = new Bundle();
@@ -87,9 +89,9 @@ public class ListCategoryFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onItemPressed(int groupPosition,int childPosition) {
         if (mListener != null) {
-            Category category;
+            CategoryEntity category;
             if(childPosition == -1) {
-                category = mCategories.get(groupPosition);
+                category = mCategories.get(groupPosition).getCategory();
             }
             else {
                 category = mCategories.get(groupPosition).getSubCategories().get(childPosition);
@@ -101,8 +103,8 @@ public class ListCategoryFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnCategoryFragmenListener) {
-            mListener = (OnCategoryFragmenListener) context;
+        if (context instanceof OnCategoryFragmentListener) {
+            mListener = (OnCategoryFragmentListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement onItemClickedListener");
@@ -125,8 +127,8 @@ public class ListCategoryFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnCategoryFragmenListener {
+    public interface OnCategoryFragmentListener {
         // TODO: Update argument type and name
-        void onItemClicked(Category category);
+        void onItemClicked(CategoryEntity category);
     }
 }
