@@ -14,6 +14,7 @@ public class BudgetEntity extends EntityBase implements Serializable {
     public static final String BUDGET_NAME = "name";
     public static final String CATEGORY_ID = "categoryId";
     public static final String BUDGET_AMOUNT = "amount";
+    public static final String BUDGET_SPENT = "spent";
     public static final String WALLET_ID = "walletId";
     public static final String START_DATE = "timeStart";
     public static final String END_DATE = "timeEnd";
@@ -63,6 +64,10 @@ public class BudgetEntity extends EntityBase implements Serializable {
         return getDouble(BUDGET_AMOUNT);
     }
 
+    public double getSpent() {
+        return getDouble(BUDGET_SPENT);
+    }
+
     public long getWalletId() {
         return getLong(WALLET_ID);
     }
@@ -76,12 +81,12 @@ public class BudgetEntity extends EntityBase implements Serializable {
 
     public MTDate getTimeStart()
     {
-        new MTDate(getLong(START_DATE));
+        return new MTDate(getLong(START_DATE));
     }
 
     public MTDate getTimeEnd()
     {
-        new MTDate(getLong(END_DATE));
+        return new MTDate(getLong(END_DATE));
     }
 
     public  String getStatus()

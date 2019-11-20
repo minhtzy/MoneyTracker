@@ -16,6 +16,7 @@ public class WalletEntity
     public static final String CURRENCY_CODE = "currencyCode";
     public static final String USER_ID = "userId";
     public static final String ICON = "icon";
+    public static final String CURRENT_BALANCE = "currentBalance";
     // basic wallet
     public static final String NOTE = "note";
     // linker wallet
@@ -99,6 +100,8 @@ public class WalletEntity
         return getDouble(CREDIT_LIMIT);
     }
 
+    public Double getCurrentBalance() { return getDouble(CURRENT_BALANCE);}
+
     public void setWalletId(long walletId) {
         setLong(WALLET_ID,walletId);
     }
@@ -141,6 +144,11 @@ public class WalletEntity
     public void setAccountNumber(String accountNumber)
     {
         setString(ACCOUNT_NUMBER,accountNumber);
+    }
+
+    public void setCurrentBalance(Double currentBalance)
+    {
+        setDouble(CURRENT_BALANCE,currentBalance);
     }
 
     public long getTimestamp()
