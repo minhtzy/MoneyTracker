@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS tbl_wallets(
     _id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    initBalance REAL NOT NULL,
+    currentBalance REAL NOT NULL,
     currencyCode TEXT NOT NULL,
     walletType TEXT NOT null,
-    icon TEXT,
     userId TEXT NOT null,
+    icon TEXT,
     note TEXT,
     accountNumber TEXT,
     creditLimit real,
@@ -331,3 +331,25 @@ INSERT INTO tbl_currency_format (_id, name, currencySymbol, decimalPoint, groupS
   (151, 'Yemeni rial', '', '.', ' ', 'YER'),
   (152, 'Venezuelan Bolívar', 'Bs.', '.', ',', 'VEF');
 
+-- trigger update wallet
+
+create trigger update_wallet_insert_transactions after insert on tbl_transactions
+begin
+    update tbl_wallets
+    set currentBalance = currentBalance + new.amount
+    where _id = new.walletId;
+end;
+
+create trigger update_wallet_update_transactions after insert on tbl_transactions
+begin
+    update tbl_wallets
+    set currentBalance = currentBalance + new.amount - old.amount
+    where _id = new.walletId;
+end;
+
+create trigger update_wallet_delete_transactions after insert on tbl_transactions
+begin
+    update tbl_wallets
+    set currentBalance = currentBalance - old.amount
+    where _id = new.walletId;
+end;
