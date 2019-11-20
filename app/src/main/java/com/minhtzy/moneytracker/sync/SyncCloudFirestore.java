@@ -9,6 +9,7 @@ import android.util.Log;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
 import com.minhtzy.moneytracker.utils.SharedPrefs;
@@ -52,13 +53,13 @@ public class SyncCloudFirestore {
     }
 
 
-    public boolean onSync(Wallet wallet) {
+    public boolean onSync(WalletEntity wallet) {
         onPullTransactions(wallet);
         onPushSync(wallet);
         return true;
     }
 
-    public void onPullSync(Wallet wallet) {
+    public void onPullSync(WalletEntity wallet) {
         onPullWallet(wallet);
         onPullTransactions(wallet);
     }
@@ -96,11 +97,11 @@ public class SyncCloudFirestore {
                 });
     }
 
-    public void onPullTransactions(Wallet wallet) {
+    public void onPullTransactions(WalletEntity wallet) {
 
         long time_pull = SharedPrefs.getInstance().get(SharedPrefs.KEY_PULL_TIME,0);
         db.collection("users")
-                .document(wallet.getUserUID())
+                .document(wallet.getUserId())
                 .collection("wallets")
                 .document("wallet_" + wallet.getWalletId())
                 .collection("transactions")
@@ -112,7 +113,7 @@ public class SyncCloudFirestore {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG_LOG, document.getId() + " => " + document.getData());
-                                Transaction transaction = Transaction.fromMap(document.getData());
+                                TransactionEntity transaction = TransactionEntity.fromMap(document.getData());
                                 TransactionsManager.getInstance(context).addTransaction(transaction);
                             }
                             long timestamp = Timestamp.now().toDate().getTime();
@@ -131,7 +132,7 @@ public class SyncCloudFirestore {
     }
 
 
-    public void onPullWallet(Wallet wallet) {
+    public void onPullWallet(WalletEntity wallet) {
         db.collection("users")
                 .document(wallet.getUserUID())
                 .get()
@@ -153,7 +154,7 @@ public class SyncCloudFirestore {
 
     }
 
-    public void onPushSync(Wallet wallet) {
+    public void onPushSync(WalletEntity wallet) {
         addWallet(wallet);
         addTransactions(wallet);
 
@@ -164,8 +165,8 @@ public class SyncCloudFirestore {
 //        }
     }
 
-    public void addWallet(Wallet wallet) {
-        db.collection("users").document(wallet.getUserUID())
+    public void addWallet(WalletEntity wallet) {
+        db.collection("users").document(wallet.getUserId())
                 .collection("wallets")
                 .document("wallet_"+ wallet.getWalletId())
                 .set(wallet.toMap())
@@ -184,19 +185,19 @@ public class SyncCloudFirestore {
                 });
     }
 
-    public void addTransactions(Wallet wallet) {
+    public void addTransactions(WalletEntity wallet) {
 
         long time_pull = SharedPrefs.getInstance().get(SharedPrefs.KEY_PUSH_TIME,0);
-        List<Transaction> transactions = new TransactionsDAOImpl(context).getAllSyncTransaction(wallet.getWalletId(), time_pull);
+        List<TransactionEntity> transactions = new TransactionsDAOImpl(context).getAllSyncTransaction(wallet.getWalletId(), time_pull);
         WriteBatch writeBatch = db.batch();
 
         CollectionReference transactionsRef = db.collection("users")
-                .document(wallet.getUserUID())
+                .document(wallet.getUserId())
                 .collection("wallets")
                 .document("wallet_" + wallet.getWalletId())
                 .collection("transactions");
 
-        for(Transaction transaction : transactions) {
+        for(TransactionEntity transaction : transactions) {
             DocumentReference documentRef = transactionsRef.document("transaction_" + transaction.getTransactionId());
             writeBatch.set(documentRef,transaction.toMap());
         }

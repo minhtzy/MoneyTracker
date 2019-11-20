@@ -61,7 +61,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.ViewHold
         // lấy ảnh từ asset
         String base_path = "category/";
         try {
-            Drawable img = Drawable.createFromStream(context.getAssets().open(base_path + budget..getIcon()), null);
+            Drawable img = Drawable.createFromStream(context.getAssets().open(base_path + budget.getBudgetIcon()), null);
             viewHolder.iconGoal.setImageDrawable(img);
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,7 +80,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.ViewHold
         }
         viewHolder.textTimeLeft.setText(textLeft);
 
-        float remain = budget.getBudgetAmount() - budget.getSpent();
+        float remain = (float) (budget.getBudgetAmount() - budget.getSpent());
         if(remain < 0) {
             remain = Math.abs(remain);
             viewHolder.textCurrent.setText(context.getString(R.string.transaction_detail_cashback_over));

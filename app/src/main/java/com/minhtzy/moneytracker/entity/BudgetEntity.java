@@ -15,10 +15,12 @@ public class BudgetEntity extends EntityBase implements Serializable {
     public static final String CATEGORY_ID = "categoryId";
     public static final String BUDGET_AMOUNT = "amount";
     public static final String BUDGET_SPENT = "spent";
+    public static final String BUDGET_ICON = "icon";
     public static final String WALLET_ID = "walletId";
     public static final String START_DATE = "timeStart";
     public static final String END_DATE = "timeEnd";
     public static final String STATUS = "status";
+    public static final String LOOP_BUDGET = "isLoop";
 
     public BudgetEntity() {
         super();
@@ -94,6 +96,11 @@ public class BudgetEntity extends EntityBase implements Serializable {
         return getString(STATUS);
     }
 
+
+    public String getBudgetIcon() { return getString(BUDGET_ICON); }
+
+    public boolean isLoop() { return getBoolean(LOOP_BUDGET);}
+
     public void setBudgetId(int budget_id) {
         setInt(BUDGET_ID,budget_id);
     }
@@ -123,4 +130,8 @@ public class BudgetEntity extends EntityBase implements Serializable {
     {
         setString(STATUS,status);
     }
+
+    public void setBudgetIcon(String icon) { setString(BUDGET_ICON,icon); }
+
+    public void setLoopBudget(boolean isLoop) { setBoolean(LOOP_BUDGET,isLoop);}
 }

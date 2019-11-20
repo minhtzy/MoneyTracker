@@ -171,7 +171,8 @@ public class AddBudgetActivity extends AppCompatActivity {
         budget.setCategoryId(mCurrentCategory.getCategoryId());
         budget.setBudgetAmount((float) mTextAmount.getCleanDoubleValue());
         budget.setPeriod(mDateRange);
-        //budget.setLoop(mCheckRepeatBudget.isChecked());
+        budget.setBudgetIcon(mCurrentCategory.getCategoryIcon());
+        budget.setLoopBudget(mCheckRepeatBudget.isChecked());
         budget.setStatus("STARTED");
         IBudgetDAO budgetDAO = new BudgetDAOImpl(this);
         budgetDAO.insertBudget(budget);
