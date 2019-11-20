@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.model.Wallet;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
 
 public class EditWalletActivity extends AppCompatActivity {

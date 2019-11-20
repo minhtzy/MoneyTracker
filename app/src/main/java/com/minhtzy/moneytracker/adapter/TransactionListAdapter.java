@@ -11,8 +11,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.model.Transaction;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.pinnedlistview.SectionedBaseAdapter;
+import com.minhtzy.moneytracker.utilities.CategoryManager;
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
 import com.minhtzy.moneytracker.utils.LanguageUtils;
 
@@ -26,9 +28,9 @@ import java.util.Locale;
 public class TransactionListAdapter extends SectionedBaseAdapter {
 
     private Context mContext;
-    public List<Pair<Date,List<Transaction>>> mItems;
+    public List<Pair<Date,List<TransactionEntity>>> mItems;
 
-    public TransactionListAdapter(Context context, List<Pair<Date,List<Transaction>>> items) {
+    public TransactionListAdapter(Context context, List<Pair<Date,List<TransactionEntity>>> items) {
         mContext = context;
         mItems = items;
     }
@@ -36,7 +38,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
     public CurrencyUtils currencyUtils;
 
 
-    public void updateValues(List<Pair<Date,List<Transaction>>> items) {
+    public void updateValues(List<Pair<Date,List<TransactionEntity>>> items) {
         mItems = items;
         notifyDataSetChanged();
     }
@@ -81,24 +83,24 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         holder.item_label = layout.findViewById(R.id.text_transaction_label);
         holder.item_note = layout.findViewById(R.id.text_transaction_note);
         holder.item_money_trading = layout.findViewById(R.id.text_item_money_trading);
-
-        Transaction transaction = mItems.get(section).second.get(position);
-        holder.item_label.setText(transaction.getCategory().getCategory());
+        TransactionEntity transaction = mItems.get(section).second.get(position);
+        CategoryEntity category = CategoryManager.getInstance().getCategoryById(transaction.getCategoryId());
+        holder.item_label.setText(category.getCategoryName());
         holder.item_note.setText(transaction.getTransactionNote());
 
-        holder.item_money_trading.setText(String.valueOf(transaction.getMoneyTrading()));
+        holder.item_money_trading.setText(String.valueOf(transaction.getTransactionId()));
 
 
         // lấy ảnh từ asset
         String base_path = "category/";
         try {
-            Drawable img = Drawable.createFromStream(mContext.getAssets().open(base_path + transaction.getCategory().getIcon()),null);
+            Drawable img = Drawable.createFromStream(mContext.getAssets().open(base_path + category.getCategoryIcon()),null);
             holder.item_image.setImageDrawable(img);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (transaction.getMoneyTradingWithSign() >= 0)
+        if (transaction.getTransactionAmount() >= 0)
             holder.item_money_trading.setTextColor(parent.getResources().getColor(R.color.colorMoneyTradingPositive));
         else holder.item_money_trading.setTextColor(parent.getResources().getColor(R.color.colorMoneyTradingNegative));
         return layout;
@@ -132,9 +134,9 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         holder.header_month_year.setText(simpleDateFormat.format(date));
 
         float moneyTrading = 0;
-        List<Transaction> transactions = mItems.get(section).second;
-        for(Transaction tran : transactions) {
-            moneyTrading += tran.getMoneyTradingWithSign();
+        List<TransactionEntity> transactions = mItems.get(section).second;
+        for(TransactionEntity tran : transactions) {
+            moneyTrading += tran.getTransactionAmount();
         }
         String moneyHeader = String.valueOf(moneyTrading);
         holder.header_money_trading.setText(moneyHeader);

@@ -6,12 +6,10 @@ import android.database.DatabaseUtils;
 
 import com.minhtzy.moneytracker.model.MTDate;
 
-import org.parceler.Parcel;
-
+import java.io.Serializable;
 import java.util.Date;
 
-@Parcel
-public class EntityBase implements IEntity {
+public class EntityBase implements IEntity, Serializable {
 
 
     ContentValues contentValues;

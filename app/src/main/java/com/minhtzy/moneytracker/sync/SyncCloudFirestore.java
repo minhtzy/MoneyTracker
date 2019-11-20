@@ -10,8 +10,6 @@ import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 import com.minhtzy.moneytracker.entity.WalletEntity;
-import com.minhtzy.moneytracker.model.Transaction;
-import com.minhtzy.moneytracker.model.Wallet;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
 import com.minhtzy.moneytracker.utils.SharedPrefs;
 import com.google.android.gms.tasks.OnCompleteListener;

@@ -13,10 +13,9 @@ import android.widget.Toast;
 import com.minhtzy.moneytracker.R;
 
 import com.minhtzy.moneytracker.adapter.CategoriesPagerAdapter;
-import com.minhtzy.moneytracker.model.Category;
 
 
-public class SelectCategoryActivity extends AppCompatActivity implements ListCategoryFragment.OnCategoryFragmenListener {
+public class SelectCategoryActivity extends AppCompatActivity implements ListCategoryFragment.OnCategoryFragmentListener {
 
     public static final String EXTRA_CATEGORY = "SelectCategoryActivity.Extra.Category";
     TabLayout mTabLayout;

@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.adapter.BudgetsAdapter;
 import com.minhtzy.moneytracker.dataaccess.BudgetDAOImpl;
-import com.minhtzy.moneytracker.model.Budget;
+import com.minhtzy.moneytracker.entity.BudgetEntity;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class BudgetFragment extends Fragment implements OnBudgetItemClickListene
     FloatingActionButton mAddBudget;
     RecyclerView mListBudget;
     BudgetsAdapter budgetsAdapter;
-    List<Budget> mBudgets;
+    List<BudgetEntity> mBudgets;
 
 
     public BudgetFragment() {
@@ -70,7 +70,7 @@ public class BudgetFragment extends Fragment implements OnBudgetItemClickListene
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_ADD_BUDGET) {
-                Budget budget = (Budget) data.getSerializableExtra(AddBudgetActivity.EXTRA_BUDGET);
+                BudgetEntity budget = (BudgetEntity) data.getSerializableExtra(AddBudgetActivity.EXTRA_BUDGET);
                 mBudgets.add(budget);
                 budgetsAdapter.notifyItemInserted(mBudgets.size());
             }

@@ -9,7 +9,6 @@ import android.support.v4.app.NotificationCompat;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.budget.DetailBudgetActivity;
-import com.minhtzy.moneytracker.model.Budget;
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
 import com.minhtzy.moneytracker.utilities.NotificationsUtils;
 

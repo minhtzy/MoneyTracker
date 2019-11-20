@@ -26,8 +26,6 @@ import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
-import com.minhtzy.moneytracker.model.Transaction;
-import com.minhtzy.moneytracker.model.Wallet;
 
 import com.minhtzy.moneytracker.utilities.DateUtils;
 import com.minhtzy.moneytracker.utilities.WalletsManager;

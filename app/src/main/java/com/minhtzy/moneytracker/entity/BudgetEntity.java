@@ -6,10 +6,9 @@ import com.minhtzy.moneytracker.model.Constants;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
 
-import org.parceler.Parcel;
+import java.io.Serializable;
 
-@Parcel
-public class BudgetEntity extends EntityBase {
+public class BudgetEntity extends EntityBase implements Serializable {
 
     public static final String BUDGET_ID = "_id";
     public static final String BUDGET_NAME = "name";
@@ -18,6 +17,7 @@ public class BudgetEntity extends EntityBase {
     public static final String WALLET_ID = "walletId";
     public static final String START_DATE = "timeStart";
     public static final String END_DATE = "timeEnd";
+    public static final String STATUS = "status";
 
     public BudgetEntity() {
         super();
@@ -63,8 +63,8 @@ public class BudgetEntity extends EntityBase {
         return getDouble(BUDGET_AMOUNT);
     }
 
-    public int getWalletId() {
-        return getInt(WALLET_ID);
+    public long getWalletId() {
+        return getLong(WALLET_ID);
     }
 
     public DateRange getPeriod() {
@@ -72,6 +72,21 @@ public class BudgetEntity extends EntityBase {
         long endDate = getLong(END_DATE);
 
         return new DateRange(new MTDate(startDate), new MTDate(endDate));
+    }
+
+    public MTDate getTimeStart()
+    {
+        new MTDate(getLong(START_DATE));
+    }
+
+    public MTDate getTimeEnd()
+    {
+        new MTDate(getLong(END_DATE));
+    }
+
+    public  String getStatus()
+    {
+        return getString(STATUS);
     }
 
     public void setBudgetId(int budget_id) {
@@ -90,12 +105,17 @@ public class BudgetEntity extends EntityBase {
         setDouble(BUDGET_AMOUNT,amount);
     }
 
-    public void setWalletId(int walletId) {
-        setInt(WALLET_ID,walletId);
+    public void setWalletId(long walletId) {
+        setLong(WALLET_ID,walletId);
     }
 
     public void setPeriod(DateRange period) {
         setLong(START_DATE,period.getDateFrom().getMillis());
         setLong(END_DATE,period.getDateTo().getMillis());
+    }
+
+    public void setStatus(String status)
+    {
+        setString(STATUS,status);
     }
 }

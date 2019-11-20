@@ -15,9 +15,11 @@ import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.budget.OnBudgetItemClickListener;
-import com.minhtzy.moneytracker.model.Budget;
+import com.minhtzy.moneytracker.entity.BudgetEntity;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
+import com.minhtzy.moneytracker.utilities.CategoryManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,7 +27,7 @@ import java.util.List;
 public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.ViewHolder> {
 
 
-    List<Budget> mBudgets;
+    List<BudgetEntity> mBudgets;
 
     public void setListener(OnBudgetItemClickListener listener) {
         this.listener = listener;
@@ -33,7 +35,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.ViewHold
 
     OnBudgetItemClickListener listener;
 
-    public BudgetsAdapter(List<Budget> budgets) {
+    public BudgetsAdapter(List<BudgetEntity> budgets) {
         mBudgets = budgets;
     }
 
@@ -54,30 +56,31 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Budget budget = mBudgets.get(i);
+        BudgetEntity budget = mBudgets.get(i);
         Context context = viewHolder.itemView.getContext();
         // lấy ảnh từ asset
         String base_path = "category/";
         try {
-            Drawable img = Drawable.createFromStream(context.getAssets().open(base_path + budget.getCategory().getIcon()), null);
+            Drawable img = Drawable.createFromStream(context.getAssets().open(base_path + budget..getIcon()), null);
             viewHolder.iconGoal.setImageDrawable(img);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        viewHolder.textBudgetTitle.setText(budget.getCategory().getCategory());
-        viewHolder.textTimeRange.setText(new DateRange(budget.getTimeStart(), budget.getTimeEnd()).toString());
+        CategoryEntity category = CategoryManager.getInstance().getCategoryById(budget.getCategoryId());
+        viewHolder.textBudgetTitle.setText(category.getCategoryName());
+        viewHolder.textTimeRange.setText(new DateRange(budget.getPeriod().getDateFrom(), budget.getPeriod().getDateTo()).toString());
 
         String textLeft = context.getString(R.string.remain_prefix);
         MTDate now = new MTDate();
 
-        long remainDays =(long) Math.ceil( (budget.getTimeEnd().getMillis() - now.getMillis()) / 24 / 60 / 60 / 1000.0f);
+        long remainDays =(long) Math.ceil( (budget.getPeriod().getDateTo().getMillis() - now.getMillis()) / 24 / 60 / 60 / 1000.0f);
         if (remainDays > 0) {
             textLeft += " " + remainDays + " " + context.getString(R.string.day);
         }
         viewHolder.textTimeLeft.setText(textLeft);
 
-        float remain = budget.getAmount() - budget.getSpent();
+        float remain = budget.getBudgetAmount() - budget.getSpent();
         if(remain < 0) {
             remain = Math.abs(remain);
             viewHolder.textCurrent.setText(context.getString(R.string.transaction_detail_cashback_over));
@@ -86,7 +89,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.ViewHold
             viewHolder.textCurrent.setText(context.getString(R.string.transaction_detail_cashback_left));
         }
         viewHolder.textAmountLeft.setText(String.valueOf(remain));
-        int progress = (int) (budget.getSpent() / budget.getAmount() * 100);
+        int progress = (int) (budget.getSpent() / budget.getBudgetAmount() * 100);
         viewHolder.progressBudget.setMax(100);
         viewHolder.progressBudget.setProgress(progress);
 

@@ -8,9 +8,7 @@ import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.model.DateRange;
-import com.minhtzy.moneytracker.model.Transaction;
 import com.minhtzy.moneytracker.model.TransactionTypes;
-import com.minhtzy.moneytracker.model.Wallet;
 
 import java.util.ArrayList;
 import java.util.Date;

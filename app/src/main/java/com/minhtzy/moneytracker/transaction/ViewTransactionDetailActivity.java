@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.model.MTDate;
-import com.minhtzy.moneytracker.model.Transaction;
 import com.minhtzy.moneytracker.utilities.BitmapUtils;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
 

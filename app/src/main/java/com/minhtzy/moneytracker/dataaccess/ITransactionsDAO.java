@@ -2,7 +2,6 @@ package com.minhtzy.moneytracker.dataaccess;
 
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.model.DateRange;
-import com.minhtzy.moneytracker.model.Transaction;
 
 import java.util.List;
 

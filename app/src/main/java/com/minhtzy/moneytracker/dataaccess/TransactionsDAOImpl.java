@@ -6,10 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.minhtzy.moneytracker.entity.TransactionEntity;
-import com.minhtzy.moneytracker.model.Category;
 import com.minhtzy.moneytracker.model.DateRange;
-import com.minhtzy.moneytracker.model.Transaction;
-import com.minhtzy.moneytracker.model.Wallet;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -192,7 +189,7 @@ public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.
         return db.rawQuery(query, new String[]{String.valueOf(transactionId)});
     }
 
-    public List<Transaction> getStatisticalByCategory(int categoryId , int type) {
+    public List<TransactionEntity> getStatisticalByCategory(int categoryId , int type) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String sql = "SELECT "
                 + " tblt.trading AS trading "
@@ -202,19 +199,12 @@ public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.
                 + " INNER JOIN tbl_categories tblc ON tblc._id = tblt.categoryId "
                 + " WHERE tblt.categoryId = " + categoryId
                 + " AND tblc.type = "+ type;
-        List<Transaction> list = new ArrayList<Transaction>();
+        List<TransactionEntity> list = new ArrayList<>();
         Cursor cursor = db.rawQuery(sql,null);
 
         while(cursor.moveToNext()) {
-            Category cat = new Category();
-            Float column1 = cursor.getFloat(cursor.getColumnIndex("trading"));
-            int column2 = cursor.getInt(cursor.getColumnIndex("categoryId"));
-            int column3 = cursor.getInt(cursor.getColumnIndex("type"));
-            Transaction data = new Transaction();
-            data.setMoneyTrading(column1);
-            cat.setId(column2);
-            cat.setType(column3);
-            data.setCategory(cat);
+            TransactionEntity  data= new TransactionEntity();
+            data.loadFromCursor(cursor);
             list.add(data);
         }
         return list;
@@ -249,7 +239,7 @@ public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.
         return list_result;
     }
 
-    public List<Transaction> getStatisticalByCategoryInRange(long wallet_id ,int categoryId , DateRange dateRange) {
+    public List<TransactionEntity> getStatisticalByCategoryInRange(long wallet_id ,int categoryId , DateRange dateRange) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String sql = "SELECT "
                 + " tblt.trading AS trading "
@@ -262,21 +252,12 @@ public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.
                 + " AND tblt.walletId = "+ wallet_id
                 + " AND tblt.transaction_date >= " + dateRange.getDateFrom().getMillis()
                 + " AND tblt.transaction_date <= " + dateRange.getDateTo().getMillis();
-        List<Transaction> list = new ArrayList<Transaction>();
+        List<TransactionEntity> list = new ArrayList<TransactionEntity>();
         Cursor cursor = db.rawQuery(sql,null);
 
         while(cursor.moveToNext()) {
-            Category cat = new Category();
-            Float column1 = cursor.getFloat(cursor.getColumnIndex("trading"));
-            int column2 = cursor.getInt(cursor.getColumnIndex("categoryId"));
-            int column3 = cursor.getInt(cursor.getColumnIndex("type"));
-            long column4 = cursor.getLong(cursor.getColumnIndex("t_date"));
-            Transaction data = new Transaction();
-            data.setMoneyTrading(column1);
-            cat.setId(column2);
-            cat.setType(column3);
-            data.setCategory(cat);
-            data.setTransactionDate(new Date(column4));
+            TransactionEntity  data= new TransactionEntity();
+            data.loadFromCursor(cursor);
             list.add(data);
         }
         return list;

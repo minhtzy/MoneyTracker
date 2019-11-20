@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
-import com.minhtzy.moneytracker.model.Budget;
+import com.minhtzy.moneytracker.entity.BudgetEntity;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
-import com.minhtzy.moneytracker.model.Transaction;
 import com.minhtzy.moneytracker.transaction.ViewTransactionListActivity;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.LimitLine;
@@ -26,6 +28,8 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.minhtzy.moneytracker.utilities.CategoryManager;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +54,7 @@ public class DetailBudgetActivity extends AppCompatActivity {
     TextView textAmountProjected;
     TextView textAmountActual;
     TextView textListTransaction;
-    Budget mBudget;
+    BudgetEntity mBudget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +63,7 @@ public class DetailBudgetActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         if (intent != null) {
-            mBudget = (Budget) intent.getSerializableExtra(EXTRA_BUDGET);
+            mBudget = (BudgetEntity) intent.getSerializableExtra(EXTRA_BUDGET);
         }
 
         addControls();
@@ -101,12 +105,12 @@ public class DetailBudgetActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 TransactionsDAOImpl iTransactionsDAO = new TransactionsDAOImpl(DetailBudgetActivity.this);
-                List<Transaction> transactions = iTransactionsDAO.getAllTransactionByCategoryInRange(
-                        mBudget.getWallet().getWalletId(),
-                        mBudget.getCategory().getId(),
-                        new DateRange(mBudget.getTimeStart(),mBudget.getTimeEnd()));
+                List<TransactionEntity> transactions = iTransactionsDAO.getAllTransactionByCategoryInRange(
+                        mBudget.getWalletId(),
+                        mBudget.getCategoryId(),
+                        mBudget.getPeriod());
                 Intent intent = new Intent(DetailBudgetActivity.this,ViewTransactionListActivity.class);
-                intent.putExtra(ViewTransactionListActivity.BUNDLE_LIST_ITEM, (ArrayList<Transaction>) transactions);
+                intent.putExtra(ViewTransactionListActivity.BUNDLE_LIST_ITEM, (ArrayList<TransactionEntity>) transactions);
                 startActivity(intent);
 
             }
@@ -115,20 +119,21 @@ public class DetailBudgetActivity extends AppCompatActivity {
 
     private void updateUI() {
         if(mBudget == null) return;
-        textGoal.setText(mBudget.getCategory().getCategory());
+        CategoryEntity category = CategoryManager.getInstance().getCategoryById(mBudget.getCategoryId());
+        textGoal.setText(category.getCategoryName());
         // lấy ảnh từ asset
         String base_path = "category/";
         try {
-            Drawable img = Drawable.createFromStream(getAssets().open(base_path + mBudget.getCategory().getIcon()), null);
+            Drawable img = Drawable.createFromStream(getAssets().open(base_path + category.getCategoryIcon()), null);
             iconGoal.setImageDrawable(img);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        textBudgetAmount.setText(String.valueOf(mBudget.getAmount()));
+        textBudgetAmount.setText(String.valueOf(mBudget.getBudgetAmount()));
         textNumSpent.setText(String.valueOf(mBudget.getSpent()));
-        textNumRemain.setText(String.valueOf(mBudget.getAmount() - mBudget.getSpent()));
+        textNumRemain.setText(String.valueOf(mBudget.getBudgetAmount() - mBudget.getSpent()));
 
-        int progress = (int) Math.ceil(mBudget.getSpent() / mBudget.getAmount() * 100);
+        int progress = (int) Math.ceil(mBudget.getSpent() / mBudget.getBudgetAmount() * 100);
         budgetProgressBar.setMax(100);
         budgetProgressBar.setMax(100);
         budgetProgressBar.setProgress(progress);
@@ -153,9 +158,11 @@ public class DetailBudgetActivity extends AppCompatActivity {
         else {
             textLeft = getString(R.string.finnished);
         }
+
+        WalletEntity wallet = WalletsManager.getInstance(this).getWalletById(mBudget.getWalletId());
         textDateInfo.setText(textLeft);
         iconWallet.setImageDrawable(getResources().getDrawable(R.drawable.ic_account_balance_wallet_black_24dp));
-        textWalletName.setText(mBudget.getWallet().getWalletName());
+        textWalletName.setText(wallet.getName());
 
         long total_days = (long)Math.ceil((mBudget.getTimeEnd().getMillis() - mBudget.getTimeStart().getMillis()) / 24 / 60 / 60/ 1000.0f) ;
         long spent_days = total_days;
@@ -163,9 +170,9 @@ public class DetailBudgetActivity extends AppCompatActivity {
             spent_days -= remainDays;
         }
         if(spent_days == 0) spent_days = total_days;
-        float recommended= mBudget.getAmount() / total_days;
-        float projected = mBudget.getSpent() * total_days / spent_days;
-        float actual = mBudget.getSpent() / spent_days;
+        double recommended= mBudget.getBudgetAmount() / total_days;
+        double projected = mBudget.getSpent() * total_days / spent_days;
+        double actual = mBudget.getSpent() / spent_days;
         textAmountRecomended.setText(String.valueOf(recommended));
         textAmountProjected.setText(String.valueOf(projected));
         textAmountActual.setText(String.valueOf(actual));
@@ -179,10 +186,10 @@ public class DetailBudgetActivity extends AppCompatActivity {
     private void loadChartTransactions() {
 
         TransactionsDAOImpl iTransactionsDAO = new TransactionsDAOImpl(this);
-        List<Transaction> transactions = iTransactionsDAO.getStatisticalByCategoryInRange(
-                mBudget.getWallet().getWalletId(),
-                mBudget.getCategory().getId(),
-                new DateRange(mBudget.getTimeStart(),mBudget.getTimeEnd()));
+        List<TransactionEntity> transactions = iTransactionsDAO.getStatisticalByCategoryInRange(
+                mBudget.getWalletId(),
+                mBudget.getCategoryId(),
+                mBudget.getPeriod());
         List<Entry> entries = filterAmountByDates(transactions);
 
         chartTransactions.setDrawGridBackground(true);
@@ -211,14 +218,14 @@ public class DetailBudgetActivity extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setValueFormatter(new IndexAxisValueFormatter(values));
 
-        chartTransactions.setMaxHighlightDistance(mBudget.getAmount());
+        chartTransactions.setMaxHighlightDistance((float)mBudget.getBudgetAmount());
 
         chartTransactions.getAxisLeft().setAxisMinimum(0.0f);
         chartTransactions.getAxisLeft().setAxisMaximum(entries.get(entries.size() - 1).getY() + 200);
 
         chartTransactions.getAxisRight().setEnabled(false);
 
-        LimitLine limitLine = new LimitLine(mBudget.getAmount(),"Ngân sách");
+        LimitLine limitLine = new LimitLine((float)mBudget.getBudgetAmount(),"Ngân sách");
         limitLine.setLineWidth(4f);
         limitLine.enableDashedLine(10f, 10f, 0f);
         limitLine.setTextSize(10f);
@@ -227,7 +234,7 @@ public class DetailBudgetActivity extends AppCompatActivity {
 
     }
 
-    private List<Entry>  filterAmountByDates(List<Transaction> transactions) {
+    private List<Entry>  filterAmountByDates(List<TransactionEntity> transactions) {
         long start = mBudget.getTimeStart().getMillis();
         long end = mBudget.getTimeEnd().getMillis();
 
@@ -237,10 +244,10 @@ public class DetailBudgetActivity extends AppCompatActivity {
             entries.add(new Entry(i,0.0f));
         }
 
-        for(Transaction t : transactions) {
-            long current = t.getTransactionDate().getTime();
+        for(TransactionEntity t : transactions) {
+            long current = t.getTransactionTime().getMillis();
             int index = (int) Math.ceil((current - start) / 24 / 60/60/1000.0f);
-            entries.get(index).setY(entries.get(index).getY() + t.getMoneyTrading());
+            entries.get(index).setY(entries.get(index).getY() + (float)t.getTransactionAmount());
 
         }
 

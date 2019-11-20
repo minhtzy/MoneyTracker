@@ -4,8 +4,6 @@ import android.content.Context;
 
 import com.minhtzy.moneytracker.dataaccess.BudgetDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.IBudgetDAO;
-import com.minhtzy.moneytracker.model.Budget;
-import com.minhtzy.moneytracker.model.Transaction;
 import com.minhtzy.moneytracker.notifications.BudgetNotifications;
 
 import java.util.List;

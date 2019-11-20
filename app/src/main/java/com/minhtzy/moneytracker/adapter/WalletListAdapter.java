@@ -1,7 +1,6 @@
 package com.minhtzy.moneytracker.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +10,16 @@ import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.common.Constants;
-import com.minhtzy.moneytracker.model.Wallet;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 
 import java.util.List;
 
-public class WalletListAdapter extends ArrayAdapter<Wallet> {
+public class WalletListAdapter extends ArrayAdapter<WalletEntity> {
     Activity context;
     int resource;
-    public List<Wallet> objects;
+    public List<WalletEntity> objects;
 
-    public WalletListAdapter(Activity context, int resource, List<Wallet> objects) {
+    public WalletListAdapter(Activity context, int resource, List<WalletEntity> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -37,10 +36,10 @@ public class WalletListAdapter extends ArrayAdapter<Wallet> {
         TextView txtTenitem = (TextView) convertView.findViewById(R.id.txtWalletTitle);
         TextView txtBalacne = convertView.findViewById(R.id.txtWalletBalance);
 
-        Wallet wallet = this.objects.get(position);
-        txtTenitem.setText(wallet.getWalletName());
-        txtBalacne.setText(String.format(Constants.PRICE_FORMAT,wallet.getCurrentBalance()));
-        if(wallet.getCurrentBalance() >= 0) {
+        WalletEntity wallet = this.objects.get(position);
+        txtTenitem.setText(wallet.getName());
+        txtBalacne.setText(String.format(Constants.PRICE_FORMAT,wallet.getInitialBalance()));
+        if(wallet.getInitialBalance() >= 0) {
             txtBalacne.setTextColor(getContext().getResources().getColor(R.color.colorMoneyTradingPositive));
         }
         else {
@@ -49,7 +48,7 @@ public class WalletListAdapter extends ArrayAdapter<Wallet> {
 
         // lấy id của ảnh
         int idImg = context.getResources().getIdentifier(
-                wallet.getImageSrc(),
+                wallet.getIcon(),
                 "drawable",
                 "com.minhtzy.moneytracker"
         );

@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
-import com.minhtzy.moneytracker.model.Transaction;
 import com.minhtzy.moneytracker.setting.Setting;
 
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;

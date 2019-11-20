@@ -2,10 +2,9 @@ package com.minhtzy.moneytracker.entity;
 
 import android.content.ContentValues;
 
-import org.parceler.Parcel;
+import java.io.Serializable;
 
-@Parcel
-public class CurrencyFormat extends EntityBase{
+public class CurrencyFormat extends EntityBase implements Serializable {
     public static final String CURRENCY_ID = "_id";
     public static final String CURRENCY_NAME = "name";
     public static final String PFX_SYMBOL = "pfxSymbol";
