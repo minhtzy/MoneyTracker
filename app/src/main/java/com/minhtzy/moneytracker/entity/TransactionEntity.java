@@ -21,8 +21,8 @@ public class TransactionEntity extends EntityBase implements ITransactionEntity,
         return getString(MEDIA_URI);
     }
 
-    public long getTransactionId() {
-        return getLong(TRANSACTION_ID);
+    public String getTransactionId() {
+        return getString(TRANSACTION_ID);
     }
 
     public double getTransactionAmount() {
@@ -58,8 +58,8 @@ public class TransactionEntity extends EntityBase implements ITransactionEntity,
         return getLong(TIMESTAMP);
     }
 
-    public void setTransactionId(long transactionId) {
-        setLong(TRANSACTION_ID,transactionId);
+    public void setTransactionId(String transactionId) {
+        setString(TRANSACTION_ID,transactionId);
     }
 
     public void setTransactionAmount(double transactionAmount) {

@@ -54,4 +54,7 @@ public class WalletsManager {
     public boolean updateWallet(WalletEntity wallet) {
         return  iWalletsDAO.updateWallet(wallet);
     }
+
+    public void notifyChanged(long walletId) {
+    }
 }

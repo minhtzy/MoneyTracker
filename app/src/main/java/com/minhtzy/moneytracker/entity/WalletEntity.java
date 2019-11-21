@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import com.minhtzy.moneytracker.model.Constants;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class WalletEntity
         extends EntityBase implements Serializable {
@@ -28,7 +29,7 @@ public class WalletEntity
 
     public WalletEntity() {
         super();
-        setWalletId(Constants.NOT_SET);
+        setWalletId(UUID.randomUUID().toString());
         setCurrencyCode("VND");
     }
 
@@ -36,7 +37,7 @@ public class WalletEntity
         super(contentValues);
     }
 
-    public static WalletEntity create (int walletId, String name, double initialBalance, WalletType walletType, String icon,String currencyCode, String userId) {
+    public static WalletEntity create (String walletId, String name, double initialBalance, WalletType walletType, String icon,String currencyCode, String userId) {
 
         WalletEntity wallet = new WalletEntity();
         wallet.setWalletId(walletId);
@@ -52,11 +53,11 @@ public class WalletEntity
 
     public static WalletEntity create()
     {
-        return create(Constants.NOT_SET,"Default Wallet",0,WalletType.BASIC_WALLET,"","VND","");
+        return create(UUID.randomUUID().toString(),"Default Wallet",0,WalletType.BASIC_WALLET,"","VND","");
     }
 
-    public long getWalletId() {
-        return getLong(WALLET_ID);
+    public String getWalletId() {
+        return getString(WALLET_ID);
     }
 
     public String getName() {
@@ -102,8 +103,8 @@ public class WalletEntity
 
     public Double getCurrentBalance() { return getDouble(CURRENT_BALANCE);}
 
-    public void setWalletId(long walletId) {
-        setLong(WALLET_ID,walletId);
+    public void setWalletId(String walletId) {
+        setString(WALLET_ID,walletId);
     }
 
     public void setName(String name) {

@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.ITransactionsDAO {
+public class TransactionsDAOImpl implements ITransactionsDAO {
 
     /**
      * Transaction table
@@ -42,23 +42,14 @@ public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.
 
     public boolean insertTransaction(TransactionEntity transaction) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        long id = transaction.getTransactionId();
-        if(id <= 0)
-            id = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
-        transaction.setTransactionId(id);
         transaction.setTimestamp(com.google.firebase.Timestamp.now().toDate().getTime());
-        db.insert(TABLE_TRANSACTION_NAME, TransactionEntity.LOCATION_ID, values);
-        transaction.setTransactionId(id);
+        ContentValues values = transaction.getContentValues();
+        long inserted = db.insert(TABLE_TRANSACTION_NAME, TransactionEntity.LOCATION_ID, values);
         db.close();
-
-        updateTimeStamp(id, com.google.firebase.Timestamp.now().toDate().getTime());
-        return true;
+        return inserted != -1;
     }
 
     public boolean updateTransaction(TransactionEntity transaction) {
-        //    COLUMN_WALLET_ID_FK                   + " INTEGER NOT NULL," +
-
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         transaction.setTimestamp(com.google.firebase.Timestamp.now().toDate().getTime());
         ContentValues values = new ContentValues();
@@ -71,11 +62,10 @@ public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.
     public boolean deleteTransaction(TransactionEntity transaction) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int deleted = db.delete(TABLE_TRANSACTION_NAME,TransactionEntity.TRANSACTION_ID + " = ?",new String[]{String.valueOf(transaction.getTransactionId())});
-
         return deleted > 0;
     }
 
-    public TransactionEntity getTransactionById(long transactionId) {
+    public TransactionEntity getTransactionById(String transactionId) {
         Cursor data = getTransactionDataById(transactionId);
         if(data != null && data.getCount() > 0) {
             data.moveToFirst();
@@ -84,7 +74,7 @@ public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.
         return null;
     }
 
-    public List<TransactionEntity> getAllTransactionByWalletId(long walletId) {
+    public List<TransactionEntity> getAllTransactionByWalletId(String walletId) {
         Cursor data = getAllTransactionDataByWalletId(walletId);
         List<TransactionEntity> list_result = new ArrayList<>();
         if (data != null && data.getCount() > 0) {
@@ -100,7 +90,7 @@ public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.
 
 
     @Override
-    public List<TransactionEntity> getAllTransactionByPeriod(long walletId, DateRange dateRange) {
+    public List<TransactionEntity> getAllTransactionByPeriod(String walletId, DateRange dateRange) {
         Cursor data = getAllTransactionDataByWalletId(walletId,dateRange);
         List<TransactionEntity> list_result = new ArrayList<>();
         if (data != null && data.getCount() > 0) {
@@ -116,14 +106,14 @@ public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.
 
 
 
-    private Cursor getAllTransactionDataByWalletId(long walletId) {
+    private Cursor getAllTransactionDataByWalletId(String walletId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_TRANSACTION_NAME +
                 " WHERE " + TransactionEntity.TRANSACTION_ID + " = ?" +
                 " ORDER BY " + TransactionEntity.TRANSACTION_TIME;
         return db.rawQuery(query, new String[]{String.valueOf(walletId)});
     }
-    private Cursor getAllTransactionDataByWalletId(long walletId, DateRange dateRange) {
+    private Cursor getAllTransactionDataByWalletId(String walletId, DateRange dateRange) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_TRANSACTION_NAME +
                 " WHERE " + TransactionEntity.TRANSACTION_ID + " = ?" +
@@ -182,7 +172,7 @@ public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.
         return entity;
     }
 
-    private Cursor getTransactionDataById(long transactionId) {
+    private Cursor getTransactionDataById(String transactionId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_TRANSACTION_NAME +
                 " WHERE " + TransactionEntity.TRANSACTION_ID + " = ?";
@@ -293,7 +283,7 @@ public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.
     }
 
     @Override
-    public List<TransactionEntity> getAllSyncTransaction(long walletId, long timestamp) {
+    public List<TransactionEntity> getAllSyncTransaction(String walletId, long timestamp) {
         Cursor data = getAllSyncTransactionData(walletId,timestamp);
         List<TransactionEntity> list_result = new ArrayList<>();
         if (data != null && data.getCount() > 0) {
@@ -307,7 +297,7 @@ public class TransactionsDAOImpl implements com.minhtzy.moneytracker.dataaccess.
         return list_result;
     }
 
-    private Cursor getAllSyncTransactionData(long walletId, long timestamp) {
+    private Cursor getAllSyncTransactionData(String walletId, long timestamp) {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_TRANSACTION_NAME +

@@ -76,33 +76,6 @@ public class BudgetDAOImpl implements IBudgetDAO {
         return list_result;
     }
 
-    @Override
-    public List<BudgetEntity> getBudgetByPeriod(long walletId,DateRange dateRange) {
-        List<BudgetEntity> list_result = new ArrayList<>();
-        Cursor data = getAllBudgetDataByPeriod(walletId,dateRange);
-        if(data != null && data.getCount() > 0) {
-            data.moveToFirst();
-            do {
-                list_result.add(getBudgetFromData(data));
-            }while (data.moveToNext());
-        }
-        return list_result;
-    }
-
-
-
-    @Override
-    public List<BudgetEntity> getBudgetByCategory(long walletId,int categoryId) {
-        List<BudgetEntity> list_result = new ArrayList<>();
-        Cursor data = getAllBudgetDataByCategory(walletId,categoryId);
-        if(data != null && data.getCount() > 0) {
-            data.moveToFirst();
-            do {
-                list_result.add(getBudgetFromData(data));
-            }while (data.moveToNext());
-        }
-        return list_result;
-    }
 
     private Cursor getAllBudgetData() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -116,28 +89,11 @@ public class BudgetDAOImpl implements IBudgetDAO {
                 " WHERE " + BudgetEntity.WALLET_ID + " = ?";
         return db.rawQuery(query, new String[]{String.valueOf(walletId)});
     }
-    private Cursor getAllBudgetDataByCategory(long walletId, int categoryId) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_BUDGET +
-                " WHERE " + BudgetEntity.WALLET_ID + " = ?"+
-                " AND " + BudgetEntity.CATEGORY_ID + " = ?";
-        return db.rawQuery(query, new String[]{String.valueOf(walletId),
-                String.valueOf(categoryId)});
-    }
-    private Cursor getAllBudgetDataByPeriod(long walletId, DateRange dateRange) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_BUDGET +
-                " WHERE " + BudgetEntity.WALLET_ID + " = ?"+
-                " AND " + BudgetEntity.START_DATE + " >= ?" +
-                " AND " + BudgetEntity.END_DATE + " <= ?";
-        return db.rawQuery(query, new String[]{String.valueOf(walletId),
-                String.valueOf(dateRange.getDateFrom().toDate().getTime()),
-                String.valueOf(dateRange.getDateTo().toDate().getTime())});
-    }
 
     private BudgetEntity getBudgetFromData(Cursor data) {
         BudgetEntity budget = new BudgetEntity();
         budget.loadFromCursor(data);
+        updateBudgetSpent(budget);
         return budget;
     }
 
@@ -147,7 +103,7 @@ public class BudgetDAOImpl implements IBudgetDAO {
         long timeStart = budget.getPeriod().getDateFrom().getMillis();
         long timeEnd = budget.getPeriod().getDateTo().getMillis();
         String query =
-                        "SELECT SUM(trading)" +
+                        "SELECT SUM(amount)" +
                         " FROM tbl_transactions as t" +
                         " INNER JOIN tbl_categories as c" +
                         " ON t.categoryId = c._id" +
@@ -157,12 +113,11 @@ public class BudgetDAOImpl implements IBudgetDAO {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(query,null);
-        float spent = 0;
+        double spent = 0;
         if(cursor.moveToFirst()) {
-            spent = cursor.getFloat(0);
+            spent = cursor.getDouble(0);
         }
-        //budget.setSpent(spent);
-        updateBudget(budget);
+        budget.setSpent(spent);
     }
 
 }

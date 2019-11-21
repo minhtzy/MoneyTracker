@@ -10,11 +10,11 @@ public interface ITransactionsDAO {
     public boolean updateTransaction(TransactionEntity transaction);
     public boolean deleteTransaction(TransactionEntity transaction);
 
-    public TransactionEntity getTransactionById(long transactionId);
+    public TransactionEntity getTransactionById(String transactionId);
 
     public List<TransactionEntity> getAllTransaction();
-    public List<TransactionEntity> getAllTransactionByWalletId(long walletId);
-    public List<TransactionEntity> getAllTransactionByPeriod(long walletId,DateRange dateRange);
+    public List<TransactionEntity> getAllTransactionByWalletId(String walletId);
+    public List<TransactionEntity> getAllTransactionByPeriod(String walletId,DateRange dateRange);
 
-    public List<TransactionEntity> getAllSyncTransaction(long walletId,long timestamp);
+    public List<TransactionEntity> getAllSyncTransaction(String walletId,long timestamp);
 }

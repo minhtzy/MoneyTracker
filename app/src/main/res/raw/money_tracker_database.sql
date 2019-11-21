@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS tbl_wallets(
-    _id INTEGER PRIMARY KEY AUTOINCREMENT,
+    _id TEXT PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     currentBalance REAL NOT NULL,
     currencyCode TEXT NOT NULL,
@@ -84,7 +84,7 @@ INSERT INTO tbl_categories VALUES(59,4,'Đi vay','icon_112.png',null);
 INSERT INTO tbl_categories VALUES(60,4,'Thu nợ','icon_140.png',null);
 
 CREATE TABLE IF NOT EXISTS tbl_transactions(
-    _id INTEGER PRIMARY KEY AUTOINCREMENT,
+    _id TEXT PRIMARY KEY AUTOINCREMENT,
     amount REAL NOT NULL,
     time INTEGER NOT NULL,
     note TEXT,

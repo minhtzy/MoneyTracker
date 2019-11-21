@@ -9,6 +9,7 @@ import android.util.Log;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
+import com.minhtzy.moneytracker.entity.EntityBase;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
@@ -28,7 +29,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SyncCloudFirestore {
 
@@ -76,11 +79,8 @@ public class SyncCloudFirestore {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG_LOG, document.getId() + " => " + document.getData());
-                                Parcel myParcel = Parcel.obtain();
-                                myParcel.writeMap(document.getData());
-                                myParcel.setDataPosition(0);
-                                ContentValues values = ContentValues.CREATOR.createFromParcel(myParcel);
-                                iWalletsDAO.insertWallet(new WalletEntity(values));
+
+                                iWalletsDAO.insertWallet(new WalletEntity(fromData(document)));
                                 //onPullTransactions(wallet);
                             }
                             if(syncEvents != null) {
@@ -113,7 +113,7 @@ public class SyncCloudFirestore {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG_LOG, document.getId() + " => " + document.getData());
-                                TransactionEntity transaction = TransactionEntity.fromMap(document.getData());
+                                TransactionEntity transaction = new TransactionEntity(fromData(document));
                                 TransactionsManager.getInstance(context).addTransaction(transaction);
                             }
                             long timestamp = Timestamp.now().toDate().getTime();
@@ -134,7 +134,7 @@ public class SyncCloudFirestore {
 
     public void onPullWallet(WalletEntity wallet) {
         db.collection("users")
-                .document(wallet.getUserUID())
+                .document(wallet.getUserId())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -169,7 +169,7 @@ public class SyncCloudFirestore {
         db.collection("users").document(wallet.getUserId())
                 .collection("wallets")
                 .document("wallet_"+ wallet.getWalletId())
-                .set(wallet.toMap())
+                .set(fromContentValue(wallet.getContentValues()))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -199,7 +199,7 @@ public class SyncCloudFirestore {
 
         for(TransactionEntity transaction : transactions) {
             DocumentReference documentRef = transactionsRef.document("transaction_" + transaction.getTransactionId());
-            writeBatch.set(documentRef,transaction.toMap());
+            writeBatch.set(documentRef,fromContentValue(transaction.getContentValues()));
         }
 
         writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -217,5 +217,25 @@ public class SyncCloudFirestore {
                 Log.d(TAG_LOG,e.getMessage());
             }
         });
+    }
+
+    Map<String,Object> fromContentValue (ContentValues data)
+    {
+
+        Map<String,Object> convert = new HashMap<>();
+        for(String key : data.keySet())
+        {
+            convert.put(key,data.get(key));
+        }
+        return convert;
+    }
+
+    ContentValues fromData(QueryDocumentSnapshot document)
+    {
+        Parcel myParcel = Parcel.obtain();
+        myParcel.writeMap(document.getData());
+        myParcel.setDataPosition(0);
+        ContentValues values = ContentValues.CREATOR.createFromParcel(myParcel);
+        return values;
     }
 }

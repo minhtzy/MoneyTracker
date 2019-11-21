@@ -33,7 +33,7 @@ public class WalletsDAOImpl implements IWalletsDAO {
 
     // Wallet data access
 
-    public WalletEntity getWalletById(long id) {
+    public WalletEntity getWalletById(String id) {
         Cursor data = getWalletDataById(id);
         if (data != null && data.getCount() > 0) {
             data.moveToFirst();
@@ -65,22 +65,16 @@ public class WalletsDAOImpl implements IWalletsDAO {
     }
 
     public boolean insertWallet(WalletEntity wallet) {
+        if(wallet == null) return false;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        if(wallet.getWalletId() <= 0) {
-            long id = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
-            wallet.setWalletId(id);
-        }
-
         wallet.setTimeStamp(com.google.firebase.Timestamp.now().toDate().getTime());
         long insertId = db.insert(TABLE_WALLET_NAME, null, wallet.getContentValues());
         db.close();
-        wallet.setWalletId(insertId);
         return insertId != -1;
     }
 
     public boolean updateWallet(WalletEntity wallet) {
-        if(wallet.getWalletId() <= 0) return false;
+        if(wallet == null) return false;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         wallet.setTimeStamp(com.google.firebase.Timestamp.now().toDate().getTime());
         ContentValues values = wallet.getContentValues();
@@ -89,7 +83,7 @@ public class WalletsDAOImpl implements IWalletsDAO {
         return updated > 0;
     }
 
-    public boolean deleteWallet(long walletId) {
+    public boolean deleteWallet(String walletId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int deleted = db.delete(TABLE_WALLET_NAME, WalletEntity.WALLET_ID + " = ?", new String[]{String.valueOf(walletId)});
         db.close();
@@ -104,7 +98,7 @@ public class WalletsDAOImpl implements IWalletsDAO {
         return cursor;
     }
 
-    private Cursor getWalletDataById(long id) {
+    private Cursor getWalletDataById(String id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_WALLET_NAME +
                 " WHERE " + WalletEntity.WALLET_ID + " = ?";

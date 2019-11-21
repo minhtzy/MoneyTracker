@@ -134,4 +134,8 @@ public class BudgetEntity extends EntityBase implements Serializable {
     public void setBudgetIcon(String icon) { setString(BUDGET_ICON,icon); }
 
     public void setLoopBudget(boolean isLoop) { setBoolean(LOOP_BUDGET,isLoop);}
+
+    public void setSpent(double spent) {
+        setDouble(BUDGET_SPENT,spent);
+    }
 }

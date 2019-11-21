@@ -11,7 +11,5 @@ public interface IBudgetDAO {
     public boolean deleteBudget(BudgetEntity budget);
     public List<BudgetEntity> getAllBudget();
     public List<BudgetEntity> getAllBudget(long walletId);
-    public List<BudgetEntity> getBudgetByPeriod(long walletId,DateRange dateRange);
-    public List<BudgetEntity> getBudgetByCategory(long walletId,int categoryId);
     public void updateBudgetSpent(BudgetEntity budget);
 }

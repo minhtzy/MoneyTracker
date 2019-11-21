@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.minhtzy.moneytracker.dataaccess.BudgetDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.IBudgetDAO;
+import com.minhtzy.moneytracker.entity.BudgetEntity;
 import com.minhtzy.moneytracker.notifications.BudgetNotifications;
 
 import java.util.List;
@@ -19,6 +20,8 @@ class BudgetsManager {
 
     Context context;
 
+    List<BudgetEntity> budgets;
+
     private BudgetsManager() {
     }
 
@@ -33,30 +36,25 @@ class BudgetsManager {
         if(context != null) {
             this.context = context;
             iBudgetDAO = new BudgetDAOImpl(context);
+            budgets = iBudgetDAO.getAllBudget();
         }
     }
 
-    public void updateBudget(Transaction transaction, float sign, boolean pushNoitification) {
-        // update budget
-        List<Budget> budgets = iBudgetDAO.getBudgetByCategory(transaction.getWallet().getWalletId(),transaction.getCategory().getId());
-        for(Budget budget : budgets) {
-            budget.setSpent(budget.getSpent() + sign * transaction.getMoneyTrading());
-            iBudgetDAO.updateBudget(budget);
-            if(pushNoitification && budget.getSpent() > budget.getAmount()) {
-                new BudgetNotifications(getContext()).notifyBudgetOverSpending(budget);
-            }
-        }
 
-        // update parent's budget
-        if(transaction.getCategory().getParentCategory() != null) {
-            List<Budget> parentBudgets = iBudgetDAO.getBudgetByCategory(transaction.getWallet().getWalletId(),transaction.getCategory().getParentCategory().getId());
-            for(Budget budget : parentBudgets) {
-                budget.setSpent(budget.getSpent() + sign * transaction.getMoneyTrading());
-                iBudgetDAO.updateBudget(budget);
-                if(pushNoitification && budget.getSpent() > budget.getAmount()) {
-                    new BudgetNotifications(getContext()).notifyBudgetOverSpending(budget);
-                }
+    public void notifyChanged() {
+        budgets = iBudgetDAO.getAllBudget();
+        for(BudgetEntity budget : budgets)
+        {
+            if(budget.getSpent() > budget.getBudgetAmount())
+            {
+                BudgetNotifications noti = new BudgetNotifications(context);
+                noti.notifyBudgetOverSpending(budget);
             }
         }
+    }
+
+    public List<BudgetEntity> getAllBudgets()
+    {
+        return budgets;
     }
 }

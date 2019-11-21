@@ -9,8 +9,11 @@ import android.support.v4.app.NotificationCompat;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.budget.DetailBudgetActivity;
+import com.minhtzy.moneytracker.entity.BudgetEntity;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
 import com.minhtzy.moneytracker.utilities.NotificationsUtils;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 
 public class BudgetNotifications {
 
@@ -27,7 +30,7 @@ public class BudgetNotifications {
         mContext = context;
     }
 
-    public void notifyBudgetOverSpending(Budget budget) {
+    public void notifyBudgetOverSpending(BudgetEntity budget) {
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -43,12 +46,13 @@ public class BudgetNotifications {
         try {
             NotificationsUtils.createNotificationChannel(getContext(),CHANNEL_ID);
 
+            WalletEntity wallet = WalletsManager.getInstance(mContext).getWalletById(budget.getWalletId());
             Notification notification = new NotificationCompat.Builder(getContext(),CHANNEL_ID)
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
                     .setContentTitle(getContext().getString(R.string.app_name))
-                    .setContentText(getContext().getString(R.string.notification_budget_overspending) + " " + CurrencyUtils.formatVnCurrency(String.valueOf(budget.getSpent() - budget.getAmount())))
-                    .setSubText(getContext().getString(R.string.in) + " " + budget.getWallet().getWalletName())
+                    .setContentText(getContext().getString(R.string.notification_budget_overspending) + " " + CurrencyUtils.formatVnCurrency(String.valueOf(budget.getSpent() - budget.getBudgetAmount())))
+                    .setSubText(getContext().getString(R.string.in) + " " + wallet.getName())
                     .setSmallIcon(R.drawable.logo)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | Notification.VISIBILITY_PUBLIC)

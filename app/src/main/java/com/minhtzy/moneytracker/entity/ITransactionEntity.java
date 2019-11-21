@@ -18,7 +18,7 @@ public interface ITransactionEntity {
 
     String getMediaUri();
 
-    long getTransactionId();
+    String getTransactionId();
 
     double getTransactionAmount();
 
@@ -36,7 +36,7 @@ public interface ITransactionEntity {
 
     long getTimestamp();
 
-    void setTransactionId(long transactionId);
+    void setTransactionId(String transactionId);
 
     void setTransactionAmount(double transactionAmount);
 
