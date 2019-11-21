@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.CategoriesDAOImpl;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.model.CategoryExpandableGroup;
 import com.minhtzy.moneytracker.wallet.ListCategoryFragment;
 
 import java.util.ArrayList;
@@ -24,19 +25,19 @@ public class CategoriesPagerAdapter extends FragmentPagerAdapter {
     }
     @Override
     public Fragment getItem(int i) {
-        List<CategoryEntity> categories = new ArrayList<>();
+        List<CategoryExpandableGroup> categories = new ArrayList<>();
         CategoriesDAOImpl categoriesDAO = new CategoriesDAOImpl(mContext);
         switch (i) {
             case 0 :
-                categories.addAll(categoriesDAO.getCategoriesByType(3));
-                categories.addAll(categoriesDAO.getCategoriesByType(4));
+                categories.addAll(categoriesDAO.getExpandedCategoriesByType(3));
+                categories.addAll(categoriesDAO.getExpandedCategoriesByType(4));
                 break;
             case 1 :
-                categories.addAll(categoriesDAO.getCategoriesByType(1));
+                categories.addAll(categoriesDAO.getExpandedCategoriesByType(1));
                 //categories = categories.subList(0,5);
                 break;
             case 2 :
-                categories.addAll(categoriesDAO.getCategoriesByType(2));
+                categories.addAll(categoriesDAO.getExpandedCategoriesByType(2));
 
         }
         return ListCategoryFragment.newInstance(categories);

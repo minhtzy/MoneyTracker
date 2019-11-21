@@ -66,6 +66,10 @@ public class WalletsDAOImpl implements IWalletsDAO {
 
     public boolean insertWallet(WalletEntity wallet) {
         if(wallet == null) return false;
+        if (wallet.getWalletId().isEmpty())
+        {
+            wallet.setWalletId(UUID.randomUUID().toString());
+        }
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         wallet.setTimeStamp(com.google.firebase.Timestamp.now().toDate().getTime());
         long insertId = db.insert(TABLE_WALLET_NAME, null, wallet.getContentValues());

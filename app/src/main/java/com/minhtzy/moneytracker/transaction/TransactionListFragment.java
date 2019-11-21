@@ -23,6 +23,7 @@ import com.minhtzy.moneytracker.R;
 
 import com.minhtzy.moneytracker.adapter.TransactionListAdapter;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView;
@@ -39,29 +40,29 @@ public class TransactionListFragment extends Fragment {
     private PinnedHeaderListView mLViewTransaction;
     private TransactionListAdapter mAdapter;
     private LinearLayout mBlankLayout;
-    List<Transaction> mItems;
-    List<Pair<Date,List<Transaction>>> mFilterItems;
+    List<TransactionEntity> mItems;
+    List<Pair<Date,List<TransactionEntity>>> mFilterItems;
     View headerView;
 
     private static final String BUNDLE_LIST_ITEM = "TransactionListFragment.bundle.list_items";
 
-    public static TransactionListFragment newInstance(List<Transaction> items) {
+    public static TransactionListFragment newInstance(List<TransactionEntity> items) {
         Log.d(LOG_TAG,"create new instance "+ items.size());
         TransactionListFragment fragment = new TransactionListFragment();
         fragment.setItems(items);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(BUNDLE_LIST_ITEM,(ArrayList<Transaction>)items);
+        bundle.putSerializable(BUNDLE_LIST_ITEM,(ArrayList<TransactionEntity>)items);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static TransactionListFragment newInstance(int wallet_id ,DateRange dateRange) {
+    public static TransactionListFragment newInstance(String wallet_id ,DateRange dateRange) {
         Log.d(LOG_TAG,"create new instance "+ dateRange);
         TransactionListFragment fragment = new TransactionListFragment();
-        List<Transaction> items = new TransactionsDAOImpl(fragment.getContext()).getAllTransactionByPeriod(wallet_id,dateRange);
+        List<TransactionEntity> items = new TransactionsDAOImpl(fragment.getContext()).getAllTransactionByPeriod(wallet_id,dateRange);
         fragment.setItems(items);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(BUNDLE_LIST_ITEM,(ArrayList<Transaction>)items);
+        bundle.putSerializable(BUNDLE_LIST_ITEM,(ArrayList<TransactionEntity>)items);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -77,7 +78,7 @@ public class TransactionListFragment extends Fragment {
 
         if(mItems == null){
             if(savedInstanceState != null) {
-                mItems =(ArrayList<Transaction>) savedInstanceState.getSerializable(BUNDLE_LIST_ITEM);
+                mItems =(ArrayList<TransactionEntity>) savedInstanceState.getSerializable(BUNDLE_LIST_ITEM);
             }
             else {
                 mItems = new ArrayList<>();
@@ -98,7 +99,7 @@ public class TransactionListFragment extends Fragment {
         mLViewTransaction.setOnItemClickListener(new PinnedHeaderListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int section, int position, long id) {
-                Transaction transaction = (Transaction) mAdapter.getItem(section,position);
+                TransactionEntity transaction = (TransactionEntity) mAdapter.getItem(section,position);
                 onClickItem(transaction);
             }
 
@@ -121,7 +122,7 @@ public class TransactionListFragment extends Fragment {
         //new loadTransactions(this.getActivity()).execute();
     }
 
-    private void onClickItem(Transaction transaction) {
+    private void onClickItem(TransactionEntity transaction) {
         Intent data = new Intent(TransactionListFragment.this.getContext(),ViewTransactionDetailActivity.class);
         data.putExtra(ViewTransactionDetailActivity.EXTRA_TRANSACTION,transaction);
         startActivityForResult(data,REQUEST_VIEW_DETAIL);
@@ -135,19 +136,19 @@ public class TransactionListFragment extends Fragment {
         }
     }
 
-    public void setItems(List<Transaction> items) {
+    public void setItems(List<TransactionEntity> items) {
         mItems = items;
     }
 
-    private void filterPairTransactions(List<Transaction> transactions) {
-        for(Transaction transaction : transactions) {
+    private void filterPairTransactions(List<TransactionEntity> transactions) {
+        for(TransactionEntity transaction : transactions) {
             filterPairTransaction(transaction);
         }
     }
 
-    private void filterPairTransaction(Transaction transaction) {
+    private void filterPairTransaction(TransactionEntity transaction) {
         int index = -1;
-        MTDate date = new MTDate(transaction.getTransactionDate());
+        MTDate date = new MTDate(transaction.getTransactionTime());
         for (int i = 0; i < mFilterItems.size(); ++i) {
             MTDate dateI = new MTDate(mFilterItems.get(i).first);
             if (compareDate(date,dateI) == 0) {
@@ -170,9 +171,9 @@ public class TransactionListFragment extends Fragment {
                     break;
                 }
             }
-            ArrayList<Transaction> trans = new ArrayList<>();
+            ArrayList<TransactionEntity> trans = new ArrayList<>();
             trans.add(transaction);
-            mFilterItems.add(index, new Pair<Date, List<Transaction>>(transaction.getTransactionDate(), trans));
+            mFilterItems.add(index, new Pair<Date, List<TransactionEntity>>(transaction.getTransactionTime(), trans));
         }
     }
 
@@ -251,28 +252,28 @@ public class TransactionListFragment extends Fragment {
     }
     private void updateHeaderView() {
 
-        float tienChi = 0;
-        float tienTieu = 0;
+        float income = 0;
+        float express= 0;
 
         if(headerView  != null) {
-            for(Transaction tran : mItems) {
-                if(tran.getMoneyTradingWithSign() < 0) {
-                    tienTieu += Math.abs(tran.getMoneyTrading());
+            for(TransactionEntity tran : mItems) {
+                if(tran.getTransactionAmount() < 0) {
+                    express += Math.abs(tran.getTransactionAmount());
                 }
                 else {
-                    tienChi += Math.abs(tran.getMoneyTrading());
+                    income += Math.abs(tran.getTransactionAmount());
                 }
             }
-            TextView textChi = headerView.findViewById(R.id.fts_so_du_dau);
-            TextView textTieu = headerView.findViewById(R.id.fts_so_du_cuoi);
-            TextView textConLai = headerView.findViewById(R.id.fts_con_lai);
 
-            String moneyChi = String.valueOf(tienChi);//CurrencyUtils.formatVnCurrency(String.format(Constants.PRICE_FORMAT,tienChi));
-            String moneyTieu = String.valueOf(tienTieu);// CurrencyUtils.formatVnCurrency(String.format(Constants.PRICE_FORMAT,tienTieu));
-            String moneyConLai = String.valueOf(tienChi - tienTieu);//CurrencyUtils.formatVnCurrency(String.format(Constants.PRICE_FORMAT,tienChi - tienTieu));
-            textChi.setText(moneyChi);
-            textTieu.setText(moneyTieu);
-            textConLai.setText(moneyConLai);
+            express = Math.abs(express);
+            income = Math.abs(income);
+            TextView textIncome = headerView.findViewById(R.id.fts_so_du_dau);
+            TextView textExpress = headerView.findViewById(R.id.fts_so_du_cuoi);
+            TextView textRemain = headerView.findViewById(R.id.fts_con_lai);
+
+            textIncome.setText(String.valueOf(income));
+            textExpress.setText(String.valueOf(express));
+            textRemain.setText(String.valueOf(income-express));
         }
     }
 

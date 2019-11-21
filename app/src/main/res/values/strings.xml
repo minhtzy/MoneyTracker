@@ -99,9 +99,9 @@
     <string name="current_year">Năm nay</string>
     <string name="future_transactions">Tương lai</string>
     <string name="loading">Loading...</string>
-    <string name="so_du_dau">Số dư đầu</string>
+    <string name="so_du_dau">Tiền vào</string>
 
-    <string name="so_du_cuoi">Số dư cuối</string>
+    <string name="so_du_cuoi">Tiền ra</string>
     <string name="view_statistic">Xem báo cáo cho giai đoạn này</string>
     <string name="init_zero">0</string>
     <string name="choose_category">Chọn nhóm của bạn</string>

@@ -11,4 +11,7 @@ public class Constants {
     }
 
     public static int NOT_SET = -1;
+
+    public static String STR_NOT_SET = "";
+
 }

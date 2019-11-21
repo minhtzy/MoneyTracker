@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.model.CategoryExpandableGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class CategoriesDAOImpl implements ICategoriesDAO {
@@ -159,5 +161,17 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
             }
         }
         return count;
+    }
+
+    public Collection<? extends CategoryExpandableGroup> getExpandedCategoriesByType(int i) {
+        List<CategoryExpandableGroup> groups = new ArrayList<>();
+        List<CategoryEntity> categories = getCategoriesByType(i);
+        for(CategoryEntity cat : categories)
+        {
+            List<CategoryEntity> subcategories = getSubCategories(cat.getCategoryId());
+            CategoryExpandableGroup catGroup = new CategoryExpandableGroup(cat,subcategories);
+            groups.add(catGroup);
+        }
+        return groups;
     }
 }

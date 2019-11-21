@@ -98,7 +98,7 @@ public class BudgetDAOImpl implements IBudgetDAO {
     }
 
     public void updateBudgetSpent(BudgetEntity budget) {
-        long walletId = budget.getWalletId();
+        String walletId = budget.getWalletId();
         int categoryId = budget.getCategoryId();
         long timeStart = budget.getPeriod().getDateFrom().getMillis();
         long timeEnd = budget.getPeriod().getDateTo().getMillis();

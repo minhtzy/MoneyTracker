@@ -48,7 +48,7 @@ public class TransactionsManager {
 
         com.minhtzy.moneytracker.utilities.DateUtils dateUtils = new com.minhtzy.moneytracker.utilities.DateUtils();
         for(TransactionEntity tran : transactions) {
-            Date date = tran.getTransactionTime().toDate();
+            Date date = tran.getTransactionTime();
             if(dateUtils.isDateRangeContainDate(dateRange,date)) {
                 filterTransaction.add(tran);
             }

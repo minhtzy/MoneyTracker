@@ -2,6 +2,8 @@ package com.minhtzy.moneytracker.entity;
 
 import com.minhtzy.moneytracker.model.MTDate;
 
+import java.util.Date;
+
 public interface ITransactionEntity {
 
     public static final String TRANSACTION_ID = "_id";
@@ -26,9 +28,9 @@ public interface ITransactionEntity {
 
     int getCategoryId();
 
-    long getWalletId();
+    String getWalletId();
 
-    MTDate getTransactionTime() ;
+    Date getTransactionTime() ;
 
     int getEventId();
 
@@ -44,7 +46,7 @@ public interface ITransactionEntity {
 
     void setCategoryId(int categoryId);
 
-    void setWalletId(long walletId);
+    void setWalletId(String walletId);
 
     void setTransactionTime(MTDate time);
 

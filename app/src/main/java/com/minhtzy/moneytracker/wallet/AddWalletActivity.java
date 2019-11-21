@@ -106,7 +106,7 @@ public class AddWalletActivity extends AppCompatActivity {
         String name = txtTen.getText().toString();
         IWalletsDAO iWalletsDAO = new WalletsDAOImpl(this);
 
-        WalletEntity wallet = WalletEntity.create(Constants.NOT_SET,name,soTien, WalletType.BASIC_WALLET,"","VND",FirebaseAuth.getInstance().getUid());
+        WalletEntity wallet = WalletEntity.create("",name,soTien, WalletType.BASIC_WALLET,"","VND",FirebaseAuth.getInstance().getUid());
 
         boolean added_wallet = iWalletsDAO.insertWallet(wallet);
 

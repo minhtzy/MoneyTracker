@@ -27,6 +27,9 @@ import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.utilities.BitmapUtils;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
@@ -61,9 +64,9 @@ public class AddTransactionActivity extends AppCompatActivity {
     private FirebaseUser mCurrentUser;
     private IWalletsDAO iWalletsDAO;
     private ITransactionsDAO iTransactionsDAO;
-    private List<Wallet> mListWallet;
-    private Category mCurrentCategory =null;
-    private Wallet mCurrentWallet = null;
+    private List<WalletEntity> mListWallet;
+    private CategoryEntity mCurrentCategory =null;
+    private WalletEntity mCurrentWallet = null;
     private Bitmap mCurrentImage = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,18 +177,16 @@ public class AddTransactionActivity extends AppCompatActivity {
         if(mCurrentImage != null) {
             mMediaUri = BitmapUtils.saveImage(this,mCurrentImage);
         }
-        float money = (float) ((CurrencyEditText)mTextMoney).getCleanDoubleValue();
+        float money = (float) ((CurrencyEditText)mTextMoney).getCleanDoubleValue() * mCurrentCategory.getRate();
         String note = mTextNote.getText().toString();
         Date date = mCalendar.getTime();
-        Transaction transaction = new Transaction.TransactionBuilder()
-                .setTransactionDate(date)
-                .setCategory(mCurrentCategory)
-                .setWallet(mCurrentWallet)
-                .setCurrencyCode(mCurrentWallet.getCurrencyCode())
-                .setMoneyTrading(money)
-                .setTransactionNote(note)
-                .setMediaUri(mMediaUri)
-                .build();
+        TransactionEntity transaction = new TransactionEntity();
+        transaction.setTransactionTime(new MTDate(date));
+        transaction.setCategoryId(mCurrentCategory.getCategoryId());
+        transaction.setWalletId(mCurrentWallet.getWalletId());
+        transaction.setTransactionAmount(money);
+        transaction.setTransactionNote(note);
+        transaction.setMediaUri(mMediaUri);
 
 
         TransactionsManager.getInstance(this).addTransaction(transaction);
@@ -260,7 +261,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(resultCode == RESULT_OK) {
             if(requestCode == REQUEST_CODE_CATEGORY) {
-                mCurrentCategory =(Category) data.getSerializableExtra(SelectCategoryActivity.EXTRA_CATEGORY);
+                mCurrentCategory =(CategoryEntity) data.getSerializableExtra(SelectCategoryActivity.EXTRA_CATEGORY);
                 updateUI();
             }
             else if(requestCode == REQUEST_CODE_GALLERY) {
@@ -296,12 +297,12 @@ public class AddTransactionActivity extends AppCompatActivity {
 
     private void updateUI() {
         if(mCurrentCategory != null) {
-            mTextCategory.setText(mCurrentCategory.getCategory());
+            mTextCategory.setText(mCurrentCategory.getCategoryName());
             ImageView imageView = findViewById(R.id.image_transaction_category);
             // lấy ảnh từ asset
             String base_path = "category/";
             try {
-                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + mCurrentCategory.getIcon()),null);
+                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + mCurrentCategory.getCategoryIcon()),null);
                 imageView.setImageDrawable(img);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -309,7 +310,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         }
 
         if(mCurrentWallet != null) {
-            mTextWallet.setText(mCurrentWallet.getWalletName());
+            mTextWallet.setText(mCurrentWallet.getName());
         }
     }
 }

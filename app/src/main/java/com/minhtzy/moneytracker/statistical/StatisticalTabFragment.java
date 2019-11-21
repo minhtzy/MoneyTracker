@@ -26,6 +26,9 @@ import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.CategoriesDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.github.mikephil.charting.animation.Easing;
@@ -232,12 +235,12 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
   private void addDataSet(PieChart pieChart) {
     ArrayList<PieEntry> yEntrys = new ArrayList<>();
     ArrayList<String> xEntrys = new ArrayList<>();
-    List<Transaction> listChi = new ArrayList<Transaction>();
-    List<Transaction> listThu = new ArrayList<Transaction>();
-    List<Transaction> listVayNo = new ArrayList<Transaction>();
-    Map<String, List<Transaction>> mapAll = getMapData();
+    List<TransactionEntity> listChi = new ArrayList<TransactionEntity>();
+    List<TransactionEntity> listThu = new ArrayList<TransactionEntity>();
+    List<TransactionEntity> listVayNo = new ArrayList<TransactionEntity>();
+    Map<String, List<TransactionEntity>> mapAll = getMapData();
     int sum = 0;
-    List<Category> listCat = categoriesDAOImpl.getAllCategory();
+    List<CategoryEntity> listCat = categoriesDAOImpl.getAllCategory();
     if(listCat != null && listCat.size() > 0) {
       actionCalucator(listCat);
     }
@@ -288,10 +291,10 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
   }
 
   public void methodMChartChi(long item) {
-    List<Transaction> listChi = new ArrayList<Transaction>();
-    List<Transaction> listThu = new ArrayList<Transaction>();
-    List<Transaction> listVayNo = new ArrayList<Transaction>();
-    Map<String, List<Transaction>> mapAll = getMapData();
+    List<TransactionEntity> listChi = new ArrayList<TransactionEntity>();
+    List<TransactionEntity> listThu = new ArrayList<TransactionEntity>();
+    List<TransactionEntity> listVayNo = new ArrayList<TransactionEntity>();
+    Map<String, List<TransactionEntity>> mapAll = getMapData();
 
     if ( !mapAll.isEmpty() && mapAll != null) {
       listChi = mapAll.get("Khoản Chi");
@@ -343,7 +346,7 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     s.setSpan(new RelativeSizeSpan(1.7f), 0, 18, 0);
     return s;
   }
-  private void setData(int count, float range, List<Transaction> listTrans) {
+  private void setData(int count, float range, List<TransactionEntity> listTrans) {
     float mult = range;
     ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
     entries = setPieEntryThongKeKhoanChi(listTrans);
@@ -418,24 +421,24 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
     float SUM_FAMILY = 0; // gia đình
     float SUM_EDUCATION  = 0; //Giáo dục
   }
-  public static  void actionCalucator(List<Category> listCat) {
+  public static  void actionCalucator(List<CategoryEntity> listCat) {
     initSum();
-    for (Category cat : listCat ) {
+    for (CategoryEntity cat : listCat ) {
       // Lấy ra danh sách giao dịch theo loại
-      List<Transaction> listTran = transactionsDAOImpl.getStatisticalByCategory(cat.getId(), cat.getType().getValue());
+      List<TransactionEntity> listTran = transactionsDAOImpl.getStatisticalByCategory(cat.getCategoryId(), cat.getCategoryType().getValue());
       if(listTran != null && listTran.size() > 0) {
 
-        for( Transaction tran: listTran ) {
-          if(tran.getCategory().getType().getValue()== 1) {
-
-          } else if (tran.getCategory().getType().getValue() == 2) {
-
-          } else if (tran.getCategory().getType().getValue() == 3) {
-
-          } else if (tran.getCategory().getType().getValue() == 4) {
-
-          }
-        }
+//        for( TransactionEntity tran: listTran ) {
+//          if(tran.getCategory().getType().getValue()== 1) {
+//
+//          } else if (tran.getCategory().getType().getValue() == 2) {
+//
+//          } else if (tran.getCategory().getType().getValue() == 3) {
+//
+//          } else if (tran.getCategory().getType().getValue() == 4) {
+//
+//          }
+//        }
       }
     }
   }
@@ -511,155 +514,41 @@ public class StatisticalTabFragment extends Fragment implements OnChartValueSele
   /* Vẽ biểu đồ cột - end */
 
   /* xứ lý logic */
-  private Map<String, List<Transaction>> getMapData() {
-    Wallet wallet = WalletsManager.getInstance(getContext()).getCurrentWallet();
-    Map<String, List<Transaction>> mapAll = new HashMap<String, List<Transaction>>();
-    List<Transaction> listAll = transactionsDAOImpl.getAllTransactionByWalletId(wallet.getWalletId());
-    List<Transaction> listChi = new ArrayList<Transaction>();
-    List<Transaction> listThu = new ArrayList<Transaction>();
-    List<Transaction> listVayNo = new ArrayList<Transaction>();
-    for (Transaction trans : listAll) {
-      Category cat = trans.getCategory();
-      int type = cat.getType().getValue();
-      if (type == 1) {
-        listChi.add(trans);
-      } else if (type == 2 ) {
-        listThu.add(trans);
-      } else if (type == 3 ) {
-        listVayNo.add(trans);
-      }
-    }
+  private Map<String, List<TransactionEntity>> getMapData() {
+    WalletEntity wallet = WalletsManager.getInstance(getContext()).getCurrentWallet();
+    Map<String, List<TransactionEntity>> mapAll = new HashMap<>();
+    List<TransactionEntity> listAll = transactionsDAOImpl.getAllTransactionByWalletId(wallet.getWalletId());
+    List<TransactionEntity> listChi = new ArrayList<TransactionEntity>();
+    List<TransactionEntity> listThu = new ArrayList<TransactionEntity>();
+    List<TransactionEntity> listVayNo = new ArrayList<TransactionEntity>();
+//    for (TransactionEntity trans : listAll) {
+//      Category cat = trans.getCategory();
+//      int type = cat.getType().getValue();
+//      if (type == 1) {
+//        listChi.add(trans);
+//      } else if (type == 2 ) {
+//        listThu.add(trans);
+//      } else if (type == 3 ) {
+//        listVayNo.add(trans);
+//      }
+//    }
     mapAll.put("Khoản Chi", listChi);
     mapAll.put("Khoản Thu", listThu);
     mapAll.put("Cho Vay/Nợ", listVayNo);
     return mapAll;
   }
 
-  private Map<String, List<Category>> thongKeKhoanChi(List<Transaction> listChi) {
-    Map<String, List<Category>> mapChi = new HashMap<>();
-    List<Category> anUong = new ArrayList<Category>();
-    List<Category> hoaDonTienIch = new ArrayList<Category>();
-    List<Category> diChuyen = new ArrayList<Category>();
-    List<Category> muaSam = new ArrayList<Category>();
-    List<Category> giaTri = new ArrayList<Category>();
-    List<Category> sucKhoe = new ArrayList<Category>();
-    List<Category> quaTang = new ArrayList<Category>();
-    List<Category> giaDinh = new ArrayList<Category>();
-    List<Category> khac = new ArrayList<Category>();
-    for (Transaction trans: listChi) {
-      Category cat = trans.getCategory();
-      int parentId = cat.getParentCategory().getId();
-      if (parentId == 1) {
-        anUong.add(cat);
-      } else if (parentId == 5) {
-        hoaDonTienIch.add(cat);
-      } else if (parentId == 13) {
-        diChuyen.add(cat);
-      } else if (parentId == 18) {
-        muaSam.add(cat);
-      } else if (parentId == 24) {
-        giaTri.add(cat);
-      } else if (parentId == 28) {
-        sucKhoe.add(cat);
-      } else if (parentId == 33) {
-        quaTang.add(cat);
-      } else if (parentId == 37) {
-        giaDinh.add(cat);
-      } else {
-        khac.add(cat);
-      }
-    }
-
-    mapChi.put("Ăn uống", anUong);
-    mapChi.put("Hóa đơn & Tiện ích", hoaDonTienIch);
-    mapChi.put("Di chuyển", diChuyen);
-    mapChi.put("Mua sắm", muaSam);
-    mapChi.put("Giải trí", giaTri);
-    mapChi.put("Sức khỏe", sucKhoe);
-    mapChi.put("Quà tặng & Quyên góp", quaTang);
-    mapChi.put("Gia đình", giaDinh);
-    mapChi.put("Khác", khac);
+  private Map<String, List<CategoryEntity>> thongKeKhoanChi(List<TransactionEntity> listChi) {
+    Map<String, List<CategoryEntity>> mapChi = new HashMap<String, List<CategoryEntity>>();
     return mapChi;
   }
 
-  private ArrayList<PieEntry> setPieEntryThongKeKhoanChi (List<Transaction> listChi) {
+  private ArrayList<PieEntry> setPieEntryThongKeKhoanChi (List<TransactionEntity> listChi) {
     ArrayList<PieEntry> entries = new ArrayList<>();
-    List<Category> anUong = new ArrayList<Category>();
-    List<Category> hoaDonTienIch = new ArrayList<Category>();
-    List<Category> diChuyen = new ArrayList<Category>();
-    List<Category> muaSam = new ArrayList<Category>();
-    List<Category> giaTri = new ArrayList<Category>();
-    List<Category> sucKhoe = new ArrayList<Category>();
-    List<Category> quaTang = new ArrayList<Category>();
-    List<Category> giaDinh = new ArrayList<Category>();
-    List<Category> khac = new ArrayList<Category>();
-
-    for (Transaction trans: listChi) {
-      Category cat = trans.getCategory();
-      int parentId = cat.getParentCategory().getId();
-      if (parentId == 1) {
-        anUong.add(cat);
-      } else if (parentId == 5) {
-        hoaDonTienIch.add(cat);
-      } else if (parentId == 13) {
-        diChuyen.add(cat);
-      } else if (parentId == 18) {
-        muaSam.add(cat);
-      } else if (parentId == 24) {
-        giaTri.add(cat);
-      } else if (parentId == 28) {
-        sucKhoe.add(cat);
-      } else if (parentId == 33) {
-        quaTang.add(cat);
-      } else if (parentId == 37) {
-        giaDinh.add(cat);
-      } else {
-        khac.add(cat);
-      }
-    }
-
-    long sum = anUong.size() + hoaDonTienIch.size()+ diChuyen.size()+ muaSam.size()
-            + giaTri.size()+ sucKhoe.size()+ quaTang.size()+ giaDinh.size()+ khac.size();
-    float anUongPT = phanTram(sum, anUong);
-    if (anUongPT > 0) {
-      entries.add(new PieEntry(anUongPT, "Ăn uống"));
-    }
-    float hoaDonTienIchPT = phanTram(sum, hoaDonTienIch);
-    if (hoaDonTienIchPT > 0) {
-      entries.add(new PieEntry(hoaDonTienIchPT, "Hóa đơn & Tiện ích"));
-    }
-    float diChuyenPT = phanTram(sum, diChuyen);
-    if (diChuyenPT > 0) {
-      entries.add(new PieEntry(diChuyenPT, "Di chuyển"));
-    }
-    float muaSamPT = phanTram(sum, muaSam);
-    if (muaSamPT > 0) {
-      entries.add(new PieEntry(muaSamPT, "Mua sắm"));
-    }
-    float giaTriPT = phanTram(sum, giaTri);
-    if (giaTriPT > 0) {
-      entries.add(new PieEntry(giaTriPT, "Giải trí"));
-    }
-    float sucKhoePT = phanTram(sum, sucKhoe);
-    if (sucKhoePT > 0) {
-      entries.add(new PieEntry(sucKhoePT, "Sức khỏe"));
-    }
-    float quaTangPT = phanTram(sum, quaTang);
-    if (quaTangPT > 0) {
-      entries.add(new PieEntry(quaTangPT, "Quà tặng & Quyên góp"));
-    }
-    float giaDinhPT = phanTram(sum, giaDinh);
-    if (giaDinhPT > 0) {
-      entries.add(new PieEntry(giaDinhPT, "Gia đình"));
-    }
-    float khacPT = phanTram(sum, khac);
-    if (khacPT > 0) {
-      entries.add(new PieEntry(khacPT, "Khác"));
-    }
     return entries;
   }
 
-  private float phanTram(long sum, List<Category> list) {
+  private float phanTram(long sum, List<CategoryEntity> list) {
     float phanTram = 0;
     if (!list.isEmpty() && list != null) {
       int size = list.size();

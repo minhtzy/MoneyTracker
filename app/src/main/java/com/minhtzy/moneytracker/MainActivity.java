@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.setting.Setting;
 
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
@@ -170,7 +171,7 @@ public class MainActivity extends AppCompatActivity
                                 long milisStart = mDateStart.getTime();
                                 long milisEnd = mDateEnd.getTime();
 //                                Toast.makeText(MainActivity.this, "" + milis, Toast.LENGTH_LONG).show();
-                                List<Transaction> listtrans = new ArrayList<>();
+                                List<TransactionEntity> listtrans = new ArrayList<>();
 
                                 TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
                                 List list = trans.getAllTransactionDataByDate(milisStart,milisEnd);
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity
                                 long milisStart = mDateStart.getTime();
                                 long milisEnd = mDateEnd.getTime();
 //                                Toast.makeText(MainActivity.this, "" + milis, Toast.LENGTH_LONG).show();
-                                List<Transaction> listtrans = new ArrayList<>();
+                                List<TransactionEntity> listtrans = new ArrayList<>();
 
                                 TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
                                 List list = trans.getAllTransactionDataByDate(milisStart, milisEnd);
@@ -302,7 +303,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
                     mDialog.dismiss();
-                    List<Transaction> listtrans = new ArrayList<>();
+                    List<TransactionEntity> listtrans = new ArrayList<>();
 
                     TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
                     List list = trans.getAllTransactionDataByType(2);
@@ -316,7 +317,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
                     mDialog.dismiss();
-                    List<Transaction> listtrans = new ArrayList<>();
+                    List<TransactionEntity> listtrans = new ArrayList<>();
 
                     TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
                     List list = trans.getAllTransactionDataByType(4);
@@ -330,7 +331,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
                     mDialog.dismiss();
-                    List<Transaction> listtrans = new ArrayList<>();
+                    List<TransactionEntity> listtrans = new ArrayList<>();
 
                     TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
                     List list = trans.getAllTransactionDataByType(1);
@@ -344,7 +345,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
                     mDialog.dismiss();
-                    List<Transaction> listtrans = new ArrayList<>();
+                    List<TransactionEntity> listtrans = new ArrayList<>();
 
                     TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
                     List list = trans.getAllTransactionDataByType(3);

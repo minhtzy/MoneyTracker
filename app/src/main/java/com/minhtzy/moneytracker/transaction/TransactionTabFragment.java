@@ -24,6 +24,8 @@ import com.minhtzy.moneytracker.adapter.TransactionPagerAdapter;
 import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
 
@@ -46,9 +48,9 @@ public class TransactionTabFragment extends Fragment {
 
     private FloatingActionButton mFabAddTransaction;
     List<Pair<String, Fragment>> mTabFragment;
-    List<Transaction> mListTransaction;
+    List<TransactionEntity> mListTransaction;
     ITransactionsDAO iTransactionsDAO;
-    Wallet mCurrentWallet = null;
+    WalletEntity mCurrentWallet = null;
 
     DateUtils dateUtils;
 
@@ -154,7 +156,7 @@ public class TransactionTabFragment extends Fragment {
     }
 
     private void addTab(DateRange dateRange) {
-        List<Transaction> transactions = filterTransactions(dateRange, mListTransaction);
+        List<TransactionEntity> transactions = filterTransactions(dateRange, mListTransaction);
 
         String title = getTitle(dateRange.getDateFrom().toDate());
 //        boolean isNeedAdd = true;
@@ -201,10 +203,10 @@ public class TransactionTabFragment extends Fragment {
         return title;
     }
 
-    private List<Transaction> filterTransactions(DateRange dateRange, List<Transaction> transactions) {
-        List<Transaction> filter = new ArrayList<>();
-        for (Transaction t : transactions) {
-            if (dateUtils.isDateRangeContainDate(dateRange, t.getTransactionDate())) {
+    private List<TransactionEntity> filterTransactions(DateRange dateRange, List<TransactionEntity> transactions) {
+        List<TransactionEntity> filter = new ArrayList<>();
+        for (TransactionEntity t : transactions) {
+            if (dateUtils.isDateRangeContainDate(dateRange, t.getTransactionTime())) {
                 filter.add(t);
             }
         }
@@ -218,7 +220,7 @@ public class TransactionTabFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FAB_ADD_TRANSACTION_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                Transaction transaction = (Transaction) data.getSerializableExtra(com.minhtzy.moneytracker.transaction.AddTransactionActivity.EXTRA_TRANSACTION);
+                TransactionEntity transaction = (TransactionEntity) data.getSerializableExtra(com.minhtzy.moneytracker.transaction.AddTransactionActivity.EXTRA_TRANSACTION);
                 mListTransaction.add(transaction);
             }
         }

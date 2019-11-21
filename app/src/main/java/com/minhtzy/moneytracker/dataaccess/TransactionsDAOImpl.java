@@ -42,6 +42,10 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
 
     public boolean insertTransaction(TransactionEntity transaction) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if(transaction.getTransactionId().isEmpty())
+        {
+            transaction.setTransactionId(UUID.randomUUID().toString());
+        }
         transaction.setTimestamp(com.google.firebase.Timestamp.now().toDate().getTime());
         ContentValues values = transaction.getContentValues();
         long inserted = db.insert(TABLE_TRANSACTION_NAME, TransactionEntity.LOCATION_ID, values);
@@ -229,7 +233,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
         return list_result;
     }
 
-    public List<TransactionEntity> getStatisticalByCategoryInRange(long wallet_id ,int categoryId , DateRange dateRange) {
+    public List<TransactionEntity> getStatisticalByCategoryInRange(String wallet_id ,int categoryId , DateRange dateRange) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String sql = "SELECT "
                 + " tblt.trading AS trading "
@@ -254,7 +258,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
     }
 
 
-    public List<TransactionEntity> getAllTransactionByCategoryInRange(long wallet_id ,int categoryId , DateRange dateRange) {
+    public List<TransactionEntity> getAllTransactionByCategoryInRange(String wallet_id ,int categoryId , DateRange dateRange) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String sql = "SELECT *"
                 + " FROM tbl_transactions tblt "

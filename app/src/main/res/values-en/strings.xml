@@ -127,8 +127,10 @@
     <string name="edit_transaction_mark_remove_message">remove message</string>
     <string name="sync">Sync</string>
     <string name="edit_transaction">Edit Transaction</string>
-    <string name="sync_in_progress">Đang đồng bộ</string>
+    <string name="sync_in_progress">Syncing</string>
     <string name="try_again">Thử lại</string>
     <string name="forgor_password_name">Forgot Password</string>
     <string name="edit_wallet">Edit Wallet</string>
+    <string name="hint_password">Enter your password</string>
+    <string name="hint_username">Enter your password</string>
 </resources>

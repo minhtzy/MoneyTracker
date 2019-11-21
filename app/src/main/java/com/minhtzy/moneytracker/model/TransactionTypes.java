@@ -13,9 +13,21 @@ public enum TransactionTypes {
     }
 
     public static TransactionTypes from(int value) {
-        for(TransactionTypes type : TransactionTypes.values()) {
+        for(TransactionTypes type : values()) {
             if(type.value == value) return type;
         }
         return null;
+    }
+
+    public float getRate() {
+        if(value == DEBIT.value || value == INCOME.value) {
+            return 1;
+        }
+        else if(value == LOAN.value || value == EXPENSE.value) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
     }
 }

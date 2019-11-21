@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
 
 public class EditWalletActivity extends AppCompatActivity {
@@ -14,7 +15,7 @@ public class EditWalletActivity extends AppCompatActivity {
     public static final String EXTRA_WALLET = "com.minhtzy.moneytracker.extra.wallet";
     private  EditText txtTen;
     CurrencyEditText txtSotien;
-    Wallet wallet;
+    WalletEntity wallet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,14 +29,14 @@ public class EditWalletActivity extends AppCompatActivity {
     private void addControls() {
         txtTen = (EditText)findViewById(R.id.txtTen);
         txtSotien = (CurrencyEditText)findViewById(R.id.txtSotien);
-        wallet = (Wallet) getIntent().getSerializableExtra(EXTRA_WALLET);
+        wallet = (WalletEntity) getIntent().getSerializableExtra(EXTRA_WALLET);
         updateUI();
     }
 
     private void updateUI() {
         if(wallet != null)
         {
-            txtTen.setText(wallet.getWalletName());
+            txtTen.setText(wallet.getName());
             txtSotien.setText(String.valueOf(wallet.getCurrentBalance()));
         }
     }

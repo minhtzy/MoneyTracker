@@ -176,7 +176,6 @@ public class AddBudgetActivity extends AppCompatActivity {
         budget.setStatus("STARTED");
         IBudgetDAO budgetDAO = new BudgetDAOImpl(this);
         budgetDAO.insertBudget(budget);
-        budgetDAO.updateBudgetSpent(budget);
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_BUDGET,budget);

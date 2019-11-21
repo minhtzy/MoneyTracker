@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.adapter.TransactionListAdapter;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView;
 
@@ -21,8 +22,8 @@ public class ViewTransactionListActivity extends AppCompatActivity {
     private PinnedHeaderListView mLViewTransaction;
     private TransactionListAdapter mAdapter;
     private LinearLayout mBlankLayout;
-    List<Transaction> mItems;
-    List<Pair<Date, List<Transaction>>> mFilterItems;
+    List<TransactionEntity> mItems;
+    List<Pair<Date, List<TransactionEntity>>> mFilterItems;
 
     public static final String BUNDLE_LIST_ITEM = "TransactionListFragment.bundle.list_items";
 
@@ -33,7 +34,7 @@ public class ViewTransactionListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (getIntent() != null) {
-            mItems = (ArrayList<Transaction>) getIntent().getSerializableExtra(BUNDLE_LIST_ITEM);
+            mItems = (ArrayList<TransactionEntity>) getIntent().getSerializableExtra(BUNDLE_LIST_ITEM);
         } else {
             mItems = new ArrayList<>();
         }
@@ -84,19 +85,19 @@ public class ViewTransactionListActivity extends AppCompatActivity {
         finish();
     }
 
-    public void add(Transaction transaction) {
+    public void add(TransactionEntity transaction) {
         mItems.add(transaction);
     }
 
-    private void filterPairTransactions(List<Transaction> transactions) {
-        for (Transaction transaction : transactions) {
+    private void filterPairTransactions(List<TransactionEntity> transactions) {
+        for (TransactionEntity transaction : transactions) {
             filterPairTransaction(transaction);
         }
     }
 
-    private void filterPairTransaction(Transaction transaction) {
+    private void filterPairTransaction(TransactionEntity transaction) {
         int index = -1;
-        MTDate date = new MTDate(transaction.getTransactionDate());
+        MTDate date = new MTDate(transaction.getTransactionTime());
         for (int i = 0; i < mFilterItems.size(); ++i) {
             MTDate dateI = new MTDate(mFilterItems.get(i).first);
             if (compareDate(date, dateI) == 0) {
@@ -118,9 +119,9 @@ public class ViewTransactionListActivity extends AppCompatActivity {
                     break;
                 }
             }
-            ArrayList<Transaction> trans = new ArrayList<>();
+            ArrayList<TransactionEntity> trans = new ArrayList<>();
             trans.add(transaction);
-            mFilterItems.add(index, new Pair<Date, List<Transaction>>(transaction.getTransactionDate(), trans));
+            mFilterItems.add(index, new Pair<Date, List<TransactionEntity>>(transaction.getTransactionTime(), trans));
         }
     }
 

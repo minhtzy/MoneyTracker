@@ -91,12 +91,12 @@ public class EditTransactionActivity extends AppCompatActivity {
         oldTransaction= (TransactionEntity) getIntent().getSerializableExtra(EXTRA_TRANSACTION);
         if(oldTransaction != null) {
             mCurrentWallet = WalletsManager.getInstance(this).getWalletById(oldTransaction.getWalletId());
-            mCurrentCategory = CategoryManager.getInstance(this).getCategoryById(oldTransaction.getCategoryId());
+            mCurrentCategory = CategoryManager.getInstance().getCategoryById(oldTransaction.getCategoryId());
             updateUI();
             updateImagePreView(oldTransaction.getMediaUri());
             mTextMoney.setText(String.valueOf(oldTransaction.getTransactionAmount()));
             mTextNote.setText(oldTransaction.getTransactionNote());
-            mCalendar.setTime(oldTransaction.getTransactionTime().toDate());
+            mCalendar.setTime(oldTransaction.getTransactionTime());
         }
     }
 
@@ -199,7 +199,7 @@ public class EditTransactionActivity extends AppCompatActivity {
         if (mCurrentImage != null) {
             mMediaUri = BitmapUtils.saveImage(this, mCurrentImage);
         }
-        float money = (float) ((CurrencyEditText) mTextMoney).getCleanDoubleValue();
+        float money = (float) ((CurrencyEditText) mTextMoney).getCleanDoubleValue() * mCurrentCategory.getRate();
         String note = mTextNote.getText().toString();
         Date date = mCalendar.getTime();
         TransactionEntity entity = new TransactionEntity();
@@ -284,7 +284,7 @@ public class EditTransactionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE_CATEGORY) {
-                mCurrentCategory = (Category) data.getSerializableExtra(SelectCategoryActivity.EXTRA_CATEGORY);
+                mCurrentCategory = (CategoryEntity) data.getSerializableExtra(SelectCategoryActivity.EXTRA_CATEGORY);
                 updateUI();
             } else if (requestCode == REQUEST_CODE_GALLERY) {
                 if (data != null) {
@@ -330,12 +330,12 @@ public class EditTransactionActivity extends AppCompatActivity {
     }
     private void updateUI() {
         if (mCurrentCategory != null) {
-            mTextCategory.setText(mCurrentCategory.getCategory());
+            mTextCategory.setText(mCurrentCategory.getCategoryName());
             ImageView imageView = findViewById(R.id.image_transaction_category);
             // lấy ảnh từ asset
             String base_path = "category/";
             try {
-                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + mCurrentCategory.getIcon()), null);
+                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + mCurrentCategory.getCategoryIcon()), null);
                 imageView.setImageDrawable(img);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -343,7 +343,7 @@ public class EditTransactionActivity extends AppCompatActivity {
         }
 
         if (mCurrentWallet != null) {
-            mTextWallet.setText(mCurrentWallet.getWalletName());
+            mTextWallet.setText(mCurrentWallet.getName());
         }
     }
 }

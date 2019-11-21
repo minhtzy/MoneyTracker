@@ -49,7 +49,7 @@ public class CategoryEntity extends EntityBase implements Serializable {
         setInt(CATEGORY_TYPE,categoryType.getValue());
     }
 
-    public void getCategoryName(String categoryName) {
+    public void setCategoryName(String categoryName) {
         setString(CATEGORY_NAME,categoryName);
     }
 
@@ -59,5 +59,9 @@ public class CategoryEntity extends EntityBase implements Serializable {
 
     public void getParentId(int parentId) {
         setInt(PARENT_ID,parentId);
+    }
+
+    public float getRate() {
+        return getCategoryType().getRate();
     }
 }

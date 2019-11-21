@@ -23,6 +23,7 @@ import com.minhtzy.moneytracker.R;
 
 import com.minhtzy.moneytracker.adapter.TransactionListAdapter;
 import com.minhtzy.moneytracker.common.Constants;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView;
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
@@ -38,18 +39,18 @@ public class TransactionListSearch extends Fragment {
     private PinnedHeaderListView mLViewTransaction;
     private TransactionListAdapter mAdapter;
     private LinearLayout mBlankLayout;
-    List<Transaction> mItems;
-    List<Pair<Date,List<Transaction>>> mFilterItems;
+    List<TransactionEntity> mItems;
+    List<Pair<Date,List<TransactionEntity>>> mFilterItems;
     View headerView;
 
     private static final String BUNDLE_LIST_ITEM = "TransactionListFragment.bundle.list_items";
 
-    public static TransactionListSearch newInstance(List<Transaction> items) {
+    public static TransactionListSearch newInstance(List<TransactionEntity> items) {
         Log.d(LOG_TAG,"create new instance "+ items.size());
         TransactionListSearch fragment = new TransactionListSearch();
         fragment.setItems(items);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(BUNDLE_LIST_ITEM,(ArrayList<Transaction>)items);
+        bundle.putSerializable(BUNDLE_LIST_ITEM,(ArrayList<TransactionEntity>)items);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -59,7 +60,7 @@ public class TransactionListSearch extends Fragment {
 
         if(mItems == null){
             if(savedInstanceState != null) {
-                mItems =(ArrayList<Transaction>) savedInstanceState.getSerializable(BUNDLE_LIST_ITEM);
+                mItems =(ArrayList<TransactionEntity>) savedInstanceState.getSerializable(BUNDLE_LIST_ITEM);
             }
             else {
                 mItems = new ArrayList<>();
@@ -80,7 +81,7 @@ public class TransactionListSearch extends Fragment {
         mLViewTransaction.setOnItemClickListener(new PinnedHeaderListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int section, int position, long id) {
-                Transaction transaction = (Transaction) mAdapter.getItem(section,position);
+                TransactionEntity transaction = (TransactionEntity) mAdapter.getItem(section,position);
                 onClickItem(transaction);
             }
 
@@ -97,30 +98,30 @@ public class TransactionListSearch extends Fragment {
         return view;
     }
 
-    private void onClickItem(Transaction transaction) {
+    private void onClickItem(TransactionEntity transaction) {
         Intent data = new Intent(TransactionListSearch.this.getContext(), com.minhtzy.moneytracker.transaction.ViewTransactionDetailActivity.class);
         data.putExtra(com.minhtzy.moneytracker.transaction.ViewTransactionDetailActivity.EXTRA_TRANSACTION,transaction);
         startActivity(data);
     }
 
-    public void setItems(List<Transaction> items) {
+    public void setItems(List<TransactionEntity> items) {
         mItems = items;
     }
 
-    public void add(Transaction transaction) {
+    public void add(TransactionEntity transaction) {
         mItems.add(transaction);
         new loadTransactions(getActivity()).execute();
     }
 
-    private void filterPairTransactions(List<Transaction> transactions) {
-        for(Transaction transaction : transactions) {
+    private void filterPairTransactions(List<TransactionEntity> transactions) {
+        for(TransactionEntity transaction : transactions) {
             filterPairTransaction(transaction);
         }
     }
 
-    private void filterPairTransaction(Transaction transaction) {
+    private void filterPairTransaction(TransactionEntity transaction) {
         int index = -1;
-        MTDate date = new MTDate(transaction.getTransactionDate());
+        MTDate date = new MTDate(transaction.getTransactionTime());
         for (int i = 0; i < mFilterItems.size(); ++i) {
             MTDate dateI = new MTDate(mFilterItems.get(i).first);
             if (compareDate(date,dateI) == 0) {
@@ -143,9 +144,9 @@ public class TransactionListSearch extends Fragment {
                     break;
                 }
             }
-            ArrayList<Transaction> trans = new ArrayList<>();
+            ArrayList<TransactionEntity> trans = new ArrayList<>();
             trans.add(transaction);
-            mFilterItems.add(index, new Pair<Date, List<Transaction>>(transaction.getTransactionDate(), trans));
+            mFilterItems.add(index, new Pair<Date, List<TransactionEntity>>(transaction.getTransactionTime(), trans));
         }
     }
 
@@ -224,28 +225,28 @@ public class TransactionListSearch extends Fragment {
     }
     private void updateHeaderView() {
 
-        float tienChi = 0;
-        float tienTieu = 0;
+        float income = 0;
+        float express= 0;
 
         if(headerView  != null) {
-            for(Transaction tran : mItems) {
-                if(tran.getMoneyTrading() < 0) {
-                    tienTieu += Math.abs(tran.getMoneyTrading());
+            for(TransactionEntity tran : mItems) {
+                if(tran.getTransactionAmount() < 0) {
+                    express += Math.abs(tran.getTransactionAmount());
                 }
                 else {
-                    tienChi += Math.abs(tran.getMoneyTrading());
+                    income += Math.abs(tran.getTransactionAmount());
                 }
             }
-            TextView textChi = headerView.findViewById(R.id.fts_so_du_dau);
-            TextView textTieu = headerView.findViewById(R.id.fts_so_du_cuoi);
-            TextView textConLai = headerView.findViewById(R.id.fts_con_lai);
 
-            String moneyChi = CurrencyUtils.formatVnCurrency(String.format(Constants.PRICE_FORMAT,tienChi));
-            String moneyTieu = CurrencyUtils.formatVnCurrency(String.format(Constants.PRICE_FORMAT,tienTieu));
-            String moneyConLai = CurrencyUtils.formatVnCurrency(String.format(Constants.PRICE_FORMAT,tienChi - tienTieu));
-            textChi.setText(moneyChi);
-            textTieu.setText(moneyTieu);
-            textConLai.setText(moneyConLai);
+            express = Math.abs(express);
+            income = Math.abs(income);
+            TextView textIncome = headerView.findViewById(R.id.fts_so_du_dau);
+            TextView textExpress = headerView.findViewById(R.id.fts_so_du_cuoi);
+            TextView textRemain = headerView.findViewById(R.id.fts_con_lai);
+
+            textIncome.setText(String.valueOf(income));
+            textExpress.setText(String.valueOf(express));
+            textRemain.setText(String.valueOf(income-express));
         }
     }
 

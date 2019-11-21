@@ -245,7 +245,7 @@ public class DetailBudgetActivity extends AppCompatActivity {
         }
 
         for(TransactionEntity t : transactions) {
-            long current = t.getTransactionTime().getMillis();
+            long current = t.getTransactionTime().getTime();
             int index = (int) Math.ceil((current - start) / 24 / 60/60/1000.0f);
             entries.get(index).setY(entries.get(index).getY() + (float)t.getTransactionAmount());
 

@@ -15,9 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.utilities.BitmapUtils;
+import com.minhtzy.moneytracker.utilities.CategoryManager;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 
 import java.io.IOException;
 
@@ -34,17 +39,17 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
 
     private static final int REQUEST_EDIT_TRANSACTION = 1;
 
-    private Transaction mTransaction;
+    private TransactionEntity mTransaction;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_transaction_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if(savedInstanceState != null) {
-            mTransaction = (Transaction) savedInstanceState.getSerializable(EXTRA_TRANSACTION);
+            mTransaction = (TransactionEntity) savedInstanceState.getSerializable(EXTRA_TRANSACTION);
         }
         else {
-            mTransaction = (Transaction) getIntent().getSerializableExtra(EXTRA_TRANSACTION);
+            mTransaction = (TransactionEntity) getIntent().getSerializableExtra(EXTRA_TRANSACTION);
         }
         addControls();
         updateUI();
@@ -127,27 +132,29 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
     private void updateUI() {
         if(mTransaction != null) {
             //Toast.makeText(this, "" + mTransaction.getTransactionDate(), Toast.LENGTH_LONG).show();
-            mTextCategory.setText(mTransaction.getCategory().getCategory());
+            CategoryEntity category = CategoryManager.getInstance().getCategoryById(mTransaction.getCategoryId());
+            WalletEntity wallet = WalletsManager.getInstance(this).getWalletById(mTransaction.getWalletId());
+            mTextCategory.setText(category.getCategoryName());
             ImageView imageView = findViewById(R.id.image_transaction_category);
             // lấy ảnh từ asset
             String base_path = "category/";
             try {
-                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + mTransaction.getCategory().getIcon()),null);
+                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + category.getCategoryIcon()),null);
                 imageView.setImageDrawable(img);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            mTextDate.setText(new MTDate(mTransaction.getTransactionDate()).toIsoDateShortTimeString());
-            mTextMoney.setText(String.valueOf(mTransaction.getMoneyTrading()));
-            if(mTransaction.getMoneyTradingWithSign() >= 0) {
+            mTextDate.setText(new MTDate(mTransaction.getTransactionTime()).toIsoDateShortTimeString());
+            mTextMoney.setText(String.valueOf(mTransaction.getTransactionAmount()));
+            if(mTransaction.getTransactionAmount() >= 0) {
                 mTextMoney.setTextColor(getResources().getColor(R.color.colorMoneyTradingPositive));
             }
             else {
                 mTextMoney.setTextColor(getResources().getColor(R.color.colorMoneyTradingNegative));
             }
             mTextNote.setText(mTransaction.getTransactionNote());
-            mTextWallet.setText(mTransaction.getWallet().getWalletName());
+            mTextWallet.setText(wallet.getName());
             if(mTransaction.getMediaUri() != null && !mTransaction.getMediaUri().isEmpty() ) {
                 updateImagePreView(mTransaction.getMediaUri());
             }
@@ -171,7 +178,7 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
             if(requestCode == REQUEST_EDIT_TRANSACTION) {
-                mTransaction = (Transaction) data.getSerializableExtra(EditTransactionActivity.EXTRA_TRANSACTION);
+                mTransaction = (TransactionEntity) data.getSerializableExtra(EditTransactionActivity.EXTRA_TRANSACTION);
                 updateUI();
             }
         }

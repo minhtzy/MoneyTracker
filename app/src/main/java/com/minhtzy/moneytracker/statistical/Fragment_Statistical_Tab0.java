@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.andexert.library.RippleView;
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
 
 import java.util.ArrayList;
 
@@ -33,7 +34,7 @@ public class Fragment_Statistical_Tab0 extends Fragment implements View.OnClickL
     TextView txtthu3,txtchi3,textViewLich3;
     TextView txtweekdays0,txtweekdays1,txtweekdays2,txtweekdays3;
     Context ct;
-    ArrayList<Transaction> chiHomNay;
+    ArrayList<TransactionEntity> chiHomNay;
     RippleView lnload;
     public Fragment_Statistical_Tab0(){
     }

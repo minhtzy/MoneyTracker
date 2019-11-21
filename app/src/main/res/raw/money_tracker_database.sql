@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS tbl_transactions(
     locationId TEXT,
     eventId integer,
     categoryId INTEGER NOT NULL,
-    walletId INTEGER NOT NULL,
+    walletId TEXT NOT NULL,
     timestamp INTEGER,
     CONSTRAINT fk_categories_id
     FOREIGN KEY (categoryId)
@@ -155,18 +155,10 @@ CREATE TABLE IF NOT EXISTS tbl_budgets (
     _id integer primary key  AUTOINCREMENT NOT NULL,
     name TEXT NOT NULL,
     categoryId integer NOT NULL,
-    walletId integer NOT NULL,
+    walletId TEXT NOT NULL,
     amount real NOT null,
     timeStart integer  NOT NULL,
     timeEnd integer  NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS tbl_splits_transactions
-(
-    _id integer primary key autoincrement,
-    tranId int not null,
-    cateId int not null,
-    trans_amount real not null
 );
 
 CREATE TABLE tbl_currency_format(

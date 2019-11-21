@@ -26,7 +26,7 @@ public class BudgetEntity extends EntityBase implements Serializable {
         super();
         setBudgetId(Constants.NOT_SET);
         setCategoryId(Constants.NOT_SET);
-        setWalletId(Constants.NOT_SET);
+        setWalletId(Constants.STR_NOT_SET);
     }
 
     public BudgetEntity(ContentValues contentValues) {
@@ -35,10 +35,10 @@ public class BudgetEntity extends EntityBase implements Serializable {
 
     public static BudgetEntity create()
     {
-        return create(Constants.NOT_SET,"",0,Constants.NOT_SET,Constants.NOT_SET,new DateRange(new MTDate(),new MTDate()));
+        return create(Constants.NOT_SET,"",0,Constants.NOT_SET,Constants.STR_NOT_SET,new DateRange(new MTDate(),new MTDate()));
     }
 
-    public static BudgetEntity create(int budgetId,String name,double amount,int categoryId,int walletId,DateRange period)
+    public static BudgetEntity create(int budgetId,String name,double amount,int categoryId,String walletId,DateRange period)
     {
         BudgetEntity budget = new BudgetEntity();
         budget.setBudgetId(budgetId);
@@ -70,8 +70,8 @@ public class BudgetEntity extends EntityBase implements Serializable {
         return getDouble(BUDGET_SPENT);
     }
 
-    public long getWalletId() {
-        return getLong(WALLET_ID);
+    public String getWalletId() {
+        return getString(WALLET_ID);
     }
 
     public DateRange getPeriod() {
@@ -117,8 +117,8 @@ public class BudgetEntity extends EntityBase implements Serializable {
         setDouble(BUDGET_AMOUNT,amount);
     }
 
-    public void setWalletId(long walletId) {
-        setLong(WALLET_ID,walletId);
+    public void setWalletId(String walletId) {
+        setString(WALLET_ID,walletId);
     }
 
     public void setPeriod(DateRange period) {
