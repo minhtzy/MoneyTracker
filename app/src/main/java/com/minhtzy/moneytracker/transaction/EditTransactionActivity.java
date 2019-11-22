@@ -40,6 +40,8 @@ import com.minhtzy.moneytracker.wallet.SelectCategoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.parceler.Parcels;
+
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
@@ -88,7 +90,7 @@ public class EditTransactionActivity extends AppCompatActivity {
     }
 
     private void loadTransaction() {
-        oldTransaction= (TransactionEntity) getIntent().getSerializableExtra(EXTRA_TRANSACTION);
+        oldTransaction= (TransactionEntity) Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_TRANSACTION));
         if(oldTransaction != null) {
             mCurrentWallet = WalletsManager.getInstance(this).getWalletById(oldTransaction.getWalletId());
             mCurrentCategory = CategoryManager.getInstance().getCategoryById(oldTransaction.getCategoryId());
@@ -214,7 +216,7 @@ public class EditTransactionActivity extends AppCompatActivity {
         TransactionsManager.getInstance(this).updateTransaction(entity,oldTransaction);
 
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_TRANSACTION, entity);
+        intent.putExtra(EXTRA_TRANSACTION, Parcels.wrap(entity));
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -284,7 +286,7 @@ public class EditTransactionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE_CATEGORY) {
-                mCurrentCategory = (CategoryEntity) data.getSerializableExtra(SelectCategoryActivity.EXTRA_CATEGORY);
+                mCurrentCategory = (CategoryEntity) Parcels.unwrap(data.getParcelableExtra(SelectCategoryActivity.EXTRA_CATEGORY));
                 updateUI();
             } else if (requestCode == REQUEST_CODE_GALLERY) {
                 if (data != null) {

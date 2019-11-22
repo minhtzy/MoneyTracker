@@ -31,6 +31,8 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.minhtzy.moneytracker.utilities.CategoryManager;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 
+import org.parceler.Parcels;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +65,7 @@ public class DetailBudgetActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         if (intent != null) {
-            mBudget = (BudgetEntity) intent.getSerializableExtra(EXTRA_BUDGET);
+            mBudget = (BudgetEntity) Parcels.unwrap(intent.getParcelableExtra(EXTRA_BUDGET));
         }
 
         addControls();

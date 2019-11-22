@@ -2,6 +2,8 @@ package com.minhtzy.moneytracker.entity;
 
 import com.minhtzy.moneytracker.model.MTDate;
 
+import org.parceler.Parcel;
+
 import java.util.Date;
 
 public interface ITransactionEntity {

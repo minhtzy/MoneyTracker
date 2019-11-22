@@ -18,6 +18,8 @@ import com.minhtzy.moneytracker.adapter.BudgetsAdapter;
 import com.minhtzy.moneytracker.dataaccess.BudgetDAOImpl;
 import com.minhtzy.moneytracker.entity.BudgetEntity;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -70,7 +72,7 @@ public class BudgetFragment extends Fragment implements OnBudgetItemClickListene
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_ADD_BUDGET) {
-                BudgetEntity budget = (BudgetEntity) data.getSerializableExtra(AddBudgetActivity.EXTRA_BUDGET);
+                BudgetEntity budget = (BudgetEntity) Parcels.unwrap(data.getParcelableExtra(AddBudgetActivity.EXTRA_BUDGET));
                 mBudgets.add(budget);
                 budgetsAdapter.notifyItemInserted(mBudgets.size());
             }
@@ -116,7 +118,7 @@ public class BudgetFragment extends Fragment implements OnBudgetItemClickListene
     public void onItemClick(View view, int position) {
         if (position >= 0 && position < mBudgets.size()) {
             Intent intent = new Intent(this.getActivity(), DetailBudgetActivity.class);
-            intent.putExtra(DetailBudgetActivity.EXTRA_BUDGET, mBudgets.get(position));
+            intent.putExtra(DetailBudgetActivity.EXTRA_BUDGET, Parcels.wrap(mBudgets.get(position)));
             startActivity(intent);
         }
     }

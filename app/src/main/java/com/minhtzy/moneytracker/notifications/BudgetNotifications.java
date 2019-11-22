@@ -15,6 +15,8 @@ import com.minhtzy.moneytracker.utilities.CurrencyUtils;
 import com.minhtzy.moneytracker.utilities.NotificationsUtils;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 
+import org.parceler.Parcels;
+
 public class BudgetNotifications {
 
     public static String CHANNEL_ID = "Budget_NotificationsChannel";
@@ -37,7 +39,7 @@ public class BudgetNotifications {
 
         // create pending intent to view detail budget detail
         Intent intent = new Intent(getContext(),DetailBudgetActivity.class);
-        intent.putExtra(DetailBudgetActivity.EXTRA_BUDGET,budget);
+        intent.putExtra(DetailBudgetActivity.EXTRA_BUDGET, Parcels.wrap(budget));
 
         PendingIntent pendingIntent = PendingIntent.getActivity(getContext(),0,intent,0);
 

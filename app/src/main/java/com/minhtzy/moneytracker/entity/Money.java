@@ -2,9 +2,12 @@ package com.minhtzy.moneytracker.entity;
 
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
 
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 
-public class Money implements Serializable {
+@Parcel
+public class Money {
     double value;
     CurrencyFormat format;
 

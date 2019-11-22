@@ -4,13 +4,17 @@ import android.content.ContentValues;
 
 import com.minhtzy.moneytracker.model.MTDate;
 
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class TransactionEntity extends EntityBase implements ITransactionEntity, Serializable {
+@Parcel
+public class TransactionEntity extends EntityBase implements ITransactionEntity {
 
     public TransactionEntity() {
         super();
+        setTransactionId("");
     }
 
     public TransactionEntity(ContentValues contentValues) {

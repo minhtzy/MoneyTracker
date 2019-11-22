@@ -6,9 +6,12 @@ import com.minhtzy.moneytracker.model.Constants;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
 
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 
-public class BudgetEntity extends EntityBase implements Serializable {
+@Parcel
+public class BudgetEntity extends EntityBase {
 
     public static final String BUDGET_ID = "_id";
     public static final String BUDGET_NAME = "name";

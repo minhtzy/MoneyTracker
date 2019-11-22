@@ -13,6 +13,8 @@ import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +36,7 @@ public class ViewTransactionListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (getIntent() != null) {
-            mItems = (ArrayList<TransactionEntity>) getIntent().getSerializableExtra(BUNDLE_LIST_ITEM);
+            mItems = (ArrayList<TransactionEntity>) Parcels.unwrap(getIntent().getParcelableExtra(BUNDLE_LIST_ITEM));
         } else {
             mItems = new ArrayList<>();
         }

@@ -1,8 +1,13 @@
 package com.minhtzy.moneytracker.entity;
 
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 
-public class SplitTransactionsEntity extends EntityBase implements Serializable {
+@Parcel
+public class SplitTransactionsEntity extends EntityBase {
     public static final String ST_ID = "_id";
     public static final String TRAN_ID = "tranId";
     public static final String CAT_ID = "cateId";

@@ -25,7 +25,7 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
 
     public static final String TABLE_CATEGORY_NAME = "tbl_categories";
 
-    MoneyTrackerDBHelper dbHelper;
+    private MoneyTrackerDBHelper dbHelper;
     public CategoriesDAOImpl(Context context) {
         dbHelper = new MoneyTrackerDBHelper(context);
     }
@@ -64,8 +64,7 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
         Cursor data = getCategoryDataById(id);
         if (data != null && data.getCount() > 0) {
             data.moveToFirst();
-            CategoryEntity category = getCategoryFromData(data);
-            return category;
+            return getCategoryFromData(data);
         } else {
             return null;
         }
@@ -104,8 +103,7 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
         String query = "SELECT * FROM " + TABLE_CATEGORY_NAME +
                 " WHERE " + CategoryEntity.PARENT_ID + " IS NULL " +
                 " AND " + CategoryEntity.CATEGORY_TYPE + " = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(type)});
-        return cursor;
+        return db.rawQuery(query, new String[]{String.valueOf(type)});
     }
 
     public List<CategoryEntity> getSubCategories(int parentId) {
@@ -126,8 +124,7 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_CATEGORY_NAME +
                 " WHERE " + CategoryEntity.PARENT_ID+ " = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(parentId)});
-        return cursor;
+        return db.rawQuery(query, new String[]{String.valueOf(parentId)});
     }
 
     private CategoryEntity getCategoryFromData(Cursor data) {
@@ -140,16 +137,14 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_CATEGORY_NAME +
                 " WHERE " + CategoryEntity.CATEGORY_ID + " = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
-        return cursor;
+        return db.rawQuery(query, new String[]{String.valueOf(id)});
     }
 
     private Cursor getAllCategoryData() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_CATEGORY_NAME +
                 " WHERE " + CategoryEntity.PARENT_ID + " IS NULL";
-        Cursor cursor = db.rawQuery(query, null);
-        return cursor;
+        return db.rawQuery(query, null);
     }
 
     public int getCountCategoryParent(int type) {

@@ -19,7 +19,7 @@
 
     <!--text in activity_add_wallet.xml-->
     <string name="name_wallet">Tên ví</string>
-    <string name="name_currency" translatable="false">Việt Nam Đồng</string>
+    <string name="name_currency" translatable="false">Chọn đơn vị tiền tệ</string>
     <string name="current_amount">Số tiền hiện tại</string>
     <string name="group">Nhóm</string>
     <string name="standard_group">Nhóm tiêu chuẩn</string>

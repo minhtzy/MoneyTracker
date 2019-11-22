@@ -42,13 +42,13 @@ public class CurrencyFormatAdapter extends ArrayAdapter<CurrencyFormat> {
 
         CurrencyFormat currencyFormat = this.objects.get(position);
         txtName.setText(currencyFormat.getCurrencyName());
-        txtSymbol.setText(String.format("%s - %s",currencyFormat.getPfxSymbol(),currencyFormat.getCurrencySymbol()));
+        txtSymbol.setText(String.format("%s - %s",currencyFormat.getCurrencySymbol(),currencyFormat.getCurrencyCode()));
 
 
         // lấy ảnh từ asset
         String base_path = "currency/";
         try {
-            Drawable img = Drawable.createFromStream(context.getAssets().open(String.format("%sic_currency_%s.png",base_path,currencyFormat.getCurrencySymbol().toLowerCase())), null);
+            Drawable img = Drawable.createFromStream(context.getAssets().open(String.format("%sic_currency_%s.png",base_path,currencyFormat.getCurrencyCode().toLowerCase())), null);
             imgLogo.setImageDrawable(img);
         } catch (IOException e) {
             imgLogo.setImageResource(R.drawable.ic_currency);

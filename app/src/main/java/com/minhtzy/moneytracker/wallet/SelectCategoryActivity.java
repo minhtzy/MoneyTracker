@@ -15,6 +15,8 @@ import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.adapter.CategoriesPagerAdapter;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
 
+import org.parceler.Parcels;
+
 
 public class SelectCategoryActivity extends AppCompatActivity implements ListCategoryFragment.OnCategoryFragmentListener {
 
@@ -50,7 +52,7 @@ public class SelectCategoryActivity extends AppCompatActivity implements ListCat
     @Override
     public void onItemClicked(CategoryEntity category) {
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_CATEGORY,category);
+        intent.putExtra(EXTRA_CATEGORY, Parcels.wrap(category));
         setResult(RESULT_OK,intent);
         finish();
     }

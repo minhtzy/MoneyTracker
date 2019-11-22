@@ -10,6 +10,8 @@ import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
 
+import org.parceler.Parcels;
+
 public class EditWalletActivity extends AppCompatActivity {
 
     public static final String EXTRA_WALLET = "com.minhtzy.moneytracker.extra.wallet";
@@ -29,7 +31,7 @@ public class EditWalletActivity extends AppCompatActivity {
     private void addControls() {
         txtTen = (EditText)findViewById(R.id.txtTen);
         txtSotien = (CurrencyEditText)findViewById(R.id.txtSotien);
-        wallet = (WalletEntity) getIntent().getSerializableExtra(EXTRA_WALLET);
+        wallet = (WalletEntity) Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_WALLET));
         updateUI();
     }
 

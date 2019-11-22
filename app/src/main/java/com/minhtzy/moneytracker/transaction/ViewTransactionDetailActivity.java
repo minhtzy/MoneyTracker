@@ -24,6 +24,8 @@ import com.minhtzy.moneytracker.utilities.CategoryManager;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 
+import org.parceler.Parcels;
+
 import java.io.IOException;
 
 public class ViewTransactionDetailActivity extends AppCompatActivity {
@@ -46,10 +48,10 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_transaction_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if(savedInstanceState != null) {
-            mTransaction = (TransactionEntity) savedInstanceState.getSerializable(EXTRA_TRANSACTION);
+            mTransaction = (TransactionEntity) Parcels.unwrap(savedInstanceState.getParcelable(EXTRA_TRANSACTION));
         }
         else {
-            mTransaction = (TransactionEntity) getIntent().getSerializableExtra(EXTRA_TRANSACTION);
+            mTransaction = (TransactionEntity) Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_TRANSACTION));
         }
         addControls();
         updateUI();
@@ -80,7 +82,7 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
     private void onClickedEdit() {
 
         Intent intent = new Intent(ViewTransactionDetailActivity.this,EditTransactionActivity.class);
-        intent.putExtra(EditTransactionActivity.EXTRA_TRANSACTION,mTransaction);
+        intent.putExtra(EditTransactionActivity.EXTRA_TRANSACTION, Parcels.wrap(mTransaction));
         startActivityForResult(intent,REQUEST_EDIT_TRANSACTION);
     }
 
@@ -178,7 +180,7 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
             if(requestCode == REQUEST_EDIT_TRANSACTION) {
-                mTransaction = (TransactionEntity) data.getSerializableExtra(EditTransactionActivity.EXTRA_TRANSACTION);
+                mTransaction = (TransactionEntity) Parcels.unwrap(data.getParcelableExtra(EditTransactionActivity.EXTRA_TRANSACTION));
                 updateUI();
             }
         }

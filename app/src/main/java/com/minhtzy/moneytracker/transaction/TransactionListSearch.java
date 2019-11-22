@@ -29,6 +29,8 @@ import com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView;
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
 
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,7 +62,7 @@ public class TransactionListSearch extends Fragment {
 
         if(mItems == null){
             if(savedInstanceState != null) {
-                mItems =(ArrayList<TransactionEntity>) savedInstanceState.getSerializable(BUNDLE_LIST_ITEM);
+                mItems =(ArrayList<TransactionEntity>) Parcels.unwrap(savedInstanceState.getParcelable(BUNDLE_LIST_ITEM));
             }
             else {
                 mItems = new ArrayList<>();
@@ -99,8 +101,8 @@ public class TransactionListSearch extends Fragment {
     }
 
     private void onClickItem(TransactionEntity transaction) {
-        Intent data = new Intent(TransactionListSearch.this.getContext(), com.minhtzy.moneytracker.transaction.ViewTransactionDetailActivity.class);
-        data.putExtra(com.minhtzy.moneytracker.transaction.ViewTransactionDetailActivity.EXTRA_TRANSACTION,transaction);
+        Intent data = new Intent(TransactionListSearch.this.getContext(), ViewTransactionDetailActivity.class);
+        data.putExtra(ViewTransactionDetailActivity.EXTRA_TRANSACTION, Parcels.wrap(transaction));
         startActivity(data);
     }
 

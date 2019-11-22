@@ -32,6 +32,8 @@ import com.minhtzy.moneytracker.wallet.SelectCategoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.parceler.Parcels;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -178,7 +180,7 @@ public class AddBudgetActivity extends AppCompatActivity {
         budgetDAO.insertBudget(budget);
 
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_BUDGET,budget);
+        intent.putExtra(EXTRA_BUDGET, Parcels.wrap(budget));
         setResult(RESULT_OK,intent);
         finish();
     }
@@ -253,7 +255,7 @@ public class AddBudgetActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE_CATEGORY) {
-                mCurrentCategory = (CategoryEntity) data.getSerializableExtra(SelectCategoryActivity.EXTRA_CATEGORY);
+                mCurrentCategory = (CategoryEntity) Parcels.unwrap(data.getParcelableExtra(SelectCategoryActivity.EXTRA_CATEGORY));
                 updateUI();
             }
             if(requestCode == REQUEST_CODE_TIME_RANGE) {

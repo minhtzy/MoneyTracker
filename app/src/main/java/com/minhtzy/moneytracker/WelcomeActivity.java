@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.minhtzy.moneytracker.account.LoginActivity;
 import com.minhtzy.moneytracker.utils.LanguageUtils;
 import com.minhtzy.moneytracker.utils.SharedPrefs;
+import com.minhtzy.moneytracker.wallet.AddWalletActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -38,21 +41,21 @@ public class WelcomeActivity extends AppCompatActivity {
         }, 1000);
     }
     private void startApplication() {
-//        // Kiểm tra nếu chưa đăng nhập thì đăng nhập
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        if(user == null) {
+        // Kiểm tra nếu chưa đăng nhập thì đăng nhập
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user == null) {
             Intent intent = new Intent(this,LoginActivity.class);
             startActivity(intent);
-//        }
-//        // Kiểm tra nếu chưa có ví
-//        else if(false) {
-//            Intent intent = new Intent(this,AddWalletActivity.class);
-//            startActivity(intent);
-//        }
-//        else {
-//            Intent intent = new Intent(this,MainActivity.class);
-//            startActivity(intent);
-//        }
+        }
+        // Kiểm tra nếu chưa có ví
+        else if(false) {
+            Intent intent = new Intent(this, AddWalletActivity.class);
+            startActivity(intent);
+        }
+        else {
+            Intent intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
+        }
         finish();
     }
 

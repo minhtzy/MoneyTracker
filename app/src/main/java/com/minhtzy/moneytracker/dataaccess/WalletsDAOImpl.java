@@ -26,7 +26,7 @@ public class WalletsDAOImpl implements IWalletsDAO {
 
     public static final String TABLE_WALLET_NAME = "tbl_wallets";
 
-    MoneyTrackerDBHelper dbHelper;
+    private MoneyTrackerDBHelper dbHelper;
     public WalletsDAOImpl(Context context) {
         dbHelper = new MoneyTrackerDBHelper(context);
     }
@@ -97,17 +97,15 @@ public class WalletsDAOImpl implements IWalletsDAO {
     private Cursor getWalletDataByUser(String userId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_WALLET_NAME +
-                " WHERE " + WalletEntity.WALLET_ID + " = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{userId});
-        return cursor;
+                " WHERE " + WalletEntity.USER_ID + " = ?";
+        return db.rawQuery(query, new String[]{userId});
     }
 
     private Cursor getWalletDataById(String id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_WALLET_NAME +
                 " WHERE " + WalletEntity.WALLET_ID + " = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
-        return cursor;
+        return db.rawQuery(query, new String[]{String.valueOf(id)});
     }
 
 

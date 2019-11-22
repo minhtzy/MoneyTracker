@@ -4,15 +4,17 @@ import android.content.ContentValues;
 
 import com.minhtzy.moneytracker.model.Constants;
 
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 import java.util.UUID;
 
+@Parcel
 public class WalletEntity
-        extends EntityBase implements Serializable {
+        extends EntityBase {
 
     public static final String WALLET_ID = "_id";
     public static final String NAME = "name";
-    public static final String INITIAL_BALANCE = "initBalance";
     public static final String WALLET_TYPE = "walletType";
     public static final String CURRENCY_CODE = "currencyCode";
     public static final String USER_ID = "userId";
@@ -29,7 +31,7 @@ public class WalletEntity
 
     public WalletEntity() {
         super();
-        setWalletId(UUID.randomUUID().toString());
+        setWalletId("");
         setCurrencyCode("VND");
     }
 
@@ -42,7 +44,7 @@ public class WalletEntity
         WalletEntity wallet = new WalletEntity();
         wallet.setWalletId(walletId);
         wallet.setName(name);
-        wallet.setInitialBalance(initialBalance);
+        wallet.setCurrentBalance(initialBalance);
         wallet.setWalletType(walletType);
         wallet.setCurrencyCode(currencyCode);
         wallet.setIcon(icon);
@@ -53,7 +55,7 @@ public class WalletEntity
 
     public static WalletEntity create()
     {
-        return create(UUID.randomUUID().toString(),"Default Wallet",0,WalletType.BASIC_WALLET,"","VND","");
+        return create("","Default Wallet",0,WalletType.BASIC_WALLET,"","VND","");
     }
 
     public String getWalletId() {
@@ -62,10 +64,6 @@ public class WalletEntity
 
     public String getName() {
         return getString(NAME);
-    }
-
-    public double getInitialBalance() {
-        return getDouble(INITIAL_BALANCE);
     }
 
     public WalletType getWalletType() {
@@ -109,10 +107,6 @@ public class WalletEntity
 
     public void setName(String name) {
         setString(NAME,name);
-    }
-
-    public void setInitialBalance(double initBalance) {
-        setDouble(INITIAL_BALANCE,initBalance);
     }
 
     public void setWalletType(WalletType walletType) {

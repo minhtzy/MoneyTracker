@@ -20,7 +20,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
 
     public static final String LOG_TAG = "DB_HELPER";
     public static final int DB_VERSION = 1;
-
+    public static final int START_VERSION = 1;
     private Context mContext;
 
     /**
@@ -37,7 +37,8 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         createDatabase(db);
-        onUpgrade(db,1,DB_VERSION);
+        createTrigger(db);
+        onUpgrade(db,START_VERSION,DB_VERSION);
     }
 
     @Override
@@ -101,5 +102,37 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
         executeRawSql(db, R.raw.drop_money_tracker_database);
     }
 
+
+    private void createTrigger(SQLiteDatabase db)
+    {
+        String s1 = "create trigger wallet_insert_transactions after insert on tbl_transactions " +
+                    "begin " +
+                    "update tbl_wallets " +
+                    "set currentBalance = currentBalance + new.amount " +
+                    "where _id = new.walletId;" +
+                    "end;";
+
+        String s2 = "create trigger wallet_update_transactions after update on tbl_transactions " +
+                "begin " +
+                "update tbl_wallets " +
+                "set currentBalance = currentBalance + new.amount - old.amount " +
+                "where _id = new.walletId;" +
+                "end;";
+
+        String s3 = "create trigger wallet_delete_transactions after delete on tbl_transactions " +
+                "begin " +
+                "update tbl_wallets " +
+                "set currentBalance = currentBalance - old.amount " +
+                "where _id = new.walletId;" +
+                "end;";
+
+        try {
+            db.execSQL(s1);
+            db.execSQL(s2);
+            db.execSQL(s3);
+        } catch (Exception e) {
+            Log.w(LOG_TAG,e.getMessage());
+        }
+    }
 
 }

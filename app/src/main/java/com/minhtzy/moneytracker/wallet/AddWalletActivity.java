@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.Transaction;
 import com.minhtzy.moneytracker.MainActivity;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.adapter.CurrencyFormatAdapter;
@@ -20,13 +21,19 @@ import com.minhtzy.moneytracker.dataaccess.CurrencyFormatDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.ICurrencyFormatDAO;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.entity.CurrencyFormat;
+import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.entity.WalletType;
 import com.minhtzy.moneytracker.model.Constants;
+import com.minhtzy.moneytracker.model.TransactionTypes;
+import com.minhtzy.moneytracker.utilities.TransactionsManager;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Date;
 import java.util.List;
 
 public class AddWalletActivity extends AppCompatActivity {
@@ -44,6 +51,16 @@ public class AddWalletActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         addControls();
         addEvents();
+    }
+
+    private void addControls() {
+        //
+        txtTen = (EditText)findViewById(R.id.txtTen);
+        txtSotien = (CurrencyEditText) findViewById(R.id.txtSotien);
+        textCurrency = findViewById(R.id.text_currency_name);
+
+        ICurrencyFormatDAO cfDao = new CurrencyFormatDAOImpl(this);
+        mListCurrencyFormat = cfDao.getAllCurrencyAvailable();
     }
 
     private void addEvents() {
@@ -106,48 +123,29 @@ public class AddWalletActivity extends AppCompatActivity {
         String name = txtTen.getText().toString();
         IWalletsDAO iWalletsDAO = new WalletsDAOImpl(this);
 
-        WalletEntity wallet = WalletEntity.create("",name,soTien, WalletType.BASIC_WALLET,"","VND",FirebaseAuth.getInstance().getUid());
+        WalletEntity wallet = WalletEntity.create("",name,0, WalletType.BASIC_WALLET,"","VND",FirebaseAuth.getInstance().getUid());
 
         boolean added_wallet = iWalletsDAO.insertWallet(wallet);
 
-//        ITransactionsDAO iTransactionsDAO = new TransactionsDAOImpl(this);
-//        Category category = new Category();
-//        category.setId(56);
-//        category.setType(TransactionTypes.INCOME.getValue());
-//        Transaction transaction = new Transaction.TransactionBuilder()
-//                .setTransactionDate(new MTDate().toDate())
-//                .setMoneyTrading(soTien)
-//                .setTransactionNote("Initial Wallet")
-//                .setCategory(category)
-//                .setWallet(wallet)
-//                .setCurrencyCode("VND")
-//                .build();
-//        boolean added_transactin =iTransactionsDAO.insertTransaction(transaction);
         if(added_wallet) {
+            TransactionEntity transaction = new TransactionEntity();
+            transaction.setTransactionTime(new Date());
+            transaction.setTransactionAmount(soTien);
+            transaction.setTransactionNote("Initial Wallet");
+            transaction.setCategoryId(56); // Other Income
+            transaction.setWalletId(wallet.getWalletId());
+            TransactionsManager.getInstance(this).addTransaction(transaction);
+
+            WalletsManager.getInstance(this).switchWallet(wallet.getWalletId());
             Intent intent = new Intent(AddWalletActivity.this,MainActivity.class);
             startActivity(intent);
             finish();
         }
         else {
             Toast.makeText(this,"Khởi tạo ví thất bại",Toast.LENGTH_SHORT).show();
-//            if(added_wallet) {
-//                iWalletsDAO.deleteWallet(wallet.getWalletId());
-//            }
-//            else if(added_transactin) {
-//                iTransactionsDAO.deleteTransaction(transaction);
-//            }
         }
     }
 
-    private void addControls() {
-        //
-        txtTen = (EditText)findViewById(R.id.txtTen);
-        txtSotien = (CurrencyEditText) findViewById(R.id.txtSotien);
-        textCurrency = findViewById(R.id.text_currency_name);
-
-        ICurrencyFormatDAO cfDao = new CurrencyFormatDAOImpl();
-        mListCurrencyFormat = cfDao.getAllCurrencyAvailable();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

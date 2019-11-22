@@ -9,7 +9,6 @@ import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,14 +28,10 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
 
     public static final String TABLE_TRANSACTION_NAME = "tbl_transactions";
 
-    MoneyTrackerDBHelper dbHelper;
-    ICategoriesDAO iCategoriesDAO;
-    IWalletsDAO iWalletsDAO;
+    private MoneyTrackerDBHelper dbHelper;
 
     public TransactionsDAOImpl(Context context) {
         dbHelper = new MoneyTrackerDBHelper(context);
-        iCategoriesDAO = new CategoriesDAOImpl(context);
-        iWalletsDAO = new WalletsDAOImpl(context);
     }
     // Transaction
 
@@ -123,12 +118,12 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
                 " WHERE " + TransactionEntity.TRANSACTION_ID + " = ?" +
                 " AND " + TransactionEntity.TRANSACTION_TIME + " >= ?" +
                 " AND " + TransactionEntity.TRANSACTION_TIME + " <= ?";
-        Cursor cursor = db.rawQuery(query,
+
+        return db.rawQuery(query,
                 new String[]{
                         String.valueOf(walletId),
                         String.valueOf(dateRange.getDateFrom().toDate().getTime()),
                         String.valueOf(dateRange.getDateTo().toDate().getTime())});
-        return cursor;
     }
     public List<TransactionEntity> getAllTransactionDataByDate(long milisStart, long milisEnd){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -246,7 +241,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
                 + " AND tblt.walletId = "+ wallet_id
                 + " AND tblt.transaction_date >= " + dateRange.getDateFrom().getMillis()
                 + " AND tblt.transaction_date <= " + dateRange.getDateTo().getMillis();
-        List<TransactionEntity> list = new ArrayList<TransactionEntity>();
+        List<TransactionEntity> list = new ArrayList<>();
         Cursor cursor = db.rawQuery(sql,null);
 
         while(cursor.moveToNext()) {
@@ -274,16 +269,6 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
             list.add(getTransactionFromData(cursor));
         }
         return list;
-    }
-
-    public void updateTimeStamp(long transactionId, long timestamp) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String query = "UPDATE " + TABLE_TRANSACTION_NAME
-                + " SET " + TransactionEntity.TIMESTAMP + " = " + timestamp
-                + " WHERE " + TransactionEntity.TRANSACTION_ID + " = " + transactionId;
-
-        db.execSQL(query);
-        db.close();
     }
 
     @Override

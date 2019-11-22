@@ -22,12 +22,16 @@ import android.widget.TextView;
 import com.minhtzy.moneytracker.R;
 
 import com.minhtzy.moneytracker.adapter.TransactionListAdapter;
+import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,24 +49,23 @@ public class TransactionListFragment extends Fragment {
     View headerView;
 
     private static final String BUNDLE_LIST_ITEM = "TransactionListFragment.bundle.list_items";
+    private static final String BUNDLE_DATE_RANGE = "TransactionListFragment.bundle.dateRange";
 
     public static TransactionListFragment newInstance(List<TransactionEntity> items) {
         Log.d(LOG_TAG,"create new instance "+ items.size());
         TransactionListFragment fragment = new TransactionListFragment();
         fragment.setItems(items);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(BUNDLE_LIST_ITEM,(ArrayList<TransactionEntity>)items);
+        bundle.putParcelable(BUNDLE_LIST_ITEM,Parcels.wrap(items));
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static TransactionListFragment newInstance(String wallet_id ,DateRange dateRange) {
+    public static TransactionListFragment newInstance(DateRange dateRange) {
         Log.d(LOG_TAG,"create new instance "+ dateRange);
         TransactionListFragment fragment = new TransactionListFragment();
-        List<TransactionEntity> items = new TransactionsDAOImpl(fragment.getContext()).getAllTransactionByPeriod(wallet_id,dateRange);
-        fragment.setItems(items);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(BUNDLE_LIST_ITEM,(ArrayList<TransactionEntity>)items);
+        bundle.putSerializable(BUNDLE_DATE_RANGE,dateRange);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -78,7 +81,22 @@ public class TransactionListFragment extends Fragment {
 
         if(mItems == null){
             if(savedInstanceState != null) {
-                mItems =(ArrayList<TransactionEntity>) savedInstanceState.getSerializable(BUNDLE_LIST_ITEM);
+                if(savedInstanceState.getParcelable(BUNDLE_LIST_ITEM) != null)
+                {
+                    mItems =(ArrayList<TransactionEntity>) Parcels.unwrap(savedInstanceState.getParcelable(BUNDLE_LIST_ITEM));
+                }
+                else if(savedInstanceState.getSerializable(BUNDLE_DATE_RANGE) != null)
+                {
+                    DateRange date = (DateRange) savedInstanceState.getSerializable(BUNDLE_DATE_RANGE);
+                    ITransactionsDAO iTransactionsDAO = new TransactionsDAOImpl(inflater.getContext());
+
+                    mItems = iTransactionsDAO.getAllTransactionByPeriod(WalletsManager.getInstance(inflater.getContext()).getCurrentWallet().getWalletId(),date);
+                }
+                else
+                {
+                    mItems= new ArrayList<>();
+                }
+
             }
             else {
                 mItems = new ArrayList<>();
@@ -124,7 +142,7 @@ public class TransactionListFragment extends Fragment {
 
     private void onClickItem(TransactionEntity transaction) {
         Intent data = new Intent(TransactionListFragment.this.getContext(),ViewTransactionDetailActivity.class);
-        data.putExtra(ViewTransactionDetailActivity.EXTRA_TRANSACTION,transaction);
+        data.putExtra(ViewTransactionDetailActivity.EXTRA_TRANSACTION, Parcels.wrap(transaction));
         startActivityForResult(data,REQUEST_VIEW_DETAIL);
     }
 

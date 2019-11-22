@@ -8,43 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:155017325181:android:6f9998693fffd807",
-        "android_client_info": {
-          "package_name": "com.example.t2m.moneytracker"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "155017325181-uco6k455q82839rrfgjalm1g04sa912n.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.t2m.moneytracker",
-            "certificate_hash": "2bcffdba611a49a213d0354671a9007bdb00f8d1"
-          }
-        },
-        {
-          "client_id": "155017325181-fo8g8ocb03mf8m61u2v40goljmia0gqf.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBZLfDHqZRd_Wbub7u_wPrmCqoYg9LDIZ8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "155017325181-fo8g8ocb03mf8m61u2v40goljmia0gqf.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:155017325181:android:19481082f4bb253d98df14",
         "android_client_info": {
           "package_name": "com.minhtzy.moneytracker"
@@ -73,7 +36,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "155017325181-fo8g8ocb03mf8m61u2v40goljmia0gqf.apps.googleusercontent.com",
+              "client_id": "155017325181-29bk9ktc94d66jhsluu63441l2uog8co.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

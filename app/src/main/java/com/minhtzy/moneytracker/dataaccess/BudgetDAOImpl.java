@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.minhtzy.moneytracker.entity.BudgetEntity;
-import com.minhtzy.moneytracker.model.DateRange;
-import com.minhtzy.moneytracker.model.MTDate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +14,7 @@ public class BudgetDAOImpl implements IBudgetDAO {
 
     public static final String TABLE_BUDGET = "tbl_budgets";
 
-    MoneyTrackerDBHelper dbHelper;
+    private MoneyTrackerDBHelper dbHelper;
 
     public BudgetDAOImpl(Context context) {
         dbHelper = new MoneyTrackerDBHelper(context);
@@ -113,6 +111,7 @@ public class BudgetDAOImpl implements IBudgetDAO {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(query,null);
+        db.close();
         double spent = 0;
         if(cursor.moveToFirst()) {
             spent = cursor.getDouble(0);

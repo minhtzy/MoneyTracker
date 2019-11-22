@@ -2,15 +2,18 @@ package com.minhtzy.moneytracker.entity;
 
 import android.content.ContentValues;
 
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 
-public class CurrencyFormat extends EntityBase implements Serializable {
+@Parcel
+public class CurrencyFormat extends EntityBase {
     public static final String CURRENCY_ID = "_id";
     public static final String CURRENCY_NAME = "name";
-    public static final String PFX_SYMBOL = "pfxSymbol";
+    public static final String CURRENCY_SYMBOL = "currencySymbol";
     public static final String GROUP_SEPARATOR = "GROUP_SEPARATOR";
     public static final String DECIMAL_POINT = "decimalPoint";
-    public static final String CURRENCY_SYMBOL = "currencySymbol";
+    public static final String CURRENCY_CODE = "currencyCode";
 
     public CurrencyFormat() {
         super();
@@ -28,8 +31,8 @@ public class CurrencyFormat extends EntityBase implements Serializable {
         return getString(CURRENCY_NAME);
     }
 
-    public String getPfxSymbol() {
-        return getString(PFX_SYMBOL);
+    public String getCurrencyCode() {
+        return getString(CURRENCY_CODE);
     }
 
     public String getDecimalPoint() {
@@ -58,8 +61,8 @@ public class CurrencyFormat extends EntityBase implements Serializable {
         setString( CURRENCY_NAME,currencyName);
     }
 
-    public void setPfxSymbol(String pfxSymbol) {
-        setString(PFX_SYMBOL,pfxSymbol);
+    public void setCurrencyCode(String pfxSymbol) {
+        setString(CURRENCY_CODE,pfxSymbol);
     }
 
     public void setDecimalPoint(String decimalPoint) {

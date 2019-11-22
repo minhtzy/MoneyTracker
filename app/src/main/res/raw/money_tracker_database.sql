@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS tbl_wallets(
-    _id TEXT PRIMARY KEY AUTOINCREMENT,
+    _id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     currentBalance REAL NOT NULL,
     currencyCode TEXT NOT NULL,
@@ -84,7 +84,7 @@ INSERT INTO tbl_categories VALUES(59,4,'Đi vay','icon_112.png',null);
 INSERT INTO tbl_categories VALUES(60,4,'Thu nợ','icon_140.png',null);
 
 CREATE TABLE IF NOT EXISTS tbl_transactions(
-    _id TEXT PRIMARY KEY AUTOINCREMENT,
+    _id TEXT PRIMARY KEY,
     amount REAL NOT NULL,
     time INTEGER NOT NULL,
     note TEXT,
@@ -169,179 +169,124 @@ _id integer primary key
 , groupSeparator TEXT
 , currencyCode TEXT COLLATE NOCASE NOT NULL UNIQUE
 );
-INSERT INTO tbl_currency_format (_id, name, currencySymbol, decimalPoint, groupSeparator, currencyCode) VALUES
-  (1, 'United States dollar', '$', '.', ' ', 'USD'),
-  (2, 'European euro', '€', '.', ' ', 'EUR'),
-  (3, 'UK Pound', '£', '.', ' ', 'GBP'),
-  (4, 'Russian Ruble', '', ',', ' ', 'RUB'),
-  (5, 'Ukrainian hryvnia', '₴', ',', ' ', 'UAH'),
-  (6, 'Afghan afghani', '؋', '.', ' ', 'AFN'),
-  (7, 'Albanian lek', '', '.', ' ', 'ALL'),
-  (8, 'Algerian dinar', 'دج', '.', ' ', 'DZD'),
-  (9, 'Angolan kwanza', '', '.', ' ', 'AOA'),
-  (10, 'East Caribbean dollar', 'EC$', '.', ' ', 'XCD'),
-  (11, 'Argentine peso', 'AR$', ',', '.', 'ARS'),
-  (12, 'Armenian dram', '', '.', ' ', 'AMD'),
-  (13, 'Aruban florin', 'ƒ', '.', ' ', 'AWG'),
-  (14, 'Australian dollar', '$', '.', ',', 'AUD'),
-  (15, 'Azerbaijani manat', '', '.', ' ', 'AZN'),
-  (16, 'Bahamian dollar', 'B$', '.', ' ', 'BSD'),
-  (17, 'Bahraini dinar', '', '.', ' ', 'BHD'),
-  (18, 'Bangladeshi taka', '', '.', ' ', 'BDT'),
-  (19, 'Barbadian dollar', 'Bds$', '.', ' ', 'BBD'),
-  (20, 'Belarusian ruble', 'Br', ',', ' ', 'BYR'),
-  (21, 'Belize dollar', 'BZ$', '.', ' ', 'BZD'),
-  (22, 'West African CFA franc', 'CFA', '.', ' ', 'XOF'),
-  (23, 'Bermudian dollar', 'BD$', '.', ' ', 'BMD'),
-  (24, 'Bhutanese ngultrum', 'Nu.', '.', ' ', 'BTN'),
-  (25, 'Bolivian boliviano', 'Bs.', '.', ' ', 'BOB'),
-  (26, 'Bosnia and Herzegovina konvertibilna marka', 'KM', ',', '.', 'BAM'),
-  (27, 'Botswana pula', 'P', '.', ' ', 'BWP'),
-  (28, 'Brazilian real', 'R$', '.', ' ', 'BRL'),
-  (29, 'Brunei dollar', 'B$', '.', ' ', 'BND'),
-  (30, 'Bulgarian lev', '', '.', ' ', 'BGN'),
-  (31, 'Burundi franc', 'FBu', '.', ' ', 'BIF'),
-  (32, 'Cambodian riel', '', '.', ' ', 'KHR'),
-  (33, 'Central African CFA franc', 'CFA', '.', ' ', 'XAF'),
-  (34, 'Canadian dollar', '$', '.', ' ', 'CAD'),
-  (35, 'Cape Verdean escudo', 'Esc', '.', ' ', 'CVE'),
-  (36, 'Cayman Islands dollar', 'KY$', '.', ' ', 'KYD'),
-  (37, 'Chilean peso', '$', '.', ' ', 'CLP'),
-  (38, 'Chinese renminbi', '¥', '.', ' ', 'CNY'),
-  (39, 'Colombian peso', 'Col$', '.', ' ', 'COP'),
-  (40, 'Comorian franc', '', '.', ' ', 'KMF'),
-  (41, 'Congolese franc', 'F', '.', ' ', 'CDF'),
-  (42, 'Costa Rican colon', '₡', '.', ' ', 'CRC'),
-  (43, 'Croatian kuna', 'kn', '.', ' ', 'HRK'),
-  (44, 'Czech koruna', 'Kč', '.', ' ', 'CZK'),
-  (45, 'Danish krone', 'Kr', '.', ' ', 'DKK'),
-  (46, 'Djiboutian franc', 'Fdj', '.', ' ', 'DJF'),
-  (47, 'Dominican peso', 'RD$', '.', ' ', 'DOP'),
-  (48, 'Egyptian pound', '£', '.', ' ', 'EGP'),
-  (49, 'Eritrean nakfa', 'Nfa', '.', ' ', 'ERN'),
-  (50, 'Ethiopian birr', 'Br', '.', ' ', 'ETB'),
-  (51, 'Falkland Islands pound', '£', '.', ' ', 'FKP'),
-  (52, 'Fijian dollar', 'FJ$', '.', ' ', 'FJD'),
-  (53, 'CFP franc', 'F', '.', ' ', 'XPF'),
-  (54, 'Gambian dalasi', 'D', '.', ' ', 'GMD'),
-  (55, 'Georgian lari', '', '.', ' ', 'GEL'),
-  (56, 'Ghanaian cedi', '', '.', ' ', 'GHS'),
-  (57, 'Gibraltar pound', '£', '.', ' ', 'GIP'),
-  (58, 'Guatemalan quetzal', 'Q', '.', ' ', 'GTQ'),
-  (59, 'Guinean franc', 'FG', '.', ' ', 'GNF'),
-  (60, 'Guyanese dollar', 'GY$', '.', ' ', 'GYD'),
-  (61, 'Haitian gourde', 'G', '.', ' ', 'HTG'),
-  (62, 'Honduran lempira', 'L', '.', ' ', 'HNL'),
-  (63, 'Hong Kong dollar', 'HK$', '.', ' ', 'HKD'),
-  (64, 'Hungarian forint', 'Ft', '.', ' ', 'HUF'),
-  (65, 'Icelandic króna', 'kr', '.', ' ', 'ISK'),
-  (66, 'Indian rupee', '₹', '.', ' ', 'INR'),
-  (67, 'Indonesian rupiah', 'Rp', '.', ' ', 'IDR'),
-  (68, 'Special Drawing Rights', 'SDR', '.', ' ', 'XDR'),
-  (69, 'Iranian rial', '', '.', ' ', 'IRR'),
-  (70, 'Iraqi dinar', '', '.', ' ', 'IQD'),
-  (71, 'Israeli new shekel', '₪', '.', ' ', 'ILS'),
-  (72, 'Jamaican dollar', 'J$', '.', ' ', 'JMD'),
-  (73, 'Japanese yen', '¥', '.', ' ', 'JPY'),
-  (74, 'Jordanian dinar', '', '.', ' ', 'JOD'),
-  (75, 'Kazakhstani tenge', 'T', '.', ' ', 'KZT'),
-  (76, 'Kenyan shilling', 'KSh', '.', ' ', 'KES'),
-  (77, 'North Korean won', 'W', '.', ' ', 'KPW'),
-  (78, 'South Korean won', 'W', '.', ' ', 'KRW'),
-  (79, 'Kuwaiti dinar', '', '.', ' ', 'KWD'),
-  (80, 'Kyrgyzstani som', '', '.', ' ', 'KGS'),
-  (81, 'Lao kip', 'KN', '.', ' ', 'LAK'),
-  (82, 'Latvian lats', 'Ls', '.', ' ', 'LVL'),
-  (83, 'Lebanese lira', '', '.', ' ', 'LBP'),
-  (84, 'Lesotho loti', 'M', '.', ' ', 'LSL'),
-  (85, 'Liberian dollar', 'L$', '.', ' ', 'LRD'),
-  (86, 'Libyan dinar', 'LD', '.', ' ', 'LYD'),
-  (87, 'Lithuanian litas', 'Lt', '.', ' ', 'LTL'),
-  (88, 'Macanese pataca', 'P', '.', ' ', 'MOP'),
-  (89, 'Macedonian denar', '', '.', ' ', 'MKD'),
-  (90, 'Malagasy ariary', 'FMG', '.', ' ', 'MGA'),
-  (91, 'Malawian kwacha', 'MK', '.', ' ', 'MWK'),
-  (92, 'Malaysian ringgit', 'RM', '.', ' ', 'MYR'),
-  (93, 'Maldivian rufiyaa', 'Rf', '.', ' ', 'MVR'),
-  (94, 'Mauritanian ouguiya', 'UM', '.', ' ', 'MRO'),
-  (95, 'Mauritian rupee', 'Rs', '.', ' ', 'MUR'),
-  (96, 'Mexican peso', '$', '.', ' ', 'MXN'),
-  (97, 'Moldovan leu', '', '.', ' ', 'MDL'),
-  (98, 'Mongolian tugrik', '₮', '.', ' ', 'MNT'),
-  (99, 'Moroccan dirham', '', '.', ' ', 'MAD'),
-  (100, 'Myanma kyat', 'K', '.', ' ', 'MMK'),
-  (101, 'Namibian dollar', 'N$', '.', ' ', 'NAD'),
-  (102, 'Nepalese rupee', 'NRs', '.', ' ', 'NPR'),
-  (103, 'Netherlands Antillean gulden', 'NAƒ', '.', ' ', 'ANG'),
-  (104, 'New Zealand dollar', 'NZ$', '.', ' ', 'NZD'),
-  (105, 'Nicaraguan córdoba', 'C$', '.', ' ', 'NIO'),
-  (106, 'Nigerian naira', '₦', '.', ' ', 'NGN'),
-  (107, 'Norwegian krone', 'kr', '.', ' ', 'NOK'),
-  (108, 'Omani rial', '', '.', ' ', 'OMR'),
-  (109, 'Pakistani rupee', 'Rs.', '.', ' ', 'PKR'),
-  (110, 'Panamanian balboa', 'B./', '.', ' ', 'PAB'),
-  (111, 'Papua New Guinean kina', 'K', '.', ' ', 'PGK'),
-  (112, 'Paraguayan guarani', '', '.', ' ', 'PYG'),
-  (113, 'Peruvian nuevo sol', 'S/.', '.', ' ', 'PEN'),
-  (114, 'Philippine peso', '₱', '.', ' ', 'PHP'),
-  (115, 'Polish zloty', '', '.', ' ', 'PLN'),
-  (116, 'Qatari riyal', 'QR', '.', ' ', 'QAR'),
-  (117, 'Romanian leu', 'L', '.', ' ', 'RON'),
-  (118, 'Rwandan franc', 'RF', '.', ' ', 'RWF'),
-  (119, 'São Tomé and Príncipe dobra', 'Db', '.', ' ', 'STD'),
-  (120, 'Saudi riyal', 'SR', '.', ' ', 'SAR'),
-  (121, 'Serbian dinar', 'din.', '.', ' ', 'RSD'),
-  (122, 'Seychellois rupee', 'SR', '.', ' ', 'SCR'),
-  (123, 'Sierra Leonean leone', 'Le', '.', ' ', 'SLL'),
-  (124, 'Singapore dollar', 'S$', '.', ' ', 'SGD'),
-  (125, 'Solomon Islands dollar', 'SI$', '.', ' ', 'SBD'),
-  (126, 'Somali shilling', 'Sh.', '.', ' ', 'SOS'),
-  (127, 'South African rand', 'R', '.', ' ', 'ZAR'),
-  (128, 'Sri Lankan rupee', 'Rs', '.', ' ', 'LKR'),
-  (129, 'Saint Helena pound', '£', '.', ' ', 'SHP'),
-  (130, 'Sudanese pound', '', '.', ' ', 'SDG'),
-  (131, 'Surinamese dollar', '$', '.', ' ', 'SRD'),
-  (132, 'Swazi lilangeni', 'E', '.', ' ', 'SZL'),
-  (133, 'Swedish krona', 'kr', '.', ' ', 'SEK'),
-  (134, 'Swiss franc', 'Fr.', '.', ' ', 'CHF'),
-  (135, 'Syrian pound', '', '.', ' ', 'SYP'),
-  (136, 'New Taiwan dollar', 'NT$', '.', ' ', 'TWD'),
-  (137, 'Tajikistani somoni', '', '.', ' ', 'TJS'),
-  (138, 'Tanzanian shilling', '', '.', ' ', 'TZS'),
-  (139, 'Thai baht', '฿', '.', ' ', 'THB'),
-  (140, 'Trinidad and Tobago dollar', 'TT$', '.', ' ', 'TTD'),
-  (141, 'Tunisian dinar', 'DT', '.', ' ', 'TND'),
-  (142, 'Turkish lira', '₺', '.', ' ', 'TRY'),
-  (143, 'Turkmen manat', 'm', '.', ' ', 'TMT'),
-  (144, 'Ugandan shilling', 'USh', '.', ' ', 'UGX'),
-  (145, 'UAE dirham', '', '.', ' ', 'AED'),
-  (146, 'Uruguayan peso', '$U', '.', ' ', 'UYU'),
-  (147, 'Uzbekistani som', '', '.', ' ', 'UZS'),
-  (148, 'Vanuatu vatu', 'VT', '.', ' ', 'VUV'),
-  (149, 'Vietnamese dong', '₫', '.', ' ', 'VND'),
-  (150, 'Samoan tala', 'WS$', '.', ' ', 'WST'),
-  (151, 'Yemeni rial', '', '.', ' ', 'YER'),
-  (152, 'Venezuelan Bolívar', 'Bs.', '.', ',', 'VEF');
-
--- trigger update wallet
-
-create trigger update_wallet_insert_transactions after insert on tbl_transactions
-begin
-    update tbl_wallets
-    set currentBalance = currentBalance + new.amount
-    where _id = new.walletId;
-end;
-
-create trigger update_wallet_update_transactions after insert on tbl_transactions
-begin
-    update tbl_wallets
-    set currentBalance = currentBalance + new.amount - old.amount
-    where _id = new.walletId;
-end;
-
-create trigger update_wallet_delete_transactions after insert on tbl_transactions
-begin
-    update tbl_wallets
-    set currentBalance = currentBalance - old.amount
-    where _id = new.walletId;
-end;
+INSERT INTO tbl_currency_format VALUES (1,'United States dollar','$','.',' ','USD');
+INSERT INTO tbl_currency_format VALUES (2,'European euro','€','.',' ','EUR');
+INSERT INTO tbl_currency_format VALUES (3,'UK Pound','£','.',' ','GBP');
+INSERT INTO tbl_currency_format VALUES (5,'Ukrainian hryvnia','₴',',',' ','UAH');
+INSERT INTO tbl_currency_format VALUES (6,'Afghan afghani','؋','.',' ','AFN');
+INSERT INTO tbl_currency_format VALUES (8,'Algerian dinar','دج','.',' ','DZD');
+INSERT INTO tbl_currency_format VALUES (10,'East Caribbean dollar','EC$','.',' ','XCD');
+INSERT INTO tbl_currency_format VALUES (11,'Argentine peso','AR$',',','.','ARS');
+INSERT INTO tbl_currency_format VALUES (13,'Aruban florin','ƒ','.',' ','AWG');
+INSERT INTO tbl_currency_format VALUES (14,'Australian dollar','$','.',',','AUD');
+INSERT INTO tbl_currency_format VALUES (16,'Bahamian dollar','B$','.',' ','BSD');
+INSERT INTO tbl_currency_format VALUES (19,'Barbadian dollar','Bds$','.',' ','BBD');
+INSERT INTO tbl_currency_format VALUES (20,'Belarusian ruble','Br',',',' ','BYR');
+INSERT INTO tbl_currency_format VALUES (21,'Belize dollar','BZ$','.',' ','BZD');
+INSERT INTO tbl_currency_format VALUES (22,'West African CFA franc','CFA','.',' ','XOF');
+INSERT INTO tbl_currency_format VALUES (23,'Bermudian dollar','BD$','.',' ','BMD');
+INSERT INTO tbl_currency_format VALUES (24,'Bhutanese ngultrum','Nu.','.',' ','BTN');
+INSERT INTO tbl_currency_format VALUES (25,'Bolivian boliviano','Bs.','.',' ','BOB');
+INSERT INTO tbl_currency_format VALUES (26,'Bosnia and Herzegovina konvertibilna marka','KM',',','.','BAM');
+INSERT INTO tbl_currency_format VALUES (27,'Botswana pula','P','.',' ','BWP');
+INSERT INTO tbl_currency_format VALUES (28,'Brazilian real','R$','.',' ','BRL');
+INSERT INTO tbl_currency_format VALUES (29,'Brunei dollar','B$','.',' ','BND');
+INSERT INTO tbl_currency_format VALUES (31,'Burundi franc','FBu','.',' ','BIF');
+INSERT INTO tbl_currency_format VALUES (33,'Central African CFA franc','CFA','.',' ','XAF');
+INSERT INTO tbl_currency_format VALUES (34,'Canadian dollar','$','.',' ','CAD');
+INSERT INTO tbl_currency_format VALUES (35,'Cape Verdean escudo','Esc','.',' ','CVE');
+INSERT INTO tbl_currency_format VALUES (36,'Cayman Islands dollar','KY$','.',' ','KYD');
+INSERT INTO tbl_currency_format VALUES (37,'Chilean peso','$','.',' ','CLP');
+INSERT INTO tbl_currency_format VALUES (38,'Chinese renminbi','¥','.',' ','CNY');
+INSERT INTO tbl_currency_format VALUES (39,'Colombian peso','Col$','.',' ','COP');
+INSERT INTO tbl_currency_format VALUES (41,'Congolese franc','F','.',' ','CDF');
+INSERT INTO tbl_currency_format VALUES (42,'Costa Rican colon','₡','.',' ','CRC');
+INSERT INTO tbl_currency_format VALUES (43,'Croatian kuna','kn','.',' ','HRK');
+INSERT INTO tbl_currency_format VALUES (44,'Czech koruna','Kč','.',' ','CZK');
+INSERT INTO tbl_currency_format VALUES (45,'Danish krone','Kr','.',' ','DKK');
+INSERT INTO tbl_currency_format VALUES (46,'Djiboutian franc','Fdj','.',' ','DJF');
+INSERT INTO tbl_currency_format VALUES (47,'Dominican peso','RD$','.',' ','DOP');
+INSERT INTO tbl_currency_format VALUES (48,'Egyptian pound','£','.',' ','EGP');
+INSERT INTO tbl_currency_format VALUES (49,'Eritrean nakfa','Nfa','.',' ','ERN');
+INSERT INTO tbl_currency_format VALUES (50,'Ethiopian birr','Br','.',' ','ETB');
+INSERT INTO tbl_currency_format VALUES (51,'Falkland Islands pound','£','.',' ','FKP');
+INSERT INTO tbl_currency_format VALUES (52,'Fijian dollar','FJ$','.',' ','FJD');
+INSERT INTO tbl_currency_format VALUES (53,'CFP franc','F','.',' ','XPF');
+INSERT INTO tbl_currency_format VALUES (54,'Gambian dalasi','D','.',' ','GMD');
+INSERT INTO tbl_currency_format VALUES (57,'Gibraltar pound','£','.',' ','GIP');
+INSERT INTO tbl_currency_format VALUES (58,'Guatemalan quetzal','Q','.',' ','GTQ');
+INSERT INTO tbl_currency_format VALUES (59,'Guinean franc','FG','.',' ','GNF');
+INSERT INTO tbl_currency_format VALUES (60,'Guyanese dollar','GY$','.',' ','GYD');
+INSERT INTO tbl_currency_format VALUES (61,'Haitian gourde','G','.',' ','HTG');
+INSERT INTO tbl_currency_format VALUES (62,'Honduran lempira','L','.',' ','HNL');
+INSERT INTO tbl_currency_format VALUES (63,'Hong Kong dollar','HK$','.',' ','HKD');
+INSERT INTO tbl_currency_format VALUES (64,'Hungarian forint','Ft','.',' ','HUF');
+INSERT INTO tbl_currency_format VALUES (65,'Icelandic króna','kr','.',' ','ISK');
+INSERT INTO tbl_currency_format VALUES (66,'Indian rupee','₹','.',' ','INR');
+INSERT INTO tbl_currency_format VALUES (67,'Indonesian rupiah','Rp','.',' ','IDR');
+INSERT INTO tbl_currency_format VALUES (68,'Special Drawing Rights','SDR','.',' ','XDR');
+INSERT INTO tbl_currency_format VALUES (71,'Israeli new shekel','₪','.',' ','ILS');
+INSERT INTO tbl_currency_format VALUES (72,'Jamaican dollar','J$','.',' ','JMD');
+INSERT INTO tbl_currency_format VALUES (73,'Japanese yen','¥','.',' ','JPY');
+INSERT INTO tbl_currency_format VALUES (75,'Kazakhstani tenge','T','.',' ','KZT');
+INSERT INTO tbl_currency_format VALUES (76,'Kenyan shilling','KSh','.',' ','KES');
+INSERT INTO tbl_currency_format VALUES (77,'North Korean won','W','.',' ','KPW');
+INSERT INTO tbl_currency_format VALUES (78,'South Korean won','W','.',' ','KRW');
+INSERT INTO tbl_currency_format VALUES (81,'Lao kip','KN','.',' ','LAK');
+INSERT INTO tbl_currency_format VALUES (82,'Latvian lats','Ls','.',' ','LVL');
+INSERT INTO tbl_currency_format VALUES (84,'Lesotho loti','M','.',' ','LSL');
+INSERT INTO tbl_currency_format VALUES (85,'Liberian dollar','L$','.',' ','LRD');
+INSERT INTO tbl_currency_format VALUES (86,'Libyan dinar','LD','.',' ','LYD');
+INSERT INTO tbl_currency_format VALUES (87,'Lithuanian litas','Lt','.',' ','LTL');
+INSERT INTO tbl_currency_format VALUES (88,'Macanese pataca','P','.',' ','MOP');
+INSERT INTO tbl_currency_format VALUES (90,'Malagasy ariary','FMG','.',' ','MGA');
+INSERT INTO tbl_currency_format VALUES (91,'Malawian kwacha','MK','.',' ','MWK');
+INSERT INTO tbl_currency_format VALUES (92,'Malaysian ringgit','RM','.',' ','MYR');
+INSERT INTO tbl_currency_format VALUES (93,'Maldivian rufiyaa','Rf','.',' ','MVR');
+INSERT INTO tbl_currency_format VALUES (94,'Mauritanian ouguiya','UM','.',' ','MRO');
+INSERT INTO tbl_currency_format VALUES (95,'Mauritian rupee','Rs','.',' ','MUR');
+INSERT INTO tbl_currency_format VALUES (96,'Mexican peso','$','.',' ','MXN');
+INSERT INTO tbl_currency_format VALUES (98,'Mongolian tugrik','₮','.',' ','MNT');
+INSERT INTO tbl_currency_format VALUES (100,'Myanma kyat','K','.',' ','MMK');
+INSERT INTO tbl_currency_format VALUES (101,'Namibian dollar','N$','.',' ','NAD');
+INSERT INTO tbl_currency_format VALUES (102,'Nepalese rupee','NRs','.',' ','NPR');
+INSERT INTO tbl_currency_format VALUES (103,'Netherlands Antillean gulden','NAƒ','.',' ','ANG');
+INSERT INTO tbl_currency_format VALUES (104,'New Zealand dollar','NZ$','.',' ','NZD');
+INSERT INTO tbl_currency_format VALUES (105,'Nicaraguan córdoba','C$','.',' ','NIO');
+INSERT INTO tbl_currency_format VALUES (106,'Nigerian naira','₦','.',' ','NGN');
+INSERT INTO tbl_currency_format VALUES (107,'Norwegian krone','kr','.',' ','NOK');
+INSERT INTO tbl_currency_format VALUES (109,'Pakistani rupee','Rs.','.',' ','PKR');
+INSERT INTO tbl_currency_format VALUES (110,'Panamanian balboa','B./','.',' ','PAB');
+INSERT INTO tbl_currency_format VALUES (111,'Papua New Guinean kina','K','.',' ','PGK');
+INSERT INTO tbl_currency_format VALUES (113,'Peruvian nuevo sol','S/.','.',' ','PEN');
+INSERT INTO tbl_currency_format VALUES (114,'Philippine peso','₱','.',' ','PHP');
+INSERT INTO tbl_currency_format VALUES (116,'Qatari riyal','QR','.',' ','QAR');
+INSERT INTO tbl_currency_format VALUES (117,'Romanian leu','L','.',' ','RON');
+INSERT INTO tbl_currency_format VALUES (118,'Rwandan franc','RF','.',' ','RWF');
+INSERT INTO tbl_currency_format VALUES (119,'São Tomé and Príncipe dobra','Db','.',' ','STD');
+INSERT INTO tbl_currency_format VALUES (120,'Saudi riyal','SR','.',' ','SAR');
+INSERT INTO tbl_currency_format VALUES (121,'Serbian dinar','din.','.',' ','RSD');
+INSERT INTO tbl_currency_format VALUES (122,'Seychellois rupee','SR','.',' ','SCR');
+INSERT INTO tbl_currency_format VALUES (123,'Sierra Leonean leone','Le','.',' ','SLL');
+INSERT INTO tbl_currency_format VALUES (124,'Singapore dollar','S$','.',' ','SGD');
+INSERT INTO tbl_currency_format VALUES (125,'Solomon Islands dollar','SI$','.',' ','SBD');
+INSERT INTO tbl_currency_format VALUES (126,'Somali shilling','Sh.','.',' ','SOS');
+INSERT INTO tbl_currency_format VALUES (127,'South African rand','R','.',' ','ZAR');
+INSERT INTO tbl_currency_format VALUES (128,'Sri Lankan rupee','Rs','.',' ','LKR');
+INSERT INTO tbl_currency_format VALUES (129,'Saint Helena pound','£','.',' ','SHP');
+INSERT INTO tbl_currency_format VALUES (131,'Surinamese dollar','$','.',' ','SRD');
+INSERT INTO tbl_currency_format VALUES (132,'Swazi lilangeni','E','.',' ','SZL');
+INSERT INTO tbl_currency_format VALUES (133,'Swedish krona','kr','.',' ','SEK');
+INSERT INTO tbl_currency_format VALUES (134,'Swiss franc','Fr.','.',' ','CHF');
+INSERT INTO tbl_currency_format VALUES (136,'New Taiwan dollar','NT$','.',' ','TWD');
+INSERT INTO tbl_currency_format VALUES (139,'Thai baht','฿','.',' ','THB');
+INSERT INTO tbl_currency_format VALUES (140,'Trinidad and Tobago dollar','TT$','.',' ','TTD');
+INSERT INTO tbl_currency_format VALUES (141,'Tunisian dinar','DT','.',' ','TND');
+INSERT INTO tbl_currency_format VALUES (142,'Turkish lira','₺','.',' ','TRY');
+INSERT INTO tbl_currency_format VALUES (143,'Turkmen manat','m','.',' ','TMT');
+INSERT INTO tbl_currency_format VALUES (144,'Ugandan shilling','USh','.',' ','UGX');
+INSERT INTO tbl_currency_format VALUES (146,'Uruguayan peso','$U','.',' ','UYU');
+INSERT INTO tbl_currency_format VALUES (148,'Vanuatu vatu','VT','.',' ','VUV');
+INSERT INTO tbl_currency_format VALUES (149,'Vietnamese dong','₫','.',' ','VND');
+INSERT INTO tbl_currency_format VALUES (150,'Samoan tala','WS$','.',' ','WST');
+INSERT INTO tbl_currency_format VALUES (152,'Venezuelan Bolívar','Bs.','.',',','VEF');

@@ -33,9 +33,22 @@ public class WalletsManager {
     public WalletEntity getCurrentWallet() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String currentId = SharedPrefs.getInstance().get(SharedPrefs.KEY_CURRENT_WALLET,"");
-        if(currentUser != null && !currentId.isEmpty()) {
-            return iWalletsDAO.getWalletById(currentId);
+        if(currentUser != null)
+        {
+            if(currentId.isEmpty()) {
+                List<WalletEntity> allWallets = iWalletsDAO.getAllWalletByUser(currentUser.getUid());
+                if(!allWallets.isEmpty())
+                {
+                    switchWallet(allWallets.get(0).getWalletId());
+                    return allWallets.get(0);
+                }
+
+            }
+            else {
+                return iWalletsDAO.getWalletById(currentId);
+            }
         }
+
         return null;
     }
 
@@ -47,7 +60,7 @@ public class WalletsManager {
     public void switchWallet(String walletId)
     {
         String currentId = SharedPrefs.getInstance().get(SharedPrefs.KEY_CURRENT_WALLET,"");
-        if(currentId == walletId) return;
+        if(currentId.equals(walletId)) return;
         SharedPrefs.getInstance().put(SharedPrefs.KEY_CURRENT_WALLET,walletId);
     }
 

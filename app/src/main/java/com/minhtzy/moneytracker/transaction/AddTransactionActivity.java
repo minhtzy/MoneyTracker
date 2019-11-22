@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -37,6 +38,8 @@ import com.minhtzy.moneytracker.view.CurrencyEditText;
 import com.minhtzy.moneytracker.wallet.SelectCategoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -192,7 +195,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         TransactionsManager.getInstance(this).addTransaction(transaction);
 
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_TRANSACTION,transaction);
+        intent.putExtra(EXTRA_TRANSACTION, Parcels.wrap(transaction));
         setResult(RESULT_OK,intent);
         finish();
     }
@@ -261,7 +264,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(resultCode == RESULT_OK) {
             if(requestCode == REQUEST_CODE_CATEGORY) {
-                mCurrentCategory =(CategoryEntity) data.getSerializableExtra(SelectCategoryActivity.EXTRA_CATEGORY);
+                mCurrentCategory =(CategoryEntity) Parcels.unwrap(data.getParcelableExtra(SelectCategoryActivity.EXTRA_CATEGORY));
                 updateUI();
             }
             else if(requestCode == REQUEST_CODE_GALLERY) {

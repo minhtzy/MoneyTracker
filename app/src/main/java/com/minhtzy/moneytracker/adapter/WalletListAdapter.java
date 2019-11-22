@@ -38,8 +38,8 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntity> {
 
         WalletEntity wallet = this.objects.get(position);
         txtTenitem.setText(wallet.getName());
-        txtBalacne.setText(String.format(Constants.PRICE_FORMAT,wallet.getInitialBalance()));
-        if(wallet.getInitialBalance() >= 0) {
+        txtBalacne.setText(String.format(Constants.PRICE_FORMAT,wallet.getCurrentBalance()));
+        if(wallet.getCurrentBalance() >= 0) {
             txtBalacne.setTextColor(getContext().getResources().getColor(R.color.colorMoneyTradingPositive));
         }
         else {

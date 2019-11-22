@@ -4,9 +4,12 @@ import android.content.ContentValues;
 
 import com.minhtzy.moneytracker.model.TransactionTypes;
 
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 
-public class CategoryEntity extends EntityBase implements Serializable {
+@Parcel
+public class CategoryEntity extends EntityBase{
 
     public static final String CATEGORY_ID = "_id";
     public static final String CATEGORY_TYPE = "type";

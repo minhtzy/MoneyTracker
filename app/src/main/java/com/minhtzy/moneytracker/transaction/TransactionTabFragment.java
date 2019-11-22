@@ -33,6 +33,8 @@ import com.minhtzy.moneytracker.utilities.DateUtils;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 import java.util.Date;
@@ -156,21 +158,14 @@ public class TransactionTabFragment extends Fragment {
     }
 
     private void addTab(DateRange dateRange) {
-        List<TransactionEntity> transactions = filterTransactions(dateRange, mListTransaction);
 
+
+        List<TransactionEntity> transactions = iTransactionsDAO.getAllTransactionByPeriod(mCurrentWallet.getWalletId(),dateRange);
         String title = getTitle(dateRange.getDateFrom().toDate());
-//        boolean isNeedAdd = true;
-//        for (Pair<String, Fragment> tab : mTabFragment) {
-//            if (tab.first.equals(title)) {
-//                ((TransactionListFragment) tab.second).setItems(transactions);
-//                isNeedAdd = false;
-//                break;
-//            }
-//        }
-//        if (isNeedAdd) {
-            Fragment fragment = com.minhtzy.moneytracker.transaction.TransactionListFragment.newInstance(transactions);
-            mTabFragment.add(new Pair<>(title, fragment));
-            //       }
+
+        Fragment fragment = TransactionListFragment.newInstance(dateRange);
+
+        mTabFragment.add(new Pair<>(title, fragment));
 
     }
 
@@ -220,7 +215,7 @@ public class TransactionTabFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FAB_ADD_TRANSACTION_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                TransactionEntity transaction = (TransactionEntity) data.getSerializableExtra(com.minhtzy.moneytracker.transaction.AddTransactionActivity.EXTRA_TRANSACTION);
+                TransactionEntity transaction = (TransactionEntity) Parcels.unwrap(data.getParcelableExtra(AddTransactionActivity.EXTRA_TRANSACTION));
                 mListTransaction.add(transaction);
             }
         }
@@ -286,6 +281,7 @@ public class TransactionTabFragment extends Fragment {
 
             } catch (Exception e) {
                 // TODO: handle exception
+                Log.d(TransactionTabFragment.class.getSimpleName(),e.getMessage());
                 Log.d(TransactionTabFragment.class.getSimpleName(), "Update adapter failed");
             }
 
