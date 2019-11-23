@@ -51,7 +51,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
     public boolean updateTransaction(TransactionEntity transaction) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         transaction.setTimestamp(com.google.firebase.Timestamp.now().toDate().getTime());
-        ContentValues values = new ContentValues();
+        ContentValues values = transaction.getContentValues();
         int updated = db.update(TABLE_TRANSACTION_NAME,values,TransactionEntity.TRANSACTION_ID + " = ?" ,new String[]{String.valueOf(transaction.getTransactionId())});
         db.close();
         return updated > 0;
@@ -115,9 +115,10 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
     private Cursor getAllTransactionDataByWalletId(String walletId, DateRange dateRange) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_TRANSACTION_NAME +
-                " WHERE " + TransactionEntity.TRANSACTION_ID + " = ?" +
+                " WHERE " + TransactionEntity.WALLET_ID + " = ?" +
                 " AND " + TransactionEntity.TRANSACTION_TIME + " >= ?" +
-                " AND " + TransactionEntity.TRANSACTION_TIME + " <= ?";
+                " AND " + TransactionEntity.TRANSACTION_TIME + " <= ?" +
+                " ORDER BY " + TransactionEntity.TRANSACTION_TIME;
 
         return db.rawQuery(query,
                 new String[]{

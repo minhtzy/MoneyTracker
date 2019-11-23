@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.common.Constants;
+import com.minhtzy.moneytracker.entity.CurrencyFormat;
 import com.minhtzy.moneytracker.entity.WalletEntity;
+import com.minhtzy.moneytracker.utilities.CurrencyUtils;
 
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntity> {
 
         WalletEntity wallet = this.objects.get(position);
         txtTenitem.setText(wallet.getName());
-        txtBalacne.setText(String.format(Constants.PRICE_FORMAT,wallet.getCurrentBalance()));
+        txtBalacne.setText(CurrencyUtils.getInstance().formatCurrency(String.valueOf(wallet.getCurrentBalance()),wallet.getCurrencyCode()));
         if(wallet.getCurrentBalance() >= 0) {
             txtBalacne.setTextColor(getContext().getResources().getColor(R.color.colorMoneyTradingPositive));
         }

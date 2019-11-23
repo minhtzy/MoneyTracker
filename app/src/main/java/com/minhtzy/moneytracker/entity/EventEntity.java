@@ -74,4 +74,8 @@ public class EventEntity extends EntityBase {
     public void setTimeExpire(MTDate timeExpire) {
         setLong(EVENT_TIME_EXPIRE,timeExpire.getMillis());
     }
+
+    public double getSpentAmount() {
+        return 0;
+    }
 }

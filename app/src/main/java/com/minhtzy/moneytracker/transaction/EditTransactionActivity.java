@@ -57,7 +57,7 @@ public class EditTransactionActivity extends AppCompatActivity {
     public static final String EXTRA_TRANSACTION = "com.minhtzy.moneytracker.extra.transaction";
     private static final Object IMAGE_DIRECTORY = "images";
 
-    private EditText mTextMoney;
+    private CurrencyEditText mTextMoney;
     private EditText mTextCategory;
     private EditText mTextNote;
     private EditText mTextDate;
@@ -96,7 +96,7 @@ public class EditTransactionActivity extends AppCompatActivity {
             mCurrentCategory = CategoryManager.getInstance().getCategoryById(oldTransaction.getCategoryId());
             updateUI();
             updateImagePreView(oldTransaction.getMediaUri());
-            mTextMoney.setText(String.valueOf(oldTransaction.getTransactionAmount()));
+            mTextMoney.setText(String.valueOf(Math.abs(oldTransaction.getTransactionAmount())));
             mTextNote.setText(oldTransaction.getTransactionNote());
             mCalendar.setTime(oldTransaction.getTransactionTime());
         }
@@ -139,7 +139,7 @@ public class EditTransactionActivity extends AppCompatActivity {
         iWalletsDAO = new WalletsDAOImpl(this);
         iTransactionsDAO = new TransactionsDAOImpl(this);
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        //mListWallet = iWalletsDAO.getAllWalletByUser(mCurrentUser.getUid());
+        mListWallet = iWalletsDAO.getAllWalletByUser(mCurrentUser.getUid());
     }
 
     private void addEvents() {
@@ -213,7 +213,14 @@ public class EditTransactionActivity extends AppCompatActivity {
         entity.setTransactionNote(note);
         entity.setMediaUri(mMediaUri);
 
-        TransactionsManager.getInstance(this).updateTransaction(entity,oldTransaction);
+        boolean updated = TransactionsManager.getInstance(this).updateTransaction(entity,oldTransaction);
+
+        if(!updated)
+        {
+            Toast.makeText(this,"Cập nhập giao dịch thất bại" ,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Toast.makeText(this,"Cập nhập giao dịch thành công" ,Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_TRANSACTION, Parcels.wrap(entity));
@@ -243,7 +250,9 @@ public class EditTransactionActivity extends AppCompatActivity {
         int year = mCalendar.get(Calendar.YEAR);
         int month = mCalendar.get(Calendar.MONTH);
         int date = mCalendar.get(Calendar.DATE);
-        new DatePickerDialog(this, dateSetListener, year, month, date).show();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,dateSetListener,year,month,date);
+        datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+        datePickerDialog.show();
     }
 
     private void onClickedWallet(View v) {
@@ -345,6 +354,7 @@ public class EditTransactionActivity extends AppCompatActivity {
         }
 
         if (mCurrentWallet != null) {
+            mTextMoney.setCurrencyCode(mCurrentWallet.getCurrencyCode());
             mTextWallet.setText(mCurrentWallet.getName());
         }
     }

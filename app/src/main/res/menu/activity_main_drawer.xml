@@ -5,6 +5,11 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_wallet"
+            android:icon="@drawable/ic_account_balance_black_24dp"
+            android:title="@string/wallets"
+        />
+        <item
             android:id="@+id/nav_transaction"
             android:icon="@drawable/ic_account_balance_wallet_black_24dp"
             android:title="@string/transaction_ledger" />
@@ -12,10 +17,6 @@
             android:id="@+id/nav_chart"
             android:icon="@drawable/ic_insert_chart_black_24dp"
             android:title="@string/report" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/action_settings" />
     </group>
 
 
@@ -25,13 +26,21 @@
                 android:id="@+id/nav_budget"
                 android:title="@string/budget"
                 android:icon="@drawable/ic_bk_budget"/>
-
+            <item
+                android:id="@+id/nav_event"
+                android:title="@string/event"
+                android:icon="@drawable/ic_event_black_24dp"
+                />
             <item
                 android:id="@+id/nav_periodic_transaction"
                 android:title="@string/periodic_transaction"
                 android:icon="@drawable/ic_update_black"/>
         </menu>
     </item>
+    <item
+        android:id="@+id/nav_manage"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="@string/action_settings" />
     <item android:title="@string/communicate">
         <menu>
             <item

@@ -88,7 +88,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         holder.item_label.setText(category.getCategoryName());
         holder.item_note.setText(transaction.getTransactionNote());
 
-        holder.item_money_trading.setText(String.valueOf(transaction.getTransactionAmount()));
+        holder.item_money_trading.setText(String.valueOf(Math.abs(transaction.getTransactionAmount())));
 
 
         // lấy ảnh từ asset

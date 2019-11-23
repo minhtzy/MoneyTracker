@@ -33,6 +33,7 @@ import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.utilities.BitmapUtils;
+import com.minhtzy.moneytracker.utilities.CurrencyUtils;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
 import com.minhtzy.moneytracker.wallet.SelectCategoryActivity;
@@ -54,7 +55,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     public static final String EXTRA_TRANSACTION = "com.minhtzy.moneytracker.extra.transaction";
     private static final Object IMAGE_DIRECTORY = "images";
 
-    private EditText mTextMoney;
+    private CurrencyEditText mTextMoney;
     private EditText mTextCategory;
     private EditText mTextNote;
     private EditText mTextDate;
@@ -66,7 +67,6 @@ public class AddTransactionActivity extends AppCompatActivity {
 
     private FirebaseUser mCurrentUser;
     private IWalletsDAO iWalletsDAO;
-    private ITransactionsDAO iTransactionsDAO;
     private List<WalletEntity> mListWallet;
     private CategoryEntity mCurrentCategory =null;
     private WalletEntity mCurrentWallet = null;
@@ -115,10 +115,10 @@ public class AddTransactionActivity extends AppCompatActivity {
         mImgPicture = findViewById(R.id.image_choose_picture);
         mImgPreView = findViewById(R.id.image_preview);
         mCalendar = Calendar.getInstance();
-        iWalletsDAO = new WalletsDAOImpl(this);
-        iTransactionsDAO = new TransactionsDAOImpl(this);
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        //mListWallet = iWalletsDAO.getAllWalletByUser(mCurrentUser.getUid());
+        iWalletsDAO = new WalletsDAOImpl(this);
+        mListWallet = iWalletsDAO.getAllWalletByUser(mCurrentUser.getUid());
+        mCurrentWallet = mListWallet.get(0);
     }
 
     private void addEvents() {
@@ -217,10 +217,13 @@ public class AddTransactionActivity extends AppCompatActivity {
                 updateLabelDate();
             }
         };
+
         int year = mCalendar.get(Calendar.YEAR);
         int month = mCalendar.get(Calendar.MONTH);
         int date = mCalendar.get(Calendar.DATE);
-        new DatePickerDialog(this,dateSetListener,year,month,date).show();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,dateSetListener,year,month,date);
+        datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+        datePickerDialog.show();
     }
 
     private void onClickedWallet(View v) {
@@ -229,7 +232,6 @@ public class AddTransactionActivity extends AppCompatActivity {
         builderSingle.setTitle("Chọn ví của bạn");
 
         final ArrayAdapter arrayAdapter = new WalletListAdapter(this, R.layout.custom_item_wallet,mListWallet);
-
 
         builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -313,6 +315,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         }
 
         if(mCurrentWallet != null) {
+            mTextMoney.setCurrencyCode(mCurrentWallet.getCurrencyCode());
             mTextWallet.setText(mCurrentWallet.getName());
         }
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import com.minhtzy.moneytracker.R;
@@ -19,7 +20,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
 
 
     public static final String LOG_TAG = "DB_HELPER";
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2;
     public static final int START_VERSION = 1;
     private Context mContext;
 
@@ -59,6 +60,7 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
                     mContext.getPackageName());
             if(identifier != 0) executeRawSql(db,identifier);
         }
+        createTrigger(db);
 
     }
 
@@ -105,28 +107,34 @@ public class MoneyTrackerDBHelper extends SQLiteOpenHelper {
 
     private void createTrigger(SQLiteDatabase db)
     {
-        String s1 = "create trigger wallet_insert_transactions after insert on tbl_transactions " +
-                    "begin " +
+        String s1 = "create trigger if not exists wallet_insert_transactions after insert on tbl_transactions " +
+                    "for each row begin " +
                     "update tbl_wallets " +
                     "set currentBalance = currentBalance + new.amount " +
                     "where _id = new.walletId;" +
                     "end;";
 
-        String s2 = "create trigger wallet_update_transactions after update on tbl_transactions " +
-                "begin " +
+        String s2 = "create trigger if not exists wallet_update_transactions after update on tbl_transactions " +
+                "for each row begin " +
                 "update tbl_wallets " +
-                "set currentBalance = currentBalance + new.amount - old.amount " +
+                "set currentBalance = currentBalance - old.amount " +
+                "where _id = old.walletId;" +
+                "update tbl_wallets " +
+                "set currentBalance = currentBalance + new.amount " +
                 "where _id = new.walletId;" +
                 "end;";
 
-        String s3 = "create trigger wallet_delete_transactions after delete on tbl_transactions " +
-                "begin " +
+        String s3 = "create trigger if not exists wallet_delete_transactions after delete on tbl_transactions " +
+                "for each row begin " +
                 "update tbl_wallets " +
                 "set currentBalance = currentBalance - old.amount " +
-                "where _id = new.walletId;" +
+                "where _id = old.walletId;" +
                 "end;";
 
         try {
+            db.execSQL("drop trigger if exists wallet_insert_transactions");
+            db.execSQL("drop trigger if exists wallet_update_transactions");
+            db.execSQL("drop trigger if exists wallet_delete_transactions");
             db.execSQL(s1);
             db.execSQL(s2);
             db.execSQL(s3);

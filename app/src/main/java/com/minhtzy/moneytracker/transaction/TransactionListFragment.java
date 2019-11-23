@@ -25,6 +25,7 @@ import com.minhtzy.moneytracker.adapter.TransactionListAdapter;
 import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView;
@@ -44,13 +45,15 @@ public class TransactionListFragment extends Fragment {
     private PinnedHeaderListView mLViewTransaction;
     private TransactionListAdapter mAdapter;
     private LinearLayout mBlankLayout;
-    List<TransactionEntity> mItems;
+    private List<TransactionEntity> mItems;
+    private WalletEntity mWallet;
+    private DateRange mDateRange;
     List<Pair<Date,List<TransactionEntity>>> mFilterItems;
     View headerView;
 
     private static final String BUNDLE_LIST_ITEM = "TransactionListFragment.bundle.list_items";
     private static final String BUNDLE_DATE_RANGE = "TransactionListFragment.bundle.dateRange";
-
+    public static final String BUNDLE_WALLET = "TransactionListFragment.bundle.wallet";
     public static TransactionListFragment newInstance(List<TransactionEntity> items) {
         Log.d(LOG_TAG,"create new instance "+ items.size());
         TransactionListFragment fragment = new TransactionListFragment();
@@ -61,11 +64,12 @@ public class TransactionListFragment extends Fragment {
         return fragment;
     }
 
-    public static TransactionListFragment newInstance(DateRange dateRange) {
+    public static TransactionListFragment newInstance(WalletEntity wallet,DateRange dateRange) {
         Log.d(LOG_TAG,"create new instance "+ dateRange);
         TransactionListFragment fragment = new TransactionListFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(BUNDLE_DATE_RANGE,dateRange);
+        bundle.putParcelable(BUNDLE_WALLET,Parcels.wrap(wallet));
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -75,31 +79,32 @@ public class TransactionListFragment extends Fragment {
         super.onStart();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments() != null)
+        {
+            mItems =(ArrayList<TransactionEntity>) Parcels.unwrap(getArguments().getParcelable(BUNDLE_LIST_ITEM));
+            mWallet = Parcels.unwrap(getArguments().getParcelable(BUNDLE_WALLET));
+            mDateRange = (DateRange) getArguments().getSerializable(BUNDLE_DATE_RANGE);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if(mItems == null){
-            if(savedInstanceState != null) {
-                if(savedInstanceState.getParcelable(BUNDLE_LIST_ITEM) != null)
-                {
-                    mItems =(ArrayList<TransactionEntity>) Parcels.unwrap(savedInstanceState.getParcelable(BUNDLE_LIST_ITEM));
-                }
-                else if(savedInstanceState.getSerializable(BUNDLE_DATE_RANGE) != null)
-                {
-                    DateRange date = (DateRange) savedInstanceState.getSerializable(BUNDLE_DATE_RANGE);
-                    ITransactionsDAO iTransactionsDAO = new TransactionsDAOImpl(inflater.getContext());
+            if(mWallet != null && mDateRange != null)
+            {
 
-                    mItems = iTransactionsDAO.getAllTransactionByPeriod(WalletsManager.getInstance(inflater.getContext()).getCurrentWallet().getWalletId(),date);
-                }
-                else
-                {
-                    mItems= new ArrayList<>();
-                }
+                ITransactionsDAO iTransactionsDAO = new TransactionsDAOImpl(inflater.getContext());
 
+                mItems = iTransactionsDAO.getAllTransactionByPeriod(mWallet.getWalletId(),mDateRange);
             }
-            else {
-                mItems = new ArrayList<>();
+            else
+            {
+                mItems= new ArrayList<>();
             }
         }
         Log.d(LOG_TAG,"create view items " + mItems.size());

@@ -133,4 +133,6 @@
     <string name="edit_wallet">Edit Wallet</string>
     <string name="hint_password">Enter your password</string>
     <string name="hint_username">Enter your password</string>
+    <string name="wallets">My Wallets</string>
+    <string name="event">Event</string>
 </resources>

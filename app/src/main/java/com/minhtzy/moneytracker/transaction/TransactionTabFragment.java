@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -50,8 +52,6 @@ public class TransactionTabFragment extends Fragment {
 
     private FloatingActionButton mFabAddTransaction;
     List<Pair<String, Fragment>> mTabFragment;
-    List<TransactionEntity> mListTransaction;
-    ITransactionsDAO iTransactionsDAO;
     WalletEntity mCurrentWallet = null;
 
     DateUtils dateUtils;
@@ -67,9 +67,7 @@ public class TransactionTabFragment extends Fragment {
         dateUtils = new DateUtils();
         mTabFragment = new ArrayList<>();
         mCurrentWallet = WalletsManager.getInstance(this.getContext()).getCurrentWallet();
-        iTransactionsDAO = new TransactionsDAOImpl(this.getContext());
-        mListTransaction = iTransactionsDAO.getAllTransactionByWalletId(mCurrentWallet.getWalletId());
-        mAdapter = new TransactionPagerAdapter(getChildFragmentManager(), mTabFragment);
+       mAdapter = new TransactionPagerAdapter(getChildFragmentManager(), mTabFragment);
 
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -78,6 +76,12 @@ public class TransactionTabFragment extends Fragment {
 
         //new loadTabs(getActivity()).execute();
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main, menu);
     }
 
     private void scrollToCurrentMonth() {
@@ -158,13 +162,8 @@ public class TransactionTabFragment extends Fragment {
     }
 
     private void addTab(DateRange dateRange) {
-
-
-        List<TransactionEntity> transactions = iTransactionsDAO.getAllTransactionByPeriod(mCurrentWallet.getWalletId(),dateRange);
         String title = getTitle(dateRange.getDateFrom().toDate());
-
-        Fragment fragment = TransactionListFragment.newInstance(dateRange);
-
+        Fragment fragment = TransactionListFragment.newInstance(mCurrentWallet,dateRange);
         mTabFragment.add(new Pair<>(title, fragment));
 
     }
@@ -198,15 +197,15 @@ public class TransactionTabFragment extends Fragment {
         return title;
     }
 
-    private List<TransactionEntity> filterTransactions(DateRange dateRange, List<TransactionEntity> transactions) {
-        List<TransactionEntity> filter = new ArrayList<>();
-        for (TransactionEntity t : transactions) {
-            if (dateUtils.isDateRangeContainDate(dateRange, t.getTransactionTime())) {
-                filter.add(t);
-            }
-        }
-        return filter;
-    }
+//    private List<TransactionEntity> filterTransactions(DateRange dateRange, List<TransactionEntity> transactions) {
+//        List<TransactionEntity> filter = new ArrayList<>();
+//        for (TransactionEntity t : transactions) {
+//            if (dateUtils.isDateRangeContainDate(dateRange, t.getTransactionTime())) {
+//                filter.add(t);
+//            }
+//        }
+//        return filter;
+//    }
 
 
     @Override
@@ -215,8 +214,7 @@ public class TransactionTabFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FAB_ADD_TRANSACTION_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                TransactionEntity transaction = (TransactionEntity) Parcels.unwrap(data.getParcelableExtra(AddTransactionActivity.EXTRA_TRANSACTION));
-                mListTransaction.add(transaction);
+                // do nothing
             }
         }
     }
@@ -245,8 +243,6 @@ public class TransactionTabFragment extends Fragment {
             // chu y phai dat truoc setcontentview
             mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             mDialog.setContentView(R.layout.loading_view);
-            mListTransaction.clear();
-            mListTransaction.addAll(iTransactionsDAO.getAllTransactionByWalletId(mCurrentWallet.getWalletId()));
             mDialog.setCancelable(false);
             mDialog.show();
         }
@@ -276,8 +272,8 @@ public class TransactionTabFragment extends Fragment {
                 DateRange dateRange = new DateRange(new MTDate(2018, 0, 1).firstDayOfMonth().setTimeToBeginningOfDay(),
                         new MTDate());
                 addTabs(dateRange);
-                mAdapter.updateValues(mTabFragment);
-
+                //mAdapter.updateValues(mTabFragment);
+                mAdapter.notifyDataSetChanged();
 
             } catch (Exception e) {
                 // TODO: handle exception

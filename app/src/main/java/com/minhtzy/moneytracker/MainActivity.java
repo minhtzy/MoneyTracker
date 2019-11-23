@@ -21,9 +21,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.minhtzy.moneytracker.budget.BudgetFragment;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
+import com.minhtzy.moneytracker.event.EventFragment;
 import com.minhtzy.moneytracker.setting.Setting;
 
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
@@ -375,8 +377,6 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_chart) {
-
-
             Log.d(MainActivity.class.getSimpleName(),"Start Transaction Activity");
             fragmentClass = StatisticalTabFragment.class;
         } else if (id == R.id.nav_manage) {
@@ -385,7 +385,21 @@ public class MainActivity extends AppCompatActivity
             finish();
             return true;
 
-        } else if (id == R.id.nav_share) {
+        }
+        else if(id == R.id.nav_wallet)
+        {
+            Log.d(MainActivity.class.getSimpleName(),"Start Budget Activity");
+            fragmentClass = BudgetFragment.class;
+        }
+        else if(id == R.id.nav_budget)
+        {
+
+        }
+        else if(id == R.id.nav_event)
+        {
+            fragmentClass = EventFragment.class;
+        }
+        else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 

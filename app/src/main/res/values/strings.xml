@@ -177,6 +177,8 @@
     <string name="edit_wallet">Sửa ví</string>
     <string name="hint_username">Nhập tên người dùng</string>
     <string name="hint_password">Nhập password</string>
+    <string name="wallets">Ví của tôi</string>
+    <string name="event">Sự kiện</string>
     <string-array name="language_names">
         <item>@string/language_vietnamese</item>
         <item>@string/language_english</item>

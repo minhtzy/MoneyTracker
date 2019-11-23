@@ -11,24 +11,33 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
 
     String rawText;
 
+    String currrencyCode;
+
     public CurrencyTextView(Context context) {
         super(context);
+        init();
     }
 
     public CurrencyTextView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public CurrencyTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
+    void init()
+    {
+        currrencyCode = "VND";
+    }
     @Override
     public void setText(CharSequence text, BufferType type) {
         rawText = text.toString();
         String currency = text.toString();
         try {
-            currency = CurrencyUtils.formatVnCurrency(currency);
+            currency = CurrencyUtils.getInstance().formatCurrency(currency,currrencyCode);
         }catch (Exception e){}
 
         super.setText(currency, type);
@@ -37,5 +46,10 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
     @Override
     public CharSequence getText() {
         return rawText;
+    }
+
+    public void setCurrrencyFormat(String currrencyCode)
+    {
+        this.currrencyCode = currrencyCode;
     }
 }

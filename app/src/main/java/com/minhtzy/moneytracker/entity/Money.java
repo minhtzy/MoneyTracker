@@ -21,6 +21,6 @@ public class Money {
 
     public String toString()
     {
-        return CurrencyUtils.formatCurrency(String.valueOf(value),format);
+        return CurrencyUtils.getInstance().formatCurrency(String.valueOf(value),format.getCurrencyCode());
     }
 }
