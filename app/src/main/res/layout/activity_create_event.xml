@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".event.CreateEventActivity">
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignWithParentIfMissing="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginBottom="@dimen/spacing_small_horizontal"
+                android:background="@color/colorBackgroundItem"
+                android:paddingBottom="@dimen/spacing_small">
+
+                <RelativeLayout
+                    android:id="@+id/pageCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/name_event"
+                        style="@style/TextAppearance.AppCompat.Headline"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/spacing_72_horizontal"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:hint="@string/saving_add_name_title"
+                        android:inputType="textCapWords"
+                        android:maxLength="@integer/wallet_name_maxlength"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="@dimen/spacing_medium" />
+
+                    <ImageView
+                        android:id="@+id/cate_icon"
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
+                        android:layout_marginStart="@dimen/spacing_small_horizontal"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:background="@drawable/button_transparent_unbounded_darken"
+                        android:src="@drawable/ic_image" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/cate_icon"
+                        android:layout_alignStart="@+id/cate_icon"
+                        android:layout_alignEnd="@+id/cate_icon"
+                        android:layout_marginTop="6dp"
+                        android:background="@color/divider_light" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/pageSetTimeEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:background="@drawable/button_transparent_bounded_darken"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_16_to_28"
+                        android:layout_marginTop="12dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/spacing_xlarge"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_calendar" />
+
+                    <ImageView
+                        android:id="@+id/end_date_clear"
+                        android:layout_width="@dimen/smallest_touchable_view_size"
+                        android:layout_height="@dimen/smallest_touchable_view_size"
+                        android:layout_alignParentEnd="true"
+                        android:background="@drawable/button_transparent_unbounded_darken"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_input_clear"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/txt_time_event"
+                        style="@style/Widget.Design.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/spacing_72_horizontal"
+                        android:hint="@string/saving_ending_date" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/pageSelectCurrency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:background="@drawable/button_transparent_bounded_darken"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_16_to_28"
+                        android:layout_marginTop="12dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/spacing_xlarge"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_currency" />
+
+                    <TextView
+                        android:id="@+id/currency"
+                        style="@style/Widget.Design.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/spacing_72_horizontal"
+                        android:hint="@string/add_account_currency_title" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/pageAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:background="@drawable/button_transparent_bounded_darken"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/img_wallet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_16_to_28"
+                        android:layout_marginTop="12dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/spacing_xlarge"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_account_balance_wallet_black_24dp" />
+
+                    <ImageView
+                        android:id="@+id/wallet_locker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:contentDescription="@string/app_name"
+                        android:visibility="gone"
+                        android:src="@drawable/ic_lock" />
+
+                    <TextView
+                        android:id="@+id/account"
+                        style="@style/Widget.Design.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_72_horizontal"
+                        android:hint="@string/select_wallet"
+                        android:layout_centerVertical="true"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="@dimen/spacing_medium" />
+                </RelativeLayout>
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

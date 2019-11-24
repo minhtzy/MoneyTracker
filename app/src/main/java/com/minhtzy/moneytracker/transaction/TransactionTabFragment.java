@@ -67,7 +67,7 @@ public class TransactionTabFragment extends Fragment {
         dateUtils = new DateUtils();
         mTabFragment = new ArrayList<>();
         mCurrentWallet = WalletsManager.getInstance(this.getContext()).getCurrentWallet();
-       mAdapter = new TransactionPagerAdapter(getChildFragmentManager(), mTabFragment);
+        mAdapter = new TransactionPagerAdapter(getChildFragmentManager(), mTabFragment);
 
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);

@@ -3,6 +3,7 @@ package com.minhtzy.moneytracker.entity;
 import android.content.ContentValues;
 
 import com.minhtzy.moneytracker.model.Constants;
+import com.minhtzy.moneytracker.model.EventStatus;
 import com.minhtzy.moneytracker.model.MTDate;
 
 import org.parceler.Parcel;
@@ -16,11 +17,13 @@ public class EventEntity extends EntityBase {
     public static final String EVENT_NAME = "name";
     public static final String EVENT_ICON = "icon";
     public static final String EVENT_TIME_EXPIRE = "timeExpire";
-
+    public static final String EVENT_STATUS = "status";
+    public static final String LOCK_WALLET = "lockWallet";
 
     public EventEntity() {
         super();
         setEventId(Constants.NOT_SET);
+        setStatus(EventStatus.START);
     }
 
     public EventEntity(ContentValues contentValues) {
@@ -39,8 +42,19 @@ public class EventEntity extends EntityBase {
         event.setEventName(eventName);
         event.setEventIcon(eventIcon);
         event.setTimeExpire(timeExpire);
+        event.setStatus(EventStatus.START);
         return event;
     }
+
+    public void setStatus(EventStatus start) {
+        setString(EVENT_STATUS,start.getValue());
+    }
+
+    public EventStatus getStatus()
+    {
+        return EventStatus.from(getString(EVENT_STATUS));
+    }
+
 
     public int getEventId() {
         return getInt(EVENT_ID);
@@ -77,5 +91,9 @@ public class EventEntity extends EntityBase {
 
     public double getSpentAmount() {
         return 0;
+    }
+
+    public void setLockWallet(String walletId) {
+        setString(LOCK_WALLET,walletId);
     }
 }

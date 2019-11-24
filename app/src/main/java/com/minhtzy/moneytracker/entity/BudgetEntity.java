@@ -23,7 +23,7 @@ public class BudgetEntity extends EntityBase {
     public static final String START_DATE = "timeStart";
     public static final String END_DATE = "timeEnd";
     public static final String STATUS = "status";
-    public static final String LOOP_BUDGET = "isLoop";
+    public static final String LOOP_BUDGET = "repeat";
 
     public BudgetEntity() {
         super();
@@ -70,6 +70,7 @@ public class BudgetEntity extends EntityBase {
     }
 
     public double getSpent() {
+        if(getDouble(BUDGET_SPENT) == null) return 0;
         return getDouble(BUDGET_SPENT);
     }
 

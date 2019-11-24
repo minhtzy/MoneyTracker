@@ -138,7 +138,9 @@ CREATE TABLE IF NOT EXISTS tbl_events (
     _id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     icon TEXT NOT NULL,
-    timeExpire INTEGER NOT NULL
+    timeExpire INTEGER NOT NULL,
+    status TEXT NOT NULL,
+    lockWallet TEXT
 );
 
 CREATE TABLE IF NOT EXISTS tbl_locations (
@@ -158,7 +160,9 @@ CREATE TABLE IF NOT EXISTS tbl_budgets (
     walletId TEXT NOT NULL,
     amount real NOT null,
     timeStart integer  NOT NULL,
-    timeEnd integer  NOT NULL
+    timeEnd integer  NOT NULL,
+    repeat integer,
+    icon TEXT
 );
 
 CREATE TABLE tbl_currency_format(

@@ -26,6 +26,7 @@ import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.event.EventFragment;
+import com.minhtzy.moneytracker.event.EventListFragment;
 import com.minhtzy.moneytracker.setting.Setting;
 
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
@@ -394,6 +395,7 @@ public class MainActivity extends AppCompatActivity
         else if(id == R.id.nav_budget)
         {
 
+            fragmentClass = BudgetFragment.class;
         }
         else if(id == R.id.nav_event)
         {

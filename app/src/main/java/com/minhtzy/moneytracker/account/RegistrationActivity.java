@@ -48,6 +48,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth
         FirebaseApp.initializeApp(RegistrationActivity.this);
+        mAuth = FirebaseAuth.getInstance();
 
     }
 

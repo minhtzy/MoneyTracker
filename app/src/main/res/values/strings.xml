@@ -179,6 +179,22 @@
     <string name="hint_password">Nhập password</string>
     <string name="wallets">Ví của tôi</string>
     <string name="event">Sự kiện</string>
+    <string name="email">Email</string>
+    <string name="title_activity_login2">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="title_activity_login_v2">Sign in</string>
+    <string name="saving_add_name_title">Nhập tên sự kiện</string>
+    <string name="saving_ending_date">Ngày hết hạn</string>
+    <string name="add_account_currency_title">Chọn đơn vị tiền tệ</string>
+    <string name="select_category_icon">Chọn biểu tượng</string>
+    <string name="create_event">Tạo sự kiện</string>
     <string-array name="language_names">
         <item>@string/language_vietnamese</item>
         <item>@string/language_english</item>

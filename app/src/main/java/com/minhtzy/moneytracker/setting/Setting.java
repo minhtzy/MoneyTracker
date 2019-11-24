@@ -14,7 +14,7 @@ import com.minhtzy.moneytracker.account.LoginActivity;
 import com.minhtzy.moneytracker.changelanguage.ChangeLanguageActivity;
 import com.minhtzy.moneytracker.model.Constants;
 import com.minhtzy.moneytracker.databinding.ActivitySettingBinding;
-import com.minhtzy.moneytracker.utils.LanguageUtils;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,7 +33,7 @@ public class Setting extends AppCompatActivity {
         FirebaseApp.initializeApp(Setting.this);
         mAtuth = FirebaseAuth.getInstance();
 
-        LanguageUtils.loadLocale();
+        WalletsManager.LanguageUtils.loadLocale();
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
         mBinding.setMain(Setting.this);
 

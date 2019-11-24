@@ -3,9 +3,12 @@ package com.minhtzy.moneytracker.utilities;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.util.Log;
+
+import com.minhtzy.moneytracker.App;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -15,7 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 
-public class BitmapUtils {
+public class ResourceUtils {
 
     private static final String IMAGE_DIRECTORY = "/money_tracker_media";
 
@@ -70,5 +73,27 @@ public class BitmapUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static final String CATEGORY_BASEPATH = "category/";
+    public static Drawable getCategoryIcon(String filename)
+    {
+        try {
+            Drawable img = Drawable.createFromStream(App.self().getAssets().open(CATEGORY_BASEPATH + filename), null);
+            return img;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public static final String CURRENCY_BASEPATH = "currency/";
+    public static Drawable getCurrencyIcon(String currencyCode)
+    {
+        try {
+            Drawable img = Drawable.createFromStream(App.self().getAssets().open(String.format("%sic_currency_%s.png",CURRENCY_BASEPATH,currencyCode.toLowerCase())), null);
+            return img;
+        } catch (IOException e) {
+            return null;
+        }
     }
 }

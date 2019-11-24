@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,7 +30,7 @@ import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.MTDate;
-import com.minhtzy.moneytracker.utilities.BitmapUtils;
+import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.CategoryManager;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
@@ -199,7 +198,7 @@ public class EditTransactionActivity extends AppCompatActivity {
         }
         String mMediaUri = null;
         if (mCurrentImage != null) {
-            mMediaUri = BitmapUtils.saveImage(this, mCurrentImage);
+            mMediaUri = ResourceUtils.saveImage(this, mCurrentImage);
         }
         float money = (float) ((CurrencyEditText) mTextMoney).getCleanDoubleValue() * mCurrentCategory.getRate();
         String note = mTextNote.getText().toString();
@@ -327,7 +326,7 @@ public class EditTransactionActivity extends AppCompatActivity {
         }
     }
     private void updateImagePreView(String uri) {
-        Bitmap bitmap = BitmapUtils.loadImageFromStorage(uri);
+        Bitmap bitmap = ResourceUtils.loadImageFromStorage(uri);
         mCurrentImage = bitmap;
         if(bitmap != null) {
             int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
@@ -343,14 +342,7 @@ public class EditTransactionActivity extends AppCompatActivity {
         if (mCurrentCategory != null) {
             mTextCategory.setText(mCurrentCategory.getCategoryName());
             ImageView imageView = findViewById(R.id.image_transaction_category);
-            // lấy ảnh từ asset
-            String base_path = "category/";
-            try {
-                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + mCurrentCategory.getCategoryIcon()), null);
-                imageView.setImageDrawable(img);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            imageView.setImageDrawable(ResourceUtils.getCategoryIcon(mCurrentCategory.getCategoryIcon()));
         }
 
         if (mCurrentWallet != null) {

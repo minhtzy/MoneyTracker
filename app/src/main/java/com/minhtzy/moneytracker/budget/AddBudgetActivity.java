@@ -3,7 +3,6 @@ package com.minhtzy.moneytracker.budget;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +26,7 @@ import com.minhtzy.moneytracker.entity.BudgetEntity;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.DateRange;
+import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
 import com.minhtzy.moneytracker.wallet.SelectCategoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +34,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.parceler.Parcels;
 
-import java.io.IOException;
 import java.util.List;
 
 public class AddBudgetActivity extends AppCompatActivity {
@@ -227,14 +226,7 @@ public class AddBudgetActivity extends AppCompatActivity {
             mTextCategory.setError(null);
             mTextCategory.setText(mCurrentCategory.getCategoryName());
             ImageView imageView = findViewById(R.id.cate_icon);
-            // lấy ảnh từ asset
-            String base_path = "category/";
-            try {
-                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + mCurrentCategory.getCategoryIcon()), null);
-                imageView.setImageDrawable(img);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            imageView.setImageDrawable(ResourceUtils.getCategoryIcon(mCurrentCategory.getCategoryIcon()));
         }
 
         if (mCurrentWallet != null) {

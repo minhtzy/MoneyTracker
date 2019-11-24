@@ -1,8 +1,6 @@
 package com.minhtzy.moneytracker.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +11,10 @@ import android.widget.TextView;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.model.CategoryExpandableGroup;
+import com.minhtzy.moneytracker.utilities.ResourceUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -82,15 +78,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
         TextView txtTenitem = (TextView)convertView.findViewById(R.id.txtCategoryTitle);
 
         txtTenitem.setText(category.getCategoryName());
-
-        // lấy ảnh từ asset
-        String base_path = "category/";
-        try{
-            Drawable img = Drawable.createFromStream(mContext.getAssets().open(base_path + category.getCategoryIcon()),null);
-            imganhItem.setImageDrawable(img);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        imganhItem.setImageDrawable(ResourceUtils.getCategoryIcon(category.getCategoryIcon()));
 
         return convertView;
     }
@@ -111,16 +99,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
         txtTenitem.setText(category.getCategoryName());
 
-        // set lại size cho ảnh
-        //imganhItem.setLayoutParams(new RelativeLayout.LayoutParams(R.dimen.item_category_child_size,R.dimen.item_category_child_size));
-        // lấy ảnh từ asset
-        String base_path = "category/";
-        try {
-            Drawable img = Drawable.createFromStream(mContext.getAssets().open(base_path + category.getCategoryIcon()),null);
-            imganhItem.setImageDrawable(img);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        imganhItem.setImageDrawable(ResourceUtils.getCategoryIcon(category.getCategoryIcon()));
 
         return convertView;
     }

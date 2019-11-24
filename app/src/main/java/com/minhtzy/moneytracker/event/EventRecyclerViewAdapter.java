@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.entity.EventEntity;
 import com.minhtzy.moneytracker.model.MTDate;
+import com.minhtzy.moneytracker.utilities.ResourceUtils;
 
 import java.util.List;
 
@@ -18,12 +19,12 @@ import java.util.List;
  * specified {@link OnEventItemInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyEventRecyclerViewAdapter extends RecyclerView.Adapter<MyEventRecyclerViewAdapter.ViewHolder> {
+public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
 
     private final List<EventEntity> mValues;
     private final OnEventItemInteractionListener mListener;
 
-    public MyEventRecyclerViewAdapter(List<EventEntity> items, OnEventItemInteractionListener listener) {
+    public EventRecyclerViewAdapter(List<EventEntity> items, OnEventItemInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -31,7 +32,7 @@ public class MyEventRecyclerViewAdapter extends RecyclerView.Adapter<MyEventRecy
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_event, parent, false);
+                .inflate(R.layout.fragment_event_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -40,9 +41,8 @@ public class MyEventRecyclerViewAdapter extends RecyclerView.Adapter<MyEventRecy
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(mValues.get(position).getEventName());
         int remainDate = getRemainDate(mValues.get(position).getTimeExpire());
-        holder.mRemainDate.setText(remainDate);
         holder.mSpentAmount.setText(String.valueOf(mValues.get(position).getSpentAmount()));
-
+        holder.mIcon.setImageDrawable(ResourceUtils.getCategoryIcon(mValues.get(position).getEventIcon()));
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,7 +56,8 @@ public class MyEventRecyclerViewAdapter extends RecyclerView.Adapter<MyEventRecy
     }
 
     private int getRemainDate(MTDate timeExpire) {
-        return 0;
+        int remain = timeExpire.getDayOfWeek() - new MTDate().getDayOfWeek();
+        return remain > 0 ? remain : 0;
     }
 
     @Override
@@ -67,7 +68,6 @@ public class MyEventRecyclerViewAdapter extends RecyclerView.Adapter<MyEventRecy
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mNameView;
-        public final TextView mRemainDate;
         public final TextView mSpentAmount;
         public final ImageView mIcon;
         public EventEntity mItem;
@@ -75,8 +75,7 @@ public class MyEventRecyclerViewAdapter extends RecyclerView.Adapter<MyEventRecy
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mNameView = (TextView) view.findViewById(R.id.event_name);
-            mRemainDate = (TextView) view.findViewById(R.id.remain_date);
+            mNameView = view.findViewById(R.id.event_name);
             mSpentAmount = view.findViewById(R.id.spent_amount);
             mIcon = view.findViewById(R.id.icon_event);
         }

@@ -1,7 +1,6 @@
 package com.minhtzy.moneytracker.adapter;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +10,8 @@ import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.utilities.ResourceUtils;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -42,14 +41,7 @@ import java.util.List;
             CategoryEntity category = this.objects.get(position);
             txtTenitem.setText(category.getCategoryName());
 
-            // lấy ảnh từ asset
-            String base_path = "category/";
-            try {
-                Drawable img = Drawable.createFromStream(context.getAssets().open(base_path + category.getCategoryIcon()), null);
-                imganhItem.setImageDrawable(img);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            imganhItem.setImageDrawable(ResourceUtils.getCategoryIcon(category.getCategoryIcon()));
 
             return convertView;
         }

@@ -9,11 +9,10 @@ import android.util.Log;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
-import com.minhtzy.moneytracker.entity.EntityBase;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
-import com.minhtzy.moneytracker.utils.SharedPrefs;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -99,7 +98,7 @@ public class SyncCloudFirestore {
 
     public void onPullTransactions(WalletEntity wallet) {
 
-        long time_pull = SharedPrefs.getInstance().get(SharedPrefs.KEY_PULL_TIME,0);
+        long time_pull = WalletsManager.SharedPrefs.getInstance().get(WalletsManager.SharedPrefs.KEY_PULL_TIME,0);
         db.collection("users")
                 .document(wallet.getUserId())
                 .collection("wallets")
@@ -117,7 +116,7 @@ public class SyncCloudFirestore {
                                 TransactionsManager.getInstance(context).addTransaction(transaction);
                             }
                             long timestamp = Timestamp.now().toDate().getTime();
-                            SharedPrefs.getInstance().put(SharedPrefs.KEY_PULL_TIME,timestamp);
+                            WalletsManager.SharedPrefs.getInstance().put(WalletsManager.SharedPrefs.KEY_PULL_TIME,timestamp);
                             if(syncEvents != null) {
                                 syncEvents.onPullTransactionComplete();
                             }
@@ -187,7 +186,7 @@ public class SyncCloudFirestore {
 
     public void addTransactions(WalletEntity wallet) {
 
-        long time_pull = SharedPrefs.getInstance().get(SharedPrefs.KEY_PUSH_TIME,0);
+        long time_pull = WalletsManager.SharedPrefs.getInstance().get(WalletsManager.SharedPrefs.KEY_PUSH_TIME,0);
         List<TransactionEntity> transactions = new TransactionsDAOImpl(context).getAllSyncTransaction(wallet.getWalletId(), time_pull);
         WriteBatch writeBatch = db.batch();
 
@@ -208,7 +207,7 @@ public class SyncCloudFirestore {
                 Log.d(TAG_LOG,"Add transactions success");
                 // update push time
                 long timestamp = Timestamp.now().toDate().getTime();
-                SharedPrefs.getInstance().put(SharedPrefs.KEY_PUSH_TIME,timestamp);
+                WalletsManager.SharedPrefs.getInstance().put(WalletsManager.SharedPrefs.KEY_PUSH_TIME,timestamp);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

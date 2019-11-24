@@ -106,7 +106,7 @@ public class BudgetDAOImpl implements IBudgetDAO {
                         " INNER JOIN tbl_categories as c" +
                         " ON t.categoryId = c._id" +
                         " WHERE t.walletId = " + walletId +
-                        " AND transaction_date >= " + timeStart + " AND transaction_date <= " + timeEnd +
+                        " AND time >= " + timeStart + " AND time <= " + timeEnd +
                         " AND (c._id = " + categoryId +" OR c.parentId = " + categoryId + ")" ;
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();

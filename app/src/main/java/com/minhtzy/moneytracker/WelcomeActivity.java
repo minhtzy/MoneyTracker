@@ -8,8 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.minhtzy.moneytracker.account.LoginActivity;
-import com.minhtzy.moneytracker.utils.LanguageUtils;
-import com.minhtzy.moneytracker.utils.SharedPrefs;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.minhtzy.moneytracker.wallet.AddWalletActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -21,10 +20,10 @@ public class WelcomeActivity extends AppCompatActivity {
 
         // luu trang thai khi lan dau su dung ung dung,
 
-        SharedPrefs sharedPrefs = SharedPrefs.getInstance();
-        if (sharedPrefs.get(SharedPrefs.KEY_IS_FIRST_TIME, true)){
-            sharedPrefs.put(SharedPrefs.KEY_IS_FIRST_TIME,false);
-            LanguageUtils.changeLanguage(LanguageUtils.getCurrentLanguage());
+        WalletsManager.SharedPrefs sharedPrefs = WalletsManager.SharedPrefs.getInstance();
+        if (sharedPrefs.get(WalletsManager.SharedPrefs.KEY_IS_FIRST_TIME, true)){
+            sharedPrefs.put(WalletsManager.SharedPrefs.KEY_IS_FIRST_TIME,false);
+            WalletsManager.LanguageUtils.changeLanguage(WalletsManager.LanguageUtils.getCurrentLanguage());
         }
         setupApplication();
 
@@ -43,12 +42,13 @@ public class WelcomeActivity extends AppCompatActivity {
     private void startApplication() {
         // Kiểm tra nếu chưa đăng nhập thì đăng nhập
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         if(user == null) {
             Intent intent = new Intent(this,LoginActivity.class);
             startActivity(intent);
         }
         // Kiểm tra nếu chưa có ví
-        else if(false) {
+        else if(!WalletsManager.getInstance(this).hasWallet(user.getUid())) {
             Intent intent = new Intent(this, AddWalletActivity.class);
             startActivity(intent);
         }

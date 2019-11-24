@@ -8,7 +8,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +19,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -29,7 +27,7 @@ import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 import com.minhtzy.moneytracker.sync.SyncActivity;
-import com.minhtzy.moneytracker.utils.SharedPrefs;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.minhtzy.moneytracker.wallet.AddWalletActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -85,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         if (currentUser !=null) {
             // check wallet
             IWalletsDAO iWalletsDAO = new WalletsDAOImpl(this);
-            boolean not_synced = SharedPrefs.getInstance().get(SharedPrefs.KEY_PULL_TIME,0) == 0;
+            boolean not_synced = WalletsManager.SharedPrefs.getInstance().get(WalletsManager.SharedPrefs.KEY_PULL_TIME,0) == 0;
             if(iWalletsDAO.hasWallet(currentUser.getUid()) ) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -115,6 +113,11 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
+
+        progressDialog = new ProgressDialog(LoginActivity.this,
+                R.style.AppTheme);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
     }
 
     private void addEvents() {
@@ -156,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                         return;
                     }
 
+                    progressDialog.show();
                     mAuth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -182,6 +186,7 @@ public class LoginActivity extends AppCompatActivity {
                                         updateUI(null);
                                     }
 
+                                    progressDialog.dismiss();
                                     // ...
                                 }
                             });
@@ -234,6 +239,7 @@ public class LoginActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
+        progressDialog.show();
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -250,6 +256,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),"Authentication Failed.",Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
+                        progressDialog.dismiss();
                     }
                 });
     }

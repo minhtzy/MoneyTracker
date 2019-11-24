@@ -1,62 +1,82 @@
 package com.minhtzy.moneytracker.event;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.dataaccess.EventDAOImpl;
-import com.minhtzy.moneytracker.dataaccess.IEventDAO;
-import com.minhtzy.moneytracker.entity.EventEntity;
+import com.minhtzy.moneytracker.adapter.EventPagerAdapter;
 
-import java.util.List;
+public class EventFragment extends Fragment {
 
-public class EventFragment extends Fragment implements OnEventItemInteractionListener {
-
-    OnEventItemInteractionListener mListener;
-
-    List<EventEntity> mListEvents;
-
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private FloatingActionButton mFabAddEvent;
+    private EventPagerAdapter mAdapter;
     public EventFragment() {
+        // Required empty public constructor
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static EventFragment newInstance(int columnCount) {
+     public static EventFragment newInstance(String param1, String param2) {
         EventFragment fragment = new EventFragment();
+        Bundle args = new Bundle();
+
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        IEventDAO iEventDAO = new EventDAOImpl(getContext());
-        mListEvents = iEventDAO.getAllAvaialbleEvent();
+        if (getArguments() != null) {
+
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_event_list, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_event, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new MyEventRecyclerViewAdapter(mListEvents, mListener));
-        }
+        mTabLayout = view.findViewById(R.id.tab_layout);
+        mViewPager = view.findViewById(R.id.page_view);
+        mFabAddEvent = view.findViewById(R.id.fab_add_event);
+
+        mAdapter = new EventPagerAdapter(getChildFragmentManager());
+
+        mViewPager.setAdapter(mAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        addEvents();
         return view;
     }
 
-    @Override
-    public void onEventItemClicked(EventEntity entity) {
+    private void addEvents() {
+        mFabAddEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),CreateEventActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }

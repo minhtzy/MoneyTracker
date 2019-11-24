@@ -3,7 +3,6 @@ package com.minhtzy.moneytracker.transaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -19,14 +18,12 @@ import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.MTDate;
-import com.minhtzy.moneytracker.utilities.BitmapUtils;
+import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.CategoryManager;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 
 import org.parceler.Parcels;
-
-import java.io.IOException;
 
 public class ViewTransactionDetailActivity extends AppCompatActivity {
 
@@ -138,14 +135,7 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
             WalletEntity wallet = WalletsManager.getInstance(this).getWalletById(mTransaction.getWalletId());
             mTextCategory.setText(category.getCategoryName());
             ImageView imageView = findViewById(R.id.image_transaction_category);
-            // lấy ảnh từ asset
-            String base_path = "category/";
-            try {
-                Drawable img = Drawable.createFromStream(this.getAssets().open(base_path + category.getCategoryIcon()),null);
-                imageView.setImageDrawable(img);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            imageView.setImageDrawable(ResourceUtils.getCategoryIcon(category.getCategoryIcon()));
 
             mTextDate.setText(new MTDate(mTransaction.getTransactionTime()).toIsoDateShortTimeString());
             mTextMoney.setText(String.valueOf(mTransaction.getTransactionAmount()));
@@ -163,7 +153,7 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
         }
     }
     private void updateImagePreView(String uri) {
-        Bitmap bitmap = BitmapUtils.loadImageFromStorage(uri);
+        Bitmap bitmap = ResourceUtils.loadImageFromStorage(uri);
         if(bitmap != null) {
             int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
             Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);

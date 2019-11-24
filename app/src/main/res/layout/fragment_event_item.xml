@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:background="@color/colorBackgroundItem">
+    <RelativeLayout
+        android:paddingLeft="@dimen/spacing_medium_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/icon_event"
+            android:layout_width="@dimen/icon_bar_size"
+            android:layout_height="@dimen/icon_bar_size"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:layout_marginBottom="2dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" />
+        <TextView
+            android:id="@+id/event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/spacing_medium_horizontal"
+            android:layout_marginRight="@dimen/spacing_small"
+            android:layout_toRightOf="@+id/icon_event"
+            android:layout_alignTop="@+id/icon_event"
+            android:hint="Event's name"
+            android:layout_alignWithParentIfMissing="true"
+            style="@style/TextAppearance.AppCompat.Title"/>
+
+        <TextView
+            android:id="@+id/spent_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/spacing_medium_horizontal"
+            android:layout_marginRight="@dimen/spacing_small"
+            android:layout_toRightOf="@+id/icon_event"
+            android:layout_below="@+id/event_name"
+            android:layout_marginTop="@dimen/spacing_16"
+            android:text="@string/budget_spent"
+            android:layout_alignWithParentIfMissing="true"
+            style="@style/TextAppearance.AppCompat.Body1"/>
+
+        <TextView
+            android:id="@+id/spent_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/spacing_medium_horizontal"
+            android:layout_marginRight="@dimen/spacing_small"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/event_name"
+            android:layout_marginTop="@dimen/spacing_16"
+            android:text="0đ"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_marginBottom="@dimen/spacing_medium"
+            style="@style/TextAppearance.AppCompat.Body1"/>
+    </RelativeLayout>
+
+
+</LinearLayout>
+
+

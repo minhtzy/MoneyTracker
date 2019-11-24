@@ -206,7 +206,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
                 + " ,tblc._id AS categoryId "
                 + " , tblc.type AS type "
                 + " , tblt._id AS _id"
-                + " , tblt.transaction_date AS transaction_date"
+                + " , tblt.time AS time"
                 + " , tblt.note AS note"
                 + " , tblt.currency AS currency"
                 + " , tblt.location AS location"
@@ -235,13 +235,13 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
                 + " tblt.trading AS trading "
                 + " ,tblc._id AS categoryId "
                 + " ,tblc.type AS type "
-                + " ,tblt.transaction_date as t_date"
+                + " ,tblt.time as time"
                 + " FROM tbl_transactions tblt "
                 + " INNER JOIN tbl_categories tblc ON tblc._id = tblt.categoryId "
                 + " WHERE (tblt.categoryId = " + categoryId + " OR tblc.parentId = " + categoryId +" )"
                 + " AND tblt.walletId = "+ wallet_id
-                + " AND tblt.transaction_date >= " + dateRange.getDateFrom().getMillis()
-                + " AND tblt.transaction_date <= " + dateRange.getDateTo().getMillis();
+                + " AND tblt.time >= " + dateRange.getDateFrom().getMillis()
+                + " AND tblt.time <= " + dateRange.getDateTo().getMillis();
         List<TransactionEntity> list = new ArrayList<>();
         Cursor cursor = db.rawQuery(sql,null);
 
@@ -261,8 +261,8 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
                 + " INNER JOIN tbl_categories tblc ON tblc._id = tblt.categoryId "
                 + " WHERE (tblt.categoryId = " + categoryId + " OR tblc.parentId = " + categoryId +" )"
                 + " AND tblt.walletId = "+ wallet_id
-                + " AND tblt.transaction_date >= " + dateRange.getDateFrom().getMillis()
-                + " AND tblt.transaction_date <= " + dateRange.getDateTo().getMillis();
+                + " AND tblt.time >= " + dateRange.getDateFrom().getMillis()
+                + " AND tblt.time <= " + dateRange.getDateTo().getMillis();
         List<TransactionEntity> list = new ArrayList<>();
         Cursor cursor = db.rawQuery(sql,null);
 

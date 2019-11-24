@@ -2,7 +2,6 @@ package com.minhtzy.moneytracker.adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -19,9 +18,9 @@ import com.minhtzy.moneytracker.entity.BudgetEntity;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
+import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.CategoryManager;
 
-import java.io.IOException;
 import java.util.List;
 
 public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.ViewHolder> {
@@ -59,13 +58,7 @@ public class BudgetsAdapter extends RecyclerView.Adapter<BudgetsAdapter.ViewHold
         BudgetEntity budget = mBudgets.get(i);
         Context context = viewHolder.itemView.getContext();
         // lấy ảnh từ asset
-        String base_path = "category/";
-        try {
-            Drawable img = Drawable.createFromStream(context.getAssets().open(base_path + budget.getBudgetIcon()), null);
-            viewHolder.iconGoal.setImageDrawable(img);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        viewHolder.iconGoal.setImageDrawable(ResourceUtils.getCategoryIcon(budget.getBudgetIcon()));
 
         CategoryEntity category = CategoryManager.getInstance().getCategoryById(budget.getCategoryId());
         viewHolder.textBudgetTitle.setText(category.getCategoryName());

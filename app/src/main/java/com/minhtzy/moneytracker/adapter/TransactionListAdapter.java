@@ -1,7 +1,6 @@
 package com.minhtzy.moneytracker.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +13,10 @@ import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.pinnedlistview.SectionedBaseAdapter;
+import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.CategoryManager;
-import com.minhtzy.moneytracker.utilities.CurrencyUtils;
-import com.minhtzy.moneytracker.utils.LanguageUtils;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -34,10 +32,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         mContext = context;
         mItems = items;
     }
-
-    public CurrencyUtils currencyUtils;
-
-
+    
     public void updateValues(List<Pair<Date,List<TransactionEntity>>> items) {
         mItems = items;
         notifyDataSetChanged();
@@ -89,16 +84,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         holder.item_note.setText(transaction.getTransactionNote());
 
         holder.item_money_trading.setText(String.valueOf(Math.abs(transaction.getTransactionAmount())));
-
-
-        // lấy ảnh từ asset
-        String base_path = "category/";
-        try {
-            Drawable img = Drawable.createFromStream(mContext.getAssets().open(base_path + category.getCategoryIcon()),null);
-            holder.item_image.setImageDrawable(img);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        holder.item_image.setImageDrawable(ResourceUtils.getCategoryIcon(       category.getCategoryIcon()));
 
         if (transaction.getTransactionAmount() >= 0)
             holder.item_money_trading.setTextColor(parent.getResources().getColor(R.color.colorMoneyTradingPositive));
@@ -123,7 +109,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         holder.header_month_year = layout.findViewById(R.id.text_month_year_header);
         holder.header_money_trading = layout.findViewById(R.id.text_money_trading);
 
-        Locale locale = new Locale(LanguageUtils.getCurrentLanguage().getCode());
+        Locale locale = new Locale(WalletsManager.LanguageUtils.getCurrentLanguage().getCode());
         Date date = mItems.get(section).first;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd",locale);
         holder.header_date.setText(simpleDateFormat.format(date));

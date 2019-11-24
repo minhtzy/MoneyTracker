@@ -2,7 +2,6 @@ package com.minhtzy.moneytracker.budget;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +16,6 @@ import com.minhtzy.moneytracker.entity.BudgetEntity;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
-import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.transaction.ViewTransactionListActivity;
 import com.github.mikephil.charting.charts.LineChart;
@@ -28,12 +26,12 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.CategoryManager;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 
 import org.parceler.Parcels;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,14 +121,7 @@ public class DetailBudgetActivity extends AppCompatActivity {
         if(mBudget == null) return;
         CategoryEntity category = CategoryManager.getInstance().getCategoryById(mBudget.getCategoryId());
         textGoal.setText(category.getCategoryName());
-        // lấy ảnh từ asset
-        String base_path = "category/";
-        try {
-            Drawable img = Drawable.createFromStream(getAssets().open(base_path + category.getCategoryIcon()), null);
-            iconGoal.setImageDrawable(img);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        iconGoal.setImageDrawable(ResourceUtils.getCategoryIcon(category.getCategoryIcon()));
         textBudgetAmount.setText(String.valueOf(mBudget.getBudgetAmount()));
         textNumSpent.setText(String.valueOf(mBudget.getSpent()));
         textNumRemain.setText(String.valueOf(mBudget.getBudgetAmount() - mBudget.getSpent()));

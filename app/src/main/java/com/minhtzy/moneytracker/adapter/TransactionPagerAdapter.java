@@ -17,11 +17,6 @@ public class TransactionPagerAdapter extends FragmentStatePagerAdapter {
         mFragmentList = fragmentList;
     }
 
-    public void updateValues( List<Pair<String,Fragment>> fragmentList) {
-        mFragmentList = fragmentList;
-        notifyDataSetChanged();
-    }
-
     @Override
     public Fragment getItem(int i) {
         return mFragmentList.get(i).second;

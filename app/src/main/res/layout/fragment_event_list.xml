@@ -8,6 +8,8 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:clipToPadding="false"
+    android:padding="@dimen/elevation_12"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".event.EventFragment"
-    tools:listitem="@layout/fragment_event" />
+    tools:context=".event.EventListFragment"
+    tools:listitem="@layout/fragment_event_item" />
