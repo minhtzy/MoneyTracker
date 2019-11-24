@@ -135,4 +135,13 @@
     <string name="hint_username">Enter your password</string>
     <string name="wallets">My Wallets</string>
     <string name="event">Event</string>
+    <string name="add_account_currency_title">Select Currency</string>
+    <string name="create_event">Create Event</string>
+    <string name="email">Email</string>
+    <string name="event_menu_mark_as_finished">Mark as finnished</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="saving_add_name_title">Enter event\'s name</string>
+    <string name="saving_ending_date">Ending date</string>
+    <string name="select_category_icon">Select Category</string>
 </resources>
