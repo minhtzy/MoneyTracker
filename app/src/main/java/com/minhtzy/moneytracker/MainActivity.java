@@ -412,7 +412,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = (Fragment) fragmentClass.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,fragment).addToBackStack(null).commit();
                 // Highlight the selected item has been done by NavigationView
-                item.setChecked(true);
+                // item.setChecked(true);
                 // Set action bar title
                 setTitle(item.getTitle());
             }

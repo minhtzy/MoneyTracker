@@ -9,4 +9,6 @@ public interface IEventDAO {
     List<EventEntity> getAllAvailableEvent(EventStatus eventStatus);
 
     boolean insert(EventEntity entity);
+
+    boolean updateStatus(int eventId, EventStatus eventStatus);
 }

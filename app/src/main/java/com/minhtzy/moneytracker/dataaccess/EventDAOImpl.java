@@ -1,8 +1,10 @@
 package com.minhtzy.moneytracker.dataaccess;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.minhtzy.moneytracker.entity.EventEntity;
 import com.minhtzy.moneytracker.model.EventStatus;
@@ -45,4 +47,15 @@ public class EventDAOImpl implements IEventDAO {
         entity.setEventId((int)inserted);
         return inserted != -1;
     }
+
+    @Override
+    public boolean updateStatus(int eventId, EventStatus eventStatus) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(EventEntity.EVENT_STATUS,eventStatus.getValue());
+        int updated = db.update(TABLE_EVENT_NAME,values,EventEntity.EVENT_ID + " = ? ",new String[]{String.valueOf(eventId)});
+        return updated > 0;
+    }
+
+
 }

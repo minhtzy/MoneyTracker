@@ -22,9 +22,6 @@ import java.util.List;
 
 public class EventListFragment extends Fragment implements OnEventItemInteractionListener {
 
-    private static final String EXTRA_EVENT_ENTITY = "EventEntity.value" ;
-    OnEventItemInteractionListener mListener;
-
     List<EventEntity> mListEvents;
 
     EventStatus eventStatus;
@@ -62,7 +59,7 @@ public class EventListFragment extends Fragment implements OnEventItemInteractio
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new EventRecyclerViewAdapter(mListEvents, mListener));
+            recyclerView.setAdapter(new EventRecyclerViewAdapter(mListEvents, this));
         }
         return view;
     }
@@ -70,7 +67,7 @@ public class EventListFragment extends Fragment implements OnEventItemInteractio
     @Override
     public void onEventItemClicked(EventEntity entity) {
         Intent intent = new Intent(getContext(),EventDetailActivity.class);
-        intent.putExtra(EXTRA_EVENT_ENTITY,Parcels.wrap(entity));
+        intent.putExtra(EventDetailActivity.EXTRA_EVENT,Parcels.wrap(entity));
         startActivity(intent);
     }
 }

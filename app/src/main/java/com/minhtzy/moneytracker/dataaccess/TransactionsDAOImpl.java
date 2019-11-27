@@ -287,6 +287,24 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
         return list_result;
     }
 
+    @Override
+    public List<TransactionEntity> getAllTransactionForEvent(int eventId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_TRANSACTION_NAME +
+                " WHERE " + TransactionEntity.EVENT_ID + " = ?";
+        Cursor data = db.rawQuery(query,new String[]{String.valueOf(eventId)});
+        List<TransactionEntity> list_result = new ArrayList<>();
+        if (data != null && data.getCount() > 0) {
+            data.moveToFirst();
+            do {
+                TransactionEntity transaction = getTransactionFromData(data);
+                list_result.add(transaction);
+            }
+            while (data.moveToNext());
+        }
+        return list_result;
+    }
+
     private Cursor getAllSyncTransactionData(String walletId, long timestamp) {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();

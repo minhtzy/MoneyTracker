@@ -96,4 +96,8 @@ public class EventEntity extends EntityBase {
     public void setLockWallet(String walletId) {
         setString(LOCK_WALLET,walletId);
     }
+
+    public String getLockWallet() {
+        return getString(LOCK_WALLET);
+    }
 }

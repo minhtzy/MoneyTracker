@@ -187,6 +187,7 @@
     <string name="select_category_icon">Chọn biểu tượng</string>
     <string name="create_event">Tạo sự kiện</string>
     <string name="event_menu_mark_as_finished">Đánh dấu hoàn tất</string>
+    <string name="event_menu_mark_not_finished">Đánh dấu chưa hoàn tất</string>
     <string-array name="language_names">
         <item>@string/language_vietnamese</item>
         <item>@string/language_english</item>

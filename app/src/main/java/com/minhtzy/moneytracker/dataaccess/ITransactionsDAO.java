@@ -17,4 +17,6 @@ public interface ITransactionsDAO {
     public List<TransactionEntity> getAllTransactionByPeriod(String walletId,DateRange dateRange);
 
     public List<TransactionEntity> getAllSyncTransaction(String walletId,long timestamp);
+
+    List<TransactionEntity> getAllTransactionForEvent(int eventId);
 }

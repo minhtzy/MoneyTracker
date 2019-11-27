@@ -96,4 +96,14 @@ public class ResourceUtils {
             return null;
         }
     }
+
+    public static final String WALLET_BASEPATH = "wallet/";
+    public static Drawable getWalletIcon(String fileName) {
+        try {
+            Drawable img = Drawable.createFromStream(App.self().getAssets().open(WALLET_BASEPATH + fileName), null);
+            return img;
+        } catch (IOException e) {
+            return null;
+        }
+    }
 }
