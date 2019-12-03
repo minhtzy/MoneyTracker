@@ -19,6 +19,7 @@ public class WalletEntity
     public static final String CURRENCY_CODE = "currencyCode";
     public static final String USER_ID = "userId";
     public static final String ICON = "icon";
+    public static final String INIT_BALANCE = "initBalance";
     public static final String CURRENT_BALANCE = "currentBalance";
     // basic wallet
     public static final String NOTE = "note";
@@ -44,11 +45,12 @@ public class WalletEntity
         WalletEntity wallet = new WalletEntity();
         wallet.setWalletId(walletId);
         wallet.setName(name);
-        wallet.setCurrentBalance(initialBalance);
+        wallet.setInitBalance(initialBalance);
         wallet.setWalletType(walletType);
         wallet.setCurrencyCode(currencyCode);
         wallet.setIcon(icon);
         wallet.setUserId(userId);
+        wallet.setCurrentBalance(0);
 
         return wallet;
     }
@@ -69,6 +71,15 @@ public class WalletEntity
     public WalletType getWalletType() {
         String typeString = getString(WALLET_TYPE);
         return WalletType.from(typeString);
+    }
+
+    public void setInitBalance(double initialBalance) {
+        setDouble(INIT_BALANCE,initialBalance);
+    }
+
+    public double getInitBalance()
+    {
+        return getDouble(INIT_BALANCE);
     }
 
     public String getCurrencyCode() {
@@ -141,7 +152,7 @@ public class WalletEntity
         setString(ACCOUNT_NUMBER,accountNumber);
     }
 
-    public void setCurrentBalance(Double currentBalance)
+    public void setCurrentBalance(double currentBalance)
     {
         setDouble(CURRENT_BALANCE,currentBalance);
     }

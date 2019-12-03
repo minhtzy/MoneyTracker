@@ -35,7 +35,7 @@ import com.minhtzy.moneytracker.utilities.CategoryManager;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
-import com.minhtzy.moneytracker.wallet.SelectCategoryActivity;
+import com.minhtzy.moneytracker.view.SelectCategoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

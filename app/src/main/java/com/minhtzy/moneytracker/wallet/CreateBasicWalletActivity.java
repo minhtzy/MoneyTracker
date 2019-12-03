@@ -3,6 +3,7 @@ package com.minhtzy.moneytracker.wallet;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -10,10 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.Transaction;
 import com.minhtzy.moneytracker.MainActivity;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.adapter.CurrencyFormatAdapter;
@@ -21,28 +22,31 @@ import com.minhtzy.moneytracker.dataaccess.CurrencyFormatDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.ICurrencyFormatDAO;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
-import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.entity.CurrencyFormat;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.entity.WalletType;
-import com.minhtzy.moneytracker.model.Constants;
-import com.minhtzy.moneytracker.model.TransactionTypes;
+import com.minhtzy.moneytracker.utilities.CurrencyUtils;
+import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.minhtzy.moneytracker.view.SelectIconActivity;
 
 import java.util.Date;
 import java.util.List;
 
-public class AddWalletActivity extends AppCompatActivity {
+public class CreateBasicWalletActivity extends AppCompatActivity {
 
+    private static final int RC_ICON_PATH = 10 ;
     EditText txtTen;
-    CurrencyEditText txtSotien;
+    CurrencyEditText mTextAmount;
     TextView textCurrency;
+    ImageView mWalletIcon;
     List<CurrencyFormat> mListCurrencyFormat;
     CurrencyFormat mCurrencyFormat;
+    String mIconPath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,11 +60,15 @@ public class AddWalletActivity extends AppCompatActivity {
     private void addControls() {
         //
         txtTen = (EditText)findViewById(R.id.txtTen);
-        txtSotien = (CurrencyEditText) findViewById(R.id.txtSotien);
+        mTextAmount = (CurrencyEditText) findViewById(R.id.txtSotien);
         textCurrency = findViewById(R.id.text_currency_name);
+        mWalletIcon = findViewById(R.id.wallet_icon);
 
         ICurrencyFormatDAO cfDao = new CurrencyFormatDAOImpl(this);
         mListCurrencyFormat = cfDao.getAllCurrencyAvailable();
+        mIconPath = ResourceUtils.getDefaultWalletIcon();
+        mCurrencyFormat = CurrencyUtils.getInstance().getCurrrencyFormat("VND");
+        updateUI();
     }
 
     private void addEvents() {
@@ -70,6 +78,18 @@ public class AddWalletActivity extends AppCompatActivity {
                onClickCurrency();
             }
         });
+        mWalletIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickedIcon();
+            }
+        });
+    }
+
+    private void onClickedIcon() {
+        Intent intent = new Intent(this, SelectIconActivity.class);
+        intent.putExtra(SelectIconActivity.EXTRA_FOLDER,ResourceUtils.WALLET_BASEPATH);
+        startActivityForResult(intent,RC_ICON_PATH);
     }
 
     private void onClickCurrency() {
@@ -98,20 +118,23 @@ public class AddWalletActivity extends AppCompatActivity {
     }
 
     private void updateUI(){
+        mWalletIcon.setImageDrawable(ResourceUtils.getWalletIcon(mIconPath));
         textCurrency.setText(mCurrencyFormat.getCurrencyName());
+        mTextAmount.setCurrencyCode(mCurrencyFormat.getCurrencyCode());
+        mTextAmount.setText(String.valueOf(mTextAmount.getCleanDoubleValue()));
     }
 
     private void addWallet() {
         String name = txtTen.getText().toString();
-        String sotien = txtSotien.getText().toString();
+        String sotien = mTextAmount.getText().toString();
         if(name.isEmpty() ) {
             txtTen.setError("Tên không được để trống");
             txtTen.requestFocus();
             return;
         }
         if (sotien.isEmpty()){
-            txtSotien.setError("Không được để trống");
-            txtSotien.requestFocus();
+            mTextAmount.setError("Không được để trống");
+            mTextAmount.requestFocus();
             return;
         }
 
@@ -119,11 +142,10 @@ public class AddWalletActivity extends AppCompatActivity {
     }
 
     private void initWallet() {
-        int soTien = txtSotien.getCleanIntValue();
+        double soTien = mTextAmount.getCleanDoubleValue();
         String name = txtTen.getText().toString();
         IWalletsDAO iWalletsDAO = new WalletsDAOImpl(this);
-
-        WalletEntity wallet = WalletEntity.create("",name,0, WalletType.BASIC_WALLET,"","VND",FirebaseAuth.getInstance().getUid());
+        WalletEntity wallet = WalletEntity.create("",name,soTien, WalletType.BASIC_WALLET,mIconPath,mCurrencyFormat.getCurrencyCode(),FirebaseAuth.getInstance().getUid());
 
         boolean added_wallet = iWalletsDAO.insertWallet(wallet);
 
@@ -137,7 +159,7 @@ public class AddWalletActivity extends AppCompatActivity {
             TransactionsManager.getInstance(this).addTransaction(transaction);
 
             WalletsManager.getInstance(this).switchWallet(wallet.getWalletId());
-            Intent intent = new Intent(AddWalletActivity.this,MainActivity.class);
+            Intent intent = new Intent(CreateBasicWalletActivity.this,MainActivity.class);
             startActivity(intent);
             finish();
         }
@@ -173,5 +195,18 @@ public class AddWalletActivity extends AppCompatActivity {
 
     private void onClickedBack() {
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RC_ICON_PATH)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                mIconPath = data.getStringExtra(SelectIconActivity.EXTRA_ICON_PATH);
+                updateUI();
+            }
+        }
     }
 }

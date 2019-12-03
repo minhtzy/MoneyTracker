@@ -28,7 +28,7 @@ import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
-import com.minhtzy.moneytracker.wallet.SelectCategoryActivity;
+import com.minhtzy.moneytracker.view.SelectCategoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

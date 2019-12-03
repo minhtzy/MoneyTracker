@@ -11,9 +11,9 @@ import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
-import com.minhtzy.moneytracker.wallet.AddWalletActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.minhtzy.moneytracker.wallet.SelectWalletTypeActivity;
 
 public class SyncActivity extends AppCompatActivity implements SyncEvents {
 
@@ -69,7 +69,7 @@ public class SyncActivity extends AppCompatActivity implements SyncEvents {
             syncCloudFirestore.onPullTransactions(WalletsManager.getInstance(this).getCurrentWallet());
         }
         else {
-            Intent intent = new Intent(SyncActivity.this, AddWalletActivity.class);
+            Intent intent = new Intent(SyncActivity.this, SelectWalletTypeActivity.class);
             startActivity(intent);
         }
     }

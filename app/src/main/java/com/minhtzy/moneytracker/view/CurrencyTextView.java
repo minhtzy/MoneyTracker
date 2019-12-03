@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 
 import androidx.annotation.Nullable;
 
@@ -48,7 +49,7 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
         return rawText;
     }
 
-    public void setCurrrencyFormat(String currrencyCode)
+    public void setCurrrencyCode(String currrencyCode)
     {
         this.currrencyCode = currrencyCode;
     }

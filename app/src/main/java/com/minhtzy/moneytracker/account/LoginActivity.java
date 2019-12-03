@@ -27,8 +27,8 @@ import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 import com.minhtzy.moneytracker.sync.SyncActivity;
+import com.minhtzy.moneytracker.utilities.SharedPrefs;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
-import com.minhtzy.moneytracker.wallet.AddWalletActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -36,6 +36,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.minhtzy.moneytracker.wallet.SelectWalletTypeActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -83,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         if (currentUser !=null) {
             // check wallet
             IWalletsDAO iWalletsDAO = new WalletsDAOImpl(this);
-            boolean not_synced = WalletsManager.SharedPrefs.getInstance().get(WalletsManager.SharedPrefs.KEY_PULL_TIME,0) == 0;
+            boolean not_synced = SharedPrefs.getInstance().get(SharedPrefs.KEY_PULL_TIME,0) == 0;
             if(iWalletsDAO.hasWallet(currentUser.getUid()) ) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -92,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                 goToSyncActivity();
             }
             else {
-                Intent intent = new Intent(LoginActivity.this, AddWalletActivity.class);
+                Intent intent = new Intent(LoginActivity.this, SelectWalletTypeActivity.class);
                 startActivity(intent);
             }
             finish();

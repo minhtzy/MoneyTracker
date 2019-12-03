@@ -27,9 +27,8 @@ import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
-import com.minhtzy.moneytracker.view.SelectCategoryIconActivity;
+import com.minhtzy.moneytracker.view.SelectIconActivity;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -125,7 +124,7 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private void onClickedIcon(View v) {
-        Intent intent = new Intent(this, SelectCategoryIconActivity.class);
+        Intent intent = new Intent(this, SelectIconActivity.class);
         startActivityForResult(intent,RC_REQUEST_CATEGORY_ICON);
 
     }
@@ -209,7 +208,7 @@ public class CreateEventActivity extends AppCompatActivity {
         {
             if(resultCode == RESULT_OK)
             {
-                mIconSrc = data.getStringExtra(SelectCategoryIconActivity.EXTRA_ICON_PATH);
+                mIconSrc = data.getStringExtra(SelectIconActivity.EXTRA_ICON_PATH);
                 updateUI();
             }
         }

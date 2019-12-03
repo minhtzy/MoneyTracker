@@ -30,6 +30,7 @@ import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
+import com.minhtzy.moneytracker.view.CurrencyTextView;
 
 
 import org.parceler.Parcels;
@@ -290,9 +291,16 @@ public class TransactionListFragment extends Fragment {
 
             express = Math.abs(express);
             income = Math.abs(income);
-            TextView textIncome = headerView.findViewById(R.id.fts_so_du_dau);
-            TextView textExpress = headerView.findViewById(R.id.fts_so_du_cuoi);
-            TextView textRemain = headerView.findViewById(R.id.fts_con_lai);
+            CurrencyTextView textIncome = headerView.findViewById(R.id.fts_so_du_dau);
+            CurrencyTextView textExpress = headerView.findViewById(R.id.fts_so_du_cuoi);
+            CurrencyTextView textRemain = headerView.findViewById(R.id.fts_con_lai);
+
+            if(mWallet != null)
+            {
+                textIncome.setCurrrencyCode(mWallet.getCurrencyCode());
+                textExpress.setCurrrencyCode(mWallet.getCurrencyCode());
+                textRemain.setCurrrencyCode(mWallet.getCurrencyCode());
+            }
 
             textIncome.setText(String.valueOf(income));
             textExpress.setText(String.valueOf(express));

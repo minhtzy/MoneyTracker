@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f3ffffff"
+    tools:context=".wallet.SelectWalletTypeActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+        <TextView
+            android:id="@+id/btnBasicWallet"
+            style="@style/ButtonGreenFullscreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:textAllCaps="true"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:drawablePadding="-24dp"
+            android:text="@string/basic_wallet" />
+
+        <TextView
+            android:id="@+id/txvCaptionBasicWallet"
+            style="@style/TextAppearance.AppCompat.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnBasicWallet"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:layout_marginBottom="@dimen/spacing_small"
+            android:gravity="center"
+            android:text="@string/caption_basic_wallet" />
+
+        <TextView
+            android:id="@+id/btnGoalWallet"
+            style="@style/ButtonGreenFullscreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:textAllCaps="true"
+            android:layout_below="@+id/txvCaptionBasicWallet"
+            android:layout_marginTop="40dp"
+            android:drawablePadding="-24dp"
+            android:text="@string/goal_wallet"
+            />
+
+        <TextView
+            android:id="@+id/txvCaptionGoalWallet"
+            style="@style/TextAppearance.AppCompat.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnGoalWallet"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:gravity="center"
+            android:text="@string/caption_goal_wallet" />
+
+        <TextView
+            android:id="@+id/btnLinkedWallet"
+            style="@style/ButtonGreenFullscreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:textAllCaps="true"
+            android:layout_below="@+id/txvCaptionGoalWallet"
+            android:layout_marginTop="40dp"
+            android:drawablePadding="-24dp"
+            android:text="@string/linker_wallet" />
+
+        <TextView
+            android:id="@+id/txvCaptionLinkedWallet"
+            style="@style/TextAppearance.AppCompat.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnLinkedWallet"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:gravity="center"
+            android:text="@string/caption_linked_wallet" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -10,10 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.adapter.CategoryIconListAdapter;
 
-public class SelectCategoryIconActivity extends AppCompatActivity implements OnIconInteractionListener {
+public class SelectIconActivity extends AppCompatActivity implements OnIconInteractionListener {
 
     public static final String EXTRA_ICON_PATH = "CategoryIcon.path" ;
+    public static final String EXTRA_FOLDER = "Icon.folder";
     RecyclerView mListView;
+    String mFolder = "category";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,9 +27,14 @@ public class SelectCategoryIconActivity extends AppCompatActivity implements OnI
 
     private void addControls() {
 
+        if(getIntent().hasExtra(EXTRA_FOLDER))
+        {
+            mFolder = getIntent().getStringExtra(EXTRA_FOLDER);
+        }
+
         mListView = findViewById(R.id.list_cat_icon);
         mListView.setLayoutManager(new GridLayoutManager(this,5));
-        mListView.setAdapter(new CategoryIconListAdapter(this));
+        mListView.setAdapter(new CategoryIconListAdapter(this,this,mFolder));
     }
 
     private void addEvents() {

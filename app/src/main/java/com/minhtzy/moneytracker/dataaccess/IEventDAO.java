@@ -11,4 +11,6 @@ public interface IEventDAO {
     boolean insert(EventEntity entity);
 
     boolean updateStatus(int eventId, EventStatus eventStatus);
+
+    List<EventEntity> getAllAvailableEventForWallet(String mWalletId);
 }

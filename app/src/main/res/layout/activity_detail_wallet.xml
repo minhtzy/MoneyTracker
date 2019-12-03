@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewdetail_wallet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".wallet.DetailWalletActivity">
+
+    <TableLayout
+        android:id="@+id/table_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableRow android:background="@color/colorBackgroundItem"
+            android:layout_marginTop="@dimen/spacing_32">
+            <ImageView
+                android:id="@+id/wallet_icon"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_marginStart="@dimen/spacing_16_to_28"
+                android:layout_marginLeft="@dimen/spacing_16_to_28"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:src="@drawable/ic_account_balance_wallet_black_24dp" />
+
+            <TextView
+                android:id="@+id/wallet_name"
+                style="@style/TextAppearance.AppCompat.Headline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/spacing_xlarge"
+                android:layout_marginLeft="@dimen/spacing_xlarge"
+                android:layout_marginTop="4dp"
+                android:text="nnoo"
+                android:layout_marginEnd="@dimen/spacing_medium_horizontal"
+                android:layout_marginRight="@dimen/spacing_medium_horizontal" />
+        </TableRow >
+
+        <TableRow
+            android:background="@color/colorBackgroundItem"
+            android:layout_marginTop="2dp">
+            <ImageView
+                android:id="@+id/currency_icon"
+                android:layout_width="@dimen/icon_size_small"
+                android:layout_height="@dimen/icon_size_small"
+                android:layout_marginStart="@dimen/spacing_16_to_28"
+                android:layout_marginLeft="@dimen/spacing_16_to_28"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_currency" />
+
+            <TextView
+                android:id="@+id/currency_name"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/spacing_xlarge"
+                android:layout_marginLeft="@dimen/spacing_xlarge"
+                android:layout_marginEnd="@dimen/spacing_medium_horizontal"
+                android:layout_marginRight="@dimen/spacing_medium_horizontal"
+                android:text="Viet Nam dong"/>
+        </TableRow>
+    </TableLayout>
+
+    <RelativeLayout
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackgroundItem"
+        android:layout_below="@id/table_info"
+        android:layout_marginTop="@dimen/spacing_16">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="@dimen/spacing_12"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:text="@string/init_balance"/>
+        <com.minhtzy.moneytracker.view.CurrencyTextView
+            android:id="@+id/tv_init_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_12"
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:text="0đ"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="8dp"
+            android:layout_below="@+id/tv_init_balance"
+            android:layout_marginTop="@dimen/spacing_tiny"
+            android:layout_marginBottom="@dimen/elevation_8"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:text="@string/current_amount"/>
+        <com.minhtzy.moneytracker.view.CurrencyTextView
+            android:id="@+id/tv_current_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_init_balance"
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/spacing_tiny"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:text="0đ"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_marginTop="@dimen/spacing_32"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/info"
+        android:background="@color/colorBackgroundItem"
+        android:text="@string/delete"
+        android:textColor="#FF0000"/>
+
+</RelativeLayout>

@@ -68,7 +68,6 @@ public class CurrencyEditText extends AppCompatEditText {
 
             }
         });
-        editText.setText("0");
     }
 
     /*

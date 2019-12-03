@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.utilities.LanguageUtils;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.minhtzy.moneytracker.view.ItemClickListener;
 import com.minhtzy.moneytracker.databinding.ItemLanguageBinding;
@@ -21,7 +22,7 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
 
     private List<Language> mLanguageList = new ArrayList<>();
     private ItemClickListener<Language> mListener;
-    private Language mCurrentLanguage = WalletsManager.LanguageUtils.getCurrentLanguage();
+    private Language mCurrentLanguage = LanguageUtils.getCurrentLanguage();
 
     public LanguageAdapter(List<Language> languageList) {
         mLanguageList = languageList;

@@ -13,6 +13,7 @@ import com.minhtzy.moneytracker.common.Constants;
 import com.minhtzy.moneytracker.entity.CurrencyFormat;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
+import com.minhtzy.moneytracker.utilities.ResourceUtils;
 
 import java.util.List;
 
@@ -47,25 +48,7 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntity> {
         else {
             txtBalacne.setTextColor(getContext().getResources().getColor(R.color.colorMoneyTradingNegative));
         }
-
-        // lấy id của ảnh
-        int idImg = context.getResources().getIdentifier(
-                wallet.getIcon(),
-                "drawable",
-                "com.minhtzy.moneytracker"
-        );
-        if(idImg == 0) {
-            idImg = R.drawable.ic_account_balance_wallet_black_24dp;
-        }
-        imganhItem.setImageResource(idImg);
-//         lấy ảnh từ asset
-//        String base_path = "category/";
-//        try {
-//            Drawable img = Drawable.createFromStream(getContext().getAssets().open(base_path + wallet.getImageSrc()),null);
-//            imganhItem.setImageDrawable(img);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        imganhItem.setImageDrawable(ResourceUtils.getWalletIcon(wallet.getIcon()));
         return convertView;
     }
 }

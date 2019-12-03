@@ -53,7 +53,7 @@ public class CurrencyUtils {
     }
 
     public static double getCleanDouble(String price,String currencyCode) {
-        price = price.replaceAll("-",""); // remove negative symbol
+        //price = price.replaceAll("-",""); // remove negative symbol
         NumberFormat format = NumberFormat.getCurrencyInstance();
         format.setCurrency(Currency.getInstance(currencyCode));
         format.setMaximumFractionDigits(0);

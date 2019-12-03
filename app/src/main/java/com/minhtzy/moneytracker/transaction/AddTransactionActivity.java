@@ -18,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.minhtzy.moneytracker.R;
@@ -25,13 +27,15 @@ import com.minhtzy.moneytracker.adapter.WalletListAdapter;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.entity.EventEntity;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
+import com.minhtzy.moneytracker.event.SelectEventActivity;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
-import com.minhtzy.moneytracker.wallet.SelectCategoryActivity;
+import com.minhtzy.moneytracker.view.SelectCategoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -47,6 +51,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_CATEGORY = 1;
     private static final int REQUEST_CODE_GALLERY = 2;
     private static final int REQUEST_CODE_CAMERA = 3 ;
+    public static final int REQUEST_CODE_EVENT = 4;
     public static final String EXTRA_TRANSACTION = "com.minhtzy.moneytracker.extra.transaction";
     private static final Object IMAGE_DIRECTORY = "images";
 
@@ -66,6 +71,11 @@ public class AddTransactionActivity extends AppCompatActivity {
     private CategoryEntity mCurrentCategory =null;
     private WalletEntity mCurrentWallet = null;
     private Bitmap mCurrentImage = null;
+    private EventEntity mEvent = null;
+
+    private TextView mTextEvent;
+    private ImageView mImgEvent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +119,8 @@ public class AddTransactionActivity extends AppCompatActivity {
         mImgCamera = findViewById(R.id.image_capture_picture);
         mImgPicture = findViewById(R.id.image_choose_picture);
         mImgPreView = findViewById(R.id.image_preview);
+        mImgEvent = findViewById(R.id.icon_event);
+        mTextEvent = findViewById(R.id.event_name);
         mCalendar = Calendar.getInstance();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         iWalletsDAO = new WalletsDAOImpl(this);
@@ -147,6 +159,34 @@ public class AddTransactionActivity extends AppCompatActivity {
                 choosePhotoFromGallary();
             }
         });
+        findViewById(R.id.layout_event).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickEvent();
+            }
+        });
+        findViewById(R.id.clear_event).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClearEvent();
+            }
+        });
+    }
+
+    private void onClearEvent() {
+        mTextEvent.setText("");
+        mImgEvent.setImageResource(R.drawable.ic_event_black_24dp);
+        mEvent = null;
+        findViewById(R.id.clear_event).setVisibility(View.INVISIBLE);
+    }
+
+    private void onClickEvent() {
+        Intent intent = new Intent(AddTransactionActivity.this, SelectEventActivity.class);
+        if(mCurrentWallet != null)
+        {
+            intent.putExtra(SelectEventActivity.EXTRA_WALLET,mCurrentWallet.getWalletId());
+        }
+        startActivityForResult(intent,REQUEST_CODE_EVENT);
     }
 
     private void takePhotoFromCamera() {
@@ -175,6 +215,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         if(mCurrentImage != null) {
             mMediaUri = ResourceUtils.saveImage(this,mCurrentImage);
         }
+
         float money = (float) ((CurrencyEditText)mTextMoney).getCleanDoubleValue() * mCurrentCategory.getRate();
         String note = mTextNote.getText().toString();
         Date date = mCalendar.getTime();
@@ -186,6 +227,10 @@ public class AddTransactionActivity extends AppCompatActivity {
         transaction.setTransactionNote(note);
         transaction.setMediaUri(mMediaUri);
 
+        if(mEvent != null)
+        {
+            transaction.setEventId(mEvent.getEventId());
+        }
 
         TransactionsManager.getInstance(this).addTransaction(transaction);
 
@@ -283,8 +328,17 @@ public class AddTransactionActivity extends AppCompatActivity {
                 mCurrentImage = thumbnail;
                 updateImagePreView(thumbnail);
             }
+            else if(requestCode == REQUEST_CODE_EVENT)
+            {
+                mEvent = Parcels.unwrap(data.getParcelableExtra(SelectEventActivity.EXTRA_EVENT));
+                if(mEvent != null)
+                {
+                    mTextEvent.setText(mEvent.getEventName());
+                    mImgEvent.setImageDrawable(ResourceUtils.getCategoryIcon(mEvent.getEventIcon()));
+                    findViewById(R.id.clear_event).setVisibility(View.VISIBLE);
+                }
+            }
         }
-
     }
 
     private void updateImagePreView(Bitmap bitmap) {

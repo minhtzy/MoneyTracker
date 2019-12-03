@@ -1,4 +1,4 @@
-package com.minhtzy.moneytracker.wallet;
+package com.minhtzy.moneytracker.view;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -14,6 +14,7 @@ import com.minhtzy.moneytracker.R;
 
 import com.minhtzy.moneytracker.adapter.CategoriesPagerAdapter;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.wallet.ListCategoryFragment;
 
 import org.parceler.Parcels;
 
@@ -66,7 +67,7 @@ public class SelectCategoryActivity extends AppCompatActivity implements ListCat
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_save : {
+            case R.id.action_edit : {
                 onClickedModifier();
                 return true;
             }

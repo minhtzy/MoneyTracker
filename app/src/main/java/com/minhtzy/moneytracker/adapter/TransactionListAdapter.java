@@ -12,10 +12,13 @@ import android.widget.TextView;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.pinnedlistview.SectionedBaseAdapter;
+import com.minhtzy.moneytracker.utilities.LanguageUtils;
 import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.CategoryManager;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
+import com.minhtzy.moneytracker.view.CurrencyTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,6 +30,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
 
     private Context mContext;
     public List<Pair<Date,List<TransactionEntity>>> mItems;
+    WalletEntity mWallet;
 
     public TransactionListAdapter(Context context, List<Pair<Date,List<TransactionEntity>>> items) {
         mContext = context;
@@ -83,6 +87,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         holder.item_label.setText(category.getCategoryName());
         holder.item_note.setText(transaction.getTransactionNote());
 
+        holder.item_money_trading.setCurrrencyCode(WalletsManager.getInstance(mContext).getWalletById(transaction.getWalletId()).getCurrencyCode());
         holder.item_money_trading.setText(String.valueOf(Math.abs(transaction.getTransactionAmount())));
         holder.item_image.setImageDrawable(ResourceUtils.getCategoryIcon(       category.getCategoryIcon()));
 
@@ -94,7 +99,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
 
     @Override
     public View getSectionHeaderView(int section, View convertView, ViewGroup parent) {
-        RelativeLayout layout = null;
+        RelativeLayout layout;
         if (convertView == null) {
             LayoutInflater inflator = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             layout = (RelativeLayout) inflator.inflate(R.layout.snippet_transaction_header, null);
@@ -109,7 +114,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         holder.header_month_year = layout.findViewById(R.id.text_month_year_header);
         holder.header_money_trading = layout.findViewById(R.id.text_money_trading);
 
-        Locale locale = new Locale(WalletsManager.LanguageUtils.getCurrentLanguage().getCode());
+        Locale locale = new Locale(LanguageUtils.getCurrentLanguage().getCode());
         Date date = mItems.get(section).first;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd",locale);
         holder.header_date.setText(simpleDateFormat.format(date));
@@ -125,6 +130,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
             moneyTrading += tran.getTransactionAmount();
         }
         String moneyHeader = String.valueOf(moneyTrading);
+        holder.header_money_trading.setCurrrencyCode(WalletsManager.getInstance(mContext).getWalletById(transactions.get(0).getWalletId()).getCurrencyCode());
         holder.header_money_trading.setText(moneyHeader);
 
 //        if (moneyTrading >= 0)
@@ -139,7 +145,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         public TextView header_date;
         public TextView header_day;
         public TextView header_month_year;
-        public TextView header_money_trading;
+        public CurrencyTextView header_money_trading;
 
     }
 
@@ -147,7 +153,7 @@ public class TransactionListAdapter extends SectionedBaseAdapter {
         public ImageView item_image;
         public TextView item_label;
         public TextView item_note;
-        public TextView item_money_trading;
+        public CurrencyTextView item_money_trading;
     }
 
 }

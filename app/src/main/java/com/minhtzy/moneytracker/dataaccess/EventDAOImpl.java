@@ -57,5 +57,25 @@ public class EventDAOImpl implements IEventDAO {
         return updated > 0;
     }
 
+    @Override
+    public List<EventEntity> getAllAvailableEventForWallet(String mWalletId) {
+        List<EventEntity> eventEntities = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_EVENT_NAME +
+                " WHERE " + EventEntity.LOCK_WALLET + " = ?" +
+                " OR " + EventEntity.LOCK_WALLET + " IS NULL";
+        Cursor cursor = db.rawQuery(query,new String[]{mWalletId});
+        if(cursor!= null && cursor.getCount() > 0)
+        {
+            cursor.moveToFirst();
+            do {
+                EventEntity event = new EventEntity();
+                event.loadFromCursor(cursor);
+                eventEntities.add(event);
+            }while (cursor.moveToNext());
+        }
+        return eventEntities;
+    }
+
 
 }

@@ -36,6 +36,7 @@ import com.minhtzy.moneytracker.transaction.TransactionListSearch;
 import com.minhtzy.moneytracker.transaction.TransactionTabFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.minhtzy.moneytracker.wallet.WalletFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -373,24 +374,18 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment;
         Class fragmentClass = null;
         if (id == R.id.nav_transaction) {
-            Log.d(MainActivity.class.getSimpleName(),"Start Transaction Activity");
             fragmentClass = TransactionTabFragment.class;
-
-
         } else if (id == R.id.nav_chart) {
-            Log.d(MainActivity.class.getSimpleName(),"Start Transaction Activity");
             fragmentClass = StatisticalTabFragment.class;
         } else if (id == R.id.nav_manage) {
             Intent intent = new Intent(MainActivity.this, Setting.class);
             startActivity(intent);
             finish();
             return true;
-
         }
         else if(id == R.id.nav_wallet)
         {
-            Log.d(MainActivity.class.getSimpleName(),"Start Budget Activity");
-            fragmentClass = BudgetFragment.class;
+            fragmentClass = WalletFragment.class;
         }
         else if(id == R.id.nav_budget)
         {

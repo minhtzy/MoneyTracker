@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.utilities.LanguageUtils;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.minhtzy.moneytracker.view.ItemClickListener;
 import com.minhtzy.moneytracker.databinding.ActivityChangeLanguageBinding;
@@ -22,11 +23,11 @@ public class ChangeLanguageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityChangeLanguageBinding binding =
                 DataBindingUtil.setContentView(this, R.layout.activity_change_language);
-        mLanguageAdapter = new LanguageAdapter(WalletsManager.LanguageUtils.getLanguageData());
+        mLanguageAdapter = new LanguageAdapter(LanguageUtils.getLanguageData());
         mLanguageAdapter.setListener(new ItemClickListener<Language>() {
             @Override
             public void onClickItem(int position, Language language) {
-                if (!language.getCode().equals(WalletsManager.LanguageUtils.getCurrentLanguage().getCode())) {
+                if (!language.getCode().equals(LanguageUtils.getCurrentLanguage().getCode())) {
                     onChangeLanguageSuccessfully(language);
                 }
             }
@@ -38,7 +39,7 @@ public class ChangeLanguageActivity extends AppCompatActivity {
 
     public void onChangeLanguageSuccessfully(final Language language) {
         mLanguageAdapter.setCurrentLanguage(language);
-        WalletsManager.LanguageUtils.changeLanguage(language);
+        LanguageUtils.changeLanguage(language);
         setResult(RESULT_OK, new Intent());
         finish();
     }

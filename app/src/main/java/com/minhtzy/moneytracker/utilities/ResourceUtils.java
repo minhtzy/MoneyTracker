@@ -75,35 +75,39 @@ public class ResourceUtils {
         return null;
     }
 
-    public static final String CATEGORY_BASEPATH = "category/";
+    public static final String CATEGORY_BASEPATH = "category";
     public static Drawable getCategoryIcon(String filename)
     {
         try {
-            Drawable img = Drawable.createFromStream(App.self().getAssets().open(CATEGORY_BASEPATH + filename), null);
+            Drawable img = Drawable.createFromStream(App.self().getAssets().open(CATEGORY_BASEPATH + "/" + filename), null);
             return img;
         } catch (IOException e) {
             return null;
         }
     }
 
-    public static final String CURRENCY_BASEPATH = "currency/";
+    public static final String CURRENCY_BASEPATH = "currency";
     public static Drawable getCurrencyIcon(String currencyCode)
     {
         try {
-            Drawable img = Drawable.createFromStream(App.self().getAssets().open(String.format("%sic_currency_%s.png",CURRENCY_BASEPATH,currencyCode.toLowerCase())), null);
+            Drawable img = Drawable.createFromStream(App.self().getAssets().open(String.format("%s/ic_currency_%s.png",CURRENCY_BASEPATH,currencyCode.toLowerCase())), null);
             return img;
         } catch (IOException e) {
             return null;
         }
     }
 
-    public static final String WALLET_BASEPATH = "wallet/";
+    public static final String WALLET_BASEPATH = "wallet";
     public static Drawable getWalletIcon(String fileName) {
         try {
-            Drawable img = Drawable.createFromStream(App.self().getAssets().open(WALLET_BASEPATH + fileName), null);
+            Drawable img = Drawable.createFromStream(App.self().getAssets().open(WALLET_BASEPATH + "/" + fileName), null);
             return img;
         } catch (IOException e) {
             return null;
         }
+    }
+
+    public static String getDefaultWalletIcon() {
+        return "icon.png";
     }
 }

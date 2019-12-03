@@ -32,17 +32,14 @@ public class CategoryIconListAdapter extends RecyclerView.Adapter<CategoryIconLi
         }
     }
 
-    public CategoryIconListAdapter(Context context) {
+    public CategoryIconListAdapter(Context context,OnIconInteractionListener listener,String folder) {
         this.context = context;
         try {
-            imageList = Arrays.asList(context.getAssets().list("category"));
+            imageList = Arrays.asList(context.getAssets().list(folder));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(context instanceof OnIconInteractionListener)
-        {
-            mListener = (OnIconInteractionListener) context;
-        }
+         mListener = listener;
     }
 
     @Override
