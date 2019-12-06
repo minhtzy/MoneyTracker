@@ -95,10 +95,6 @@
             android:label="@string/budget_detail_list_transactions_title"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".statistical.StatisticalActivity"
-            android:label="@string/report"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".budget.AddBudgetActivity"
             android:label="@string/add_budget"
             android:theme="@style/AppTheme" />

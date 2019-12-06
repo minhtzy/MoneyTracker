@@ -10,4 +10,6 @@
     <item>Theo thời gian</item>
     <item>Theo nhóm</item>
   </string-array>
+    <string-array name="spinnerSelect" />
+  <string-array name="spinnerItems" />
 </resources>
