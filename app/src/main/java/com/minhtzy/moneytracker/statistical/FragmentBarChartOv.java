@@ -68,7 +68,7 @@ public class FragmentBarChartOv extends Fragment {
 
         if (listTransaction != null) {
 
-            args.putParcelableArrayList(ARG_ITEMS, (ArrayList<? extends Parcelable>) listTransaction);
+            args.putParcelable(ARG_ITEMS, Parcels.wrap(listTransaction));
             args.putInt(ARG_POSITION, position);
 
         }

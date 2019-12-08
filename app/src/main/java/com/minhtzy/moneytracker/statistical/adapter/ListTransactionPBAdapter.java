@@ -41,7 +41,7 @@ public class ListTransactionPBAdapter extends RecyclerView.Adapter<ListTransacti
     public ViewHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         Context context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.snippet_transaction_item2, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.snippet_transaction_item6, parent, false);
 
         return new ViewHoder(view);
     }

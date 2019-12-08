@@ -189,10 +189,10 @@
     <string name="event_menu_mark_as_finished">Đánh dấu hoàn tất</string>
     <string name="event_menu_mark_not_finished">Đánh dấu chưa hoàn tất</string>
     <string name="basic_wallet">Ví cơ bản</string>
-    <string name="caption_basic_wallet">Ví mà bạn tự nhập giao dịch của bạn</string>
+    <string name="caption_basic_wallet" translatable="false">Ví mà bạn tự nhập giao dịch của bạn</string>
     <string name="goal_wallet">Ví tiết kiệm</string>
-    <string name="caption_goal_wallet">Ví mà bạn có thể tự nhập các khoản tiết kiệm của bạn</string>
-    <string name="caption_linked_wallet">Ví tự động đồng bộ giao dịch từ ngân hàng và các dịch vụ khác</string>
+    <string name="caption_goal_wallet" translatable="false">Ví mà bạn có thể tự nhập các khoản tiết kiệm của bạn</string>
+    <string name="caption_linked_wallet" translatable="false">Ví tự động đồng bộ giao dịch từ ngân hàng và các dịch vụ khác</string>
     <string name="linker_wallet">Ví liên kết</string>
     <string name="choose_wallet_type">Chọn loại ví</string>
     <string name="init_balance">Số dư khởi tạo</string>
@@ -203,6 +203,8 @@
     <string name="pay_book">Sổ nợ</string>
     <string name="tendency">Xu hướng</string>
     <string name="feature_developing">Tính năng đang phát triển</string>
+    <string name="over_view_month">Chi tiết tháng</string>
+    <string name="select_location">Chọn địa điểm</string>
     <string-array name="language_names">
         <item>@string/language_vietnamese</item>
         <item>@string/language_english</item>

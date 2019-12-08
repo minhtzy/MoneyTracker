@@ -12,4 +12,6 @@ public interface ICategoriesDAO {
     public List<CategoryEntity> getCategoriesByType(int type);
     public List<CategoryEntity> getSubCategories(int parentId);
     CategoryEntity getCategoryById(int typeId);
+
+    CategoryEntity getCategoryByName(String second);
 }

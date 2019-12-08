@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,20 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.dataaccess.CategoriesDAOImpl;
+import com.minhtzy.moneytracker.dataaccess.ICategoriesDAO;
+import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
+import com.minhtzy.moneytracker.model.TransactionTypes;
 import com.minhtzy.moneytracker.statistical.adapter.ChartOVTransactionAdapter;
+import com.minhtzy.moneytracker.utilities.CategoryManager;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class FragmentPieChartOV extends Fragment {
@@ -72,9 +80,9 @@ public class FragmentPieChartOV extends Fragment {
     public static Fragment newInstance(List<TransactionEntity> listTransaction, int position) {
         FragmentPieChartOV fragment = new FragmentPieChartOV();
         Bundle args = new Bundle();
-        if (listTransaction != null ) {
+        if (listTransaction != null) {
 
-            args.putParcelableArrayList(ARG_ITEMS, (ArrayList<? extends Parcelable>) listTransaction);
+            args.putParcelable(ARG_ITEMS, Parcels.wrap(listTransaction));
             args.putInt(ARG_POSITION, position);
         }
 
@@ -87,7 +95,7 @@ public class FragmentPieChartOV extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 
-            mListTransactions.addAll((List<TransactionEntity>)Parcels.unwrap(getArguments().getParcelable(ARG_ITEMS)));
+            mListTransactions.addAll((List<TransactionEntity>) Parcels.unwrap(getArguments().getParcelable(ARG_ITEMS)));
             mPosition = getArguments().getInt(ARG_POSITION);
         }
     }
@@ -136,35 +144,44 @@ public class FragmentPieChartOV extends Fragment {
 
     private void onBindView() {
 
-        float money1 = 0, money5 = 0, money13 = 0, money18 = 0,
-                money23 = 0, money24 = 0, money27 = 0, money28 = 0,
-                money33 = 0, money37 = 0, money42 = 0, money49 = 0, money51 = 0,
-                money53 = 0, money56 = 0;
         float moneyEx = 0, moneyIn = 0;
 
         List<Pair<Float, String>> listItems = new ArrayList<>();
         List<Pair<Float, String>> totalItems = new ArrayList<>();
-        List<Pair<Float, String>> listItemsEx = new ArrayList<>();
+        SparseArray<Float> listSumAmount = new SparseArray<>();
         List<Pair<Float, String>> totalItemsEx = new ArrayList<>();
-        List<Pair<Float, String>> listItemsIn = new ArrayList<>();
         List<Pair<Float, String>> totalItemsIn = new ArrayList<>();
 
         if (mListTransactions != null) {
 
+            for (TransactionEntity tran : mListTransactions) {
+                int parentID = tran.getCategoryId();
+                CategoryEntity categoryEntity = CategoryManager.getInstance().getCategoryById(parentID);
+                try
+                {
+                    parentID = categoryEntity.getParentId();
+                }
+                catch (NullPointerException ex)
+                {
+
+                }
+                float value = listSumAmount.get(parentID) != null ?  listSumAmount.get(parentID) : 0;
+                float new_value = value + (float) Math.abs(tran.getTransactionAmount());
+
+                listSumAmount.put(parentID, new_value);
+
+                if (tran.getTransactionAmount() < 0) {
+
+                    moneyEx += Math.abs(tran.getTransactionAmount());
+                } else {
+
+                    moneyIn += Math.abs(tran.getTransactionAmount());
+                }
+            }
+
             if (mPosition == 2) {
 
                 mPieChart.setCenterText("Tất cả");
-
-                for (TransactionEntity tran : mListTransactions) {
-
-                    if (tran.getTransactionAmount() < 0) {
-
-                        moneyEx += Math.abs(tran.getTransactionAmount());
-                    } else {
-
-                        moneyIn += Math.abs(tran.getTransactionAmount());
-                    }
-                }
 
                 listItems.add(new Pair<>(moneyEx, "Khoản chi"));
                 listItems.add(new Pair<>(moneyIn, "Khoản thu"));
@@ -172,107 +189,31 @@ public class FragmentPieChartOV extends Fragment {
                 for (int i = 0; i < listItems.size(); i++) {
 
                     if (listItems.get(i).first > 0) {
-
                         totalItems.add(new Pair<>(listItems.get(i).first, listItems.get(i).second));
-//                        mYData.add(listItems.get(i).first);
-//                        mXData.add(listItems.get(i).second);
                     }
                 }
 
                 addDataSet(mPieChart, totalItems);
             }
 
+
+            ICategoriesDAO categoriesDAO = new CategoriesDAOImpl(getContext());
+
+
             if (mPosition == 0) {
 
                 mPieChart.setCenterText("Khoản chi");
 
-                for (TransactionEntity tran : mListTransactions) {
+                List<CategoryEntity> listCateExpress = categoriesDAO.getCategoriesByType(TransactionTypes.EXPENSE.getValue());
 
-                    if (tran.getCategoryId() == 1) {
 
-                        money1 += Math.abs(tran.getTransactionAmount());
-                    }
+                for (CategoryEntity categoryEntity : listCateExpress) {
 
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 5) {
+                    if (listSumAmount.indexOfKey(categoryEntity.getCategoryId()) >= 0 && listSumAmount.get(categoryEntity.getCategoryId()) > 0) {
 
-                        money5 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 13) {
-
-                        money13 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 18) {
-
-                        money18 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 23) {
-
-                        money23 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 24) {
-
-                        money24 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 27) {
-
-                        money27 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 28) {
-
-                        money28 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 33) {
-
-                        money33 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 37) {
-
-                        money37 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 42) {
-
-                        money42 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 49) {
-
-                        money49 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                }
-
-                listItemsEx.add(new Pair<>(money1, "Ăn uống"));
-                listItemsEx.add(new Pair<>(money5, "Hóa đơn & Tiện ích"));
-                listItemsEx.add(new Pair<>(money13, "Di chuyển"));
-                listItemsEx.add(new Pair<>(money18, "Mua sắm"));
-                listItemsEx.add(new Pair<>(money23, "Bạn bè & Người yêu"));
-                listItemsEx.add(new Pair<>(money24, "Giải trí"));
-                listItemsEx.add(new Pair<>(money27, "Du lịch"));
-                listItemsEx.add(new Pair<>(money28, "Sức khỏe"));
-                listItemsEx.add(new Pair<>(money33, "Quà tặng & Quyên góp"));
-                listItemsEx.add(new Pair<>(money37, "Gia đình"));
-                listItemsEx.add(new Pair<>(money42, "Giáo dục"));
-                listItemsEx.add(new Pair<>(money49, "Khoản chi khác"));
-
-                for (int i = 0; i < listItemsEx.size(); i++) {
-
-                    if (listItemsEx.get(i).first > 0) {
-
-                        totalItemsEx.add(new Pair<>(listItemsEx.get(i).first, listItemsEx.get(i).second));
-//                        mYData.add(listItemsEx.get(i).first);
-//                        mXData.add(listItemsEx.get(i).second);
+                        totalItemsEx.add(new Pair<>(listSumAmount.get(categoryEntity.getCategoryId()), categoryEntity.getCategoryName()));
                     }
                 }
-
                 addDataSet(mPieChart, totalItemsEx);
                 ChartOVTransactionAdapter transactionAdapter = new ChartOVTransactionAdapter(totalItemsEx);
                 mRecycleViewOV.setAdapter(transactionAdapter);
@@ -282,45 +223,18 @@ public class FragmentPieChartOV extends Fragment {
 
                 mPieChart.setCenterText("Khoản Thu");
 
-                for (TransactionEntity tran : mListTransactions) {
+                List<CategoryEntity> listCateIncome = categoriesDAO.getCategoriesByType(TransactionTypes.INCOME.getValue());
 
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 51) {
+                for (CategoryEntity categoryEntity : listCateIncome) {
 
-                        money51 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 53) {
-
-                        money53 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-
-                    if (tran.getTransactionCategoryID().getCategoryParentId() == 56) {
-
-                        money56 += Math.abs(tran.getMoneyTradingWithSign());
-                    }
-                }
-
-                listItemsIn.add(new Pair<>(money51, "Thưởng"));
-                listItemsIn.add(new Pair<>(money53, "Lương"));
-                listItemsIn.add(new Pair<>(money56, "Khoản thu khác"));
-
-                for (int i = 0; i < listItemsIn.size(); i++) {
-
-                    if (listItemsIn.get(i).first > 0) {
-
-                        totalItemsIn.add(new Pair<>(listItemsIn.get(i).first, listItemsIn.get(i).second));
-//                        mYData.add(listItemsIn.get(i).first);
-//                        mXData.add(listItemsIn.get(i).second);
-                    }
+                    if (listSumAmount.indexOfKey(categoryEntity.getCategoryId()) >= 0 && listSumAmount.get(categoryEntity.getCategoryId()) > 0)
+                        totalItemsIn.add(new Pair<>(listSumAmount.get(categoryEntity.getCategoryId()), categoryEntity.getCategoryName()));
                 }
 
                 addDataSet(mPieChart, totalItemsIn);
-
                 ChartOVTransactionAdapter transactionAdapter = new ChartOVTransactionAdapter(totalItemsIn);
                 mRecycleViewOV.setAdapter(transactionAdapter);
             }
-
-
         }
     }
 

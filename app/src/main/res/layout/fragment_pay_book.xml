@@ -8,25 +8,24 @@
     tools:ignore="ResAuto">
 
     <!-- TODO: Update blank fragment layout -->
-    <TableLayout
+    <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:pstsShouldExpand="true"
-        android:tabMode="scrollable"
-        android:tabSelectedTextColor="@color/colorTabTitleSelected"
-        android:tabTextColor="@color/colorTabTitle">
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/colorTabTitleSelected"
+        app:tabTextColor="@color/colorTabTitle">
 
-    </TableLayout>
+    </android.support.design.widget.TabLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tab_layout">
 
-    </androidx.viewpager.widget.ViewPager>
+    </android.support.v4.view.ViewPager>
 
 
 </RelativeLayout>

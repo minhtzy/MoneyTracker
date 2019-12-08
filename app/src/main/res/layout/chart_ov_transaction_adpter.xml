@@ -10,7 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="8dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/icon"
+        android:src="@drawable/ic_image"
         android:contentDescription="logo"/>
 
     <TextView

@@ -70,6 +70,19 @@ public class CategoriesDAOImpl implements ICategoriesDAO {
         }
     }
 
+    @Override
+    public CategoryEntity getCategoryByName(String name) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_CATEGORY_NAME +
+                " WHERE " + CategoryEntity.CATEGORY_NAME + " = ?";
+        Cursor data = db.rawQuery(query, new String[]{name});
+        if (data != null && data.getCount() > 0) {
+            data.moveToFirst();
+            return getCategoryFromData(data);
+        }
+        return null;
+    }
+
     public List<CategoryEntity> getAllCategory() {
         Cursor data = getAllCategoryData();
         List<CategoryEntity> list_result = new ArrayList<>();

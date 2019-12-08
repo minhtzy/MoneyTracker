@@ -22,6 +22,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.adapter.WalletListAdapter;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
@@ -34,6 +40,7 @@ import com.minhtzy.moneytracker.event.SelectEventActivity;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.minhtzy.moneytracker.view.CurrencyEditText;
 import com.minhtzy.moneytracker.view.SelectCategoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,6 +59,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_GALLERY = 2;
     private static final int REQUEST_CODE_CAMERA = 3 ;
     public static final int REQUEST_CODE_EVENT = 4;
+    public static final int REQUEST_PLACE_PICKER = 5;
     public static final String EXTRA_TRANSACTION = "com.minhtzy.moneytracker.extra.transaction";
     private static final Object IMAGE_DIRECTORY = "images";
 
@@ -64,6 +72,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     private ImageView mImgPicture;
     private ImageView mImgPreView;
     private Calendar mCalendar;
+    private TextView mTextPlace;
 
     private FirebaseUser mCurrentUser;
     private IWalletsDAO iWalletsDAO;
@@ -76,6 +85,8 @@ public class AddTransactionActivity extends AppCompatActivity {
     private TextView mTextEvent;
     private ImageView mImgEvent;
 
+    PlaceDetectionClient mPlaceDetectionClient;
+    Place mCurrentPlace = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +136,9 @@ public class AddTransactionActivity extends AppCompatActivity {
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         iWalletsDAO = new WalletsDAOImpl(this);
         mListWallet = iWalletsDAO.getAllWalletByUser(mCurrentUser.getUid());
-        mCurrentWallet = mListWallet.get(0);
+        mCurrentWallet = WalletsManager.getInstance(this).getCurrentWallet();
+        mTextPlace = findViewById(R.id.location_name);
+        mPlaceDetectionClient = Places.getPlaceDetectionClient(this);
     }
 
     private void addEvents() {
@@ -171,6 +184,23 @@ public class AddTransactionActivity extends AppCompatActivity {
                 onClearEvent();
             }
         });
+        findViewById(R.id.layout_location).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickLocation();
+            }
+        });
+    }
+
+    private void onClickLocation() {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            startActivityForResult(builder.build(AddTransactionActivity.this),REQUEST_PLACE_PICKER);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        }
     }
 
     private void onClearEvent() {
@@ -337,6 +367,11 @@ public class AddTransactionActivity extends AppCompatActivity {
                     mImgEvent.setImageDrawable(ResourceUtils.getCategoryIcon(mEvent.getEventIcon()));
                     findViewById(R.id.clear_event).setVisibility(View.VISIBLE);
                 }
+            }
+            else if(requestCode == REQUEST_PLACE_PICKER)
+            {
+                mCurrentPlace = PlacePicker.getPlace(this,data);
+                mTextPlace.setText(mCurrentPlace.getName());
             }
         }
     }

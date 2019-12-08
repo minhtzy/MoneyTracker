@@ -11,19 +11,15 @@ import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
-import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
-import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class FragmentTendency extends Fragment {

@@ -80,7 +80,7 @@ public class ChartOVTransactionAdapter extends RecyclerView.Adapter<ChartOVTrans
             mLabelItem.setText(item.second);
             mTradingItem.setText(String.valueOf(item.first));
 
-            CategoryEntity category = mICategoriesDAO.getCategoryById(item.second);
+            CategoryEntity category = mICategoriesDAO.getCategoryByName(item.second);
 
             mImgItem.setImageDrawable(ResourceUtils.getCategoryIcon(category.getCategoryIcon()));
         }

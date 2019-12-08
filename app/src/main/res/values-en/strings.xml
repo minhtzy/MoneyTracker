@@ -144,4 +144,18 @@
     <string name="saving_add_name_title">Enter event\'s name</string>
     <string name="saving_ending_date">Ending date</string>
     <string name="select_category_icon">Select Category</string>
+    <string name="basic_wallet">Basic Wallet</string>
+    <string name="choose_wallet_type">Choose Wallet Type</string>
+    <string name="detail_wallet">Detail Wallet</string>
+    <string name="event_detail">Detail Event</string>
+    <string name="event_menu_mark_not_finished">Mark as not finnished</string>
+    <string name="feature_developing">Feature is developing</string>
+    <string name="goal_wallet">Saving Wallet</string>
+    <string name="init_balance">Intitial Balance</string>
+    <string name="over_view_month">Overview</string>
+    <string name="pay_book">Paybook</string>
+    <string name="select_event">Select Event</string>
+    <string name="select_location">Select Location</string>
+    <string name="select_wallet_type">Select Wallet Type</string>
+    <string name="linker_wallet">Linker Wallet</string>
 </resources>

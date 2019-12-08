@@ -119,12 +119,15 @@
                 <action android:name="android.net.conn.CONECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+        <meta-data
+            android:name="com.google.android.geo.api_key"
+            android:value="@string/google_api_key"/>
     </application>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-
 </manifest>

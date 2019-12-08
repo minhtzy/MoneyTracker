@@ -7,26 +7,26 @@
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:id="@+id/imgItemExMax"
+        android:id="@+id/imgItemExMin"
         android:layout_alignParentLeft="true"
+        android:layout_marginLeft="8dp"
         android:layout_centerVertical="true"
         android:contentDescription="logo"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txtLableExMax"
+        android:id="@+id/txtLableExMin"
         android:textSize="14dp"
-        android:layout_toRightOf="@+id/imgItemExMax"
-        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/imgItemExMin"
         android:layout_marginLeft="8dp"
-        android:textColor="#000"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:textColor="#000"/>
 
     <com.minhtzy.moneytracker.view.CurrencyTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txtTrandingExMax"
+        android:id="@+id/txtTrandingExMin"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:textSize="14dp"

@@ -153,7 +153,7 @@ public class OVTransactionMonth extends Fragment {
         OVTransactionMonth fragment = new OVTransactionMonth();
         Bundle args = new Bundle();
         assert transactions != null;
-        args.putParcelableArrayList(ARG_ITEMS, (ArrayList<? extends Parcelable>) transactions);
+        args.putParcelable(ARG_ITEMS, Parcels.wrap(transactions));
         fragment.setArguments(args);
         return fragment;
     }
