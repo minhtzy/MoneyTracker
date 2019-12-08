@@ -232,15 +232,15 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
     public List<TransactionEntity> getStatisticalByCategoryInRange(String wallet_id ,int categoryId , DateRange dateRange) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String sql = "SELECT "
-                + " tblt.trading AS trading "
-                + " ,tblc._id AS categoryId "
-                + " ,tblc.type AS type "
+                + " tblt.amount AS amount"
+                + " ,tblc._id AS categoryId"
+                + " ,tblc.type AS type"
                 + " ,tblt.time as time"
                 + " FROM tbl_transactions tblt "
                 + " INNER JOIN tbl_categories tblc ON tblc._id = tblt.categoryId "
                 + " WHERE (tblt.categoryId = " + categoryId + " OR tblc.parentId = " + categoryId +" )"
-                + " AND tblt.walletId = "+ wallet_id
-                + " AND tblt.time >= " + dateRange.getDateFrom().getMillis()
+                + " AND tblt.walletId = \'"+ wallet_id
+                + "\' AND tblt.time >= " + dateRange.getDateFrom().getMillis()
                 + " AND tblt.time <= " + dateRange.getDateTo().getMillis();
         List<TransactionEntity> list = new ArrayList<>();
         Cursor cursor = db.rawQuery(sql,null);
@@ -260,8 +260,8 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
                 + " FROM tbl_transactions tblt "
                 + " INNER JOIN tbl_categories tblc ON tblc._id = tblt.categoryId "
                 + " WHERE (tblt.categoryId = " + categoryId + " OR tblc.parentId = " + categoryId +" )"
-                + " AND tblt.walletId = "+ wallet_id
-                + " AND tblt.time >= " + dateRange.getDateFrom().getMillis()
+                + " AND tblt.walletId = \'"+ wallet_id
+                + "\' AND tblt.time >= " + dateRange.getDateFrom().getMillis()
                 + " AND tblt.time <= " + dateRange.getDateTo().getMillis();
         List<TransactionEntity> list = new ArrayList<>();
         Cursor cursor = db.rawQuery(sql,null);

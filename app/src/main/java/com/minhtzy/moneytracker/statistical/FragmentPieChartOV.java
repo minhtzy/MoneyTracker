@@ -3,10 +3,10 @@ package com.minhtzy.moneytracker.statistical;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -34,10 +34,7 @@ import com.minhtzy.moneytracker.utilities.CategoryManager;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class FragmentPieChartOV extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -205,7 +202,7 @@ public class FragmentPieChartOV extends Fragment {
                 mPieChart.setCenterText("Khoản chi");
 
                 List<CategoryEntity> listCateExpress = categoriesDAO.getCategoriesByType(TransactionTypes.EXPENSE.getValue());
-
+                listCateExpress.addAll(categoriesDAO.getCategoriesByType(TransactionTypes.LOAN.getValue()));
 
                 for (CategoryEntity categoryEntity : listCateExpress) {
 
@@ -224,6 +221,7 @@ public class FragmentPieChartOV extends Fragment {
                 mPieChart.setCenterText("Khoản Thu");
 
                 List<CategoryEntity> listCateIncome = categoriesDAO.getCategoriesByType(TransactionTypes.INCOME.getValue());
+                listCateIncome.addAll(categoriesDAO.getCategoriesByType(TransactionTypes.DEBIT.getValue()));
 
                 for (CategoryEntity categoryEntity : listCateIncome) {
 

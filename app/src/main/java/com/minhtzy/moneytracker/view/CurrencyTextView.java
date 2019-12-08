@@ -4,11 +4,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
-import com.minhtzy.moneytracker.utilities.WalletsManager;
 
 import androidx.annotation.Nullable;
 
-public class CurrencyTextView extends android.support.v7.widget.AppCompatTextView {
+public class CurrencyTextView extends androidx.appcompat.widget.AppCompatTextView {
 
     String rawText;
 

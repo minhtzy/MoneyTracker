@@ -2,7 +2,7 @@ package com.minhtzy.moneytracker.wallet;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +10,7 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.adapter.CategoryExpandableListAdapter;
+import com.minhtzy.moneytracker.view.adapter.CategoryExpandableListAdapter;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.model.CategoryExpandableGroup;
 

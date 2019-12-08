@@ -2,9 +2,9 @@ package com.minhtzy.moneytracker.wallet;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,18 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.minhtzy.moneytracker.MainActivity;
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.adapter.CurrencyFormatAdapter;
+import com.minhtzy.moneytracker.view.adapter.CurrencyFormatAdapter;
 import com.minhtzy.moneytracker.dataaccess.CurrencyFormatDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.ICurrencyFormatDAO;
-import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
-import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 import com.minhtzy.moneytracker.entity.CurrencyFormat;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
-import com.minhtzy.moneytracker.entity.WalletType;
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
 import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;

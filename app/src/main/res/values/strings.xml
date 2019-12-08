@@ -205,6 +205,8 @@
     <string name="feature_developing">Tính năng đang phát triển</string>
     <string name="over_view_month">Chi tiết tháng</string>
     <string name="select_location">Chọn địa điểm</string>
+    <string name="over_view">Báo cáo chi tiết</string>
+    <string name="notify" />
     <string-array name="language_names">
         <item>@string/language_vietnamese</item>
         <item>@string/language_english</item>

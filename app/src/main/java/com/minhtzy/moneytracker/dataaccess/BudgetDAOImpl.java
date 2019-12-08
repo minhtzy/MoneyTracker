@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.minhtzy.moneytracker.budget.BudgetFragment;
 import com.minhtzy.moneytracker.entity.BudgetEntity;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class BudgetDAOImpl implements IBudgetDAO {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = budget.getContentValues();
         values.remove(BudgetEntity.BUDGET_ID);
+        values.remove(BudgetEntity.STATUS);
         int id = (int) db.insert(TABLE_BUDGET,BudgetEntity.BUDGET_ID,values);
         budget.setBudgetId(id);
         db.close();
@@ -62,7 +64,7 @@ public class BudgetDAOImpl implements IBudgetDAO {
     }
 
     @Override
-    public List<BudgetEntity> getAllBudget(long walletId) {
+    public List<BudgetEntity> getAllBudget(String walletId) {
         List<BudgetEntity> list_result = new ArrayList<>();
         Cursor data = getAllBudgetData(walletId);
         if(data != null && data.getCount() > 0) {
@@ -81,7 +83,7 @@ public class BudgetDAOImpl implements IBudgetDAO {
         return db.rawQuery(query,new String[]{});
     }
 
-    private Cursor getAllBudgetData(long walletId) {
+    private Cursor getAllBudgetData(String walletId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_BUDGET +
                 " WHERE " + BudgetEntity.WALLET_ID + " = ?";
@@ -105,18 +107,19 @@ public class BudgetDAOImpl implements IBudgetDAO {
                         " FROM tbl_transactions as t" +
                         " INNER JOIN tbl_categories as c" +
                         " ON t.categoryId = c._id" +
-                        " WHERE t.walletId = " + walletId +
-                        " AND time >= " + timeStart + " AND time <= " + timeEnd +
+                        " WHERE t.walletId = \'" + walletId +
+                        "\' AND time >= " + timeStart + " AND time <= " + timeEnd +
                         " AND (c._id = " + categoryId +" OR c.parentId = " + categoryId + ")" ;
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(query,null);
-        db.close();
         double spent = 0;
-        if(cursor.moveToFirst()) {
+        if(cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
             spent = cursor.getDouble(0);
         }
-        budget.setSpent(spent);
+        budget.setSpent(Math.abs(spent));
+        db.close();
     }
 
 }

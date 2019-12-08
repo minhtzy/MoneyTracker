@@ -1,17 +1,18 @@
 package com.minhtzy.moneytracker.statistical;
 
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
-import android.support.v4.app.Fragment;
 import android.util.Pair;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,28 +31,31 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.dataaccess.CategoriesDAOImpl;
+import com.minhtzy.moneytracker.dataaccess.ICategoriesDAO;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.model.TransactionTypes;
 import com.minhtzy.moneytracker.utilities.CategoryManager;
+import com.minhtzy.moneytracker.utilities.DateUtils;
 import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.view.CurrencyTextView;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 
 import org.parceler.Parcels;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-@RequiresApi(api = Build.VERSION_CODES.KITKAT)
-public class OVTransactionMonth extends Fragment {
+public class OVTransactionMonth extends AppCompatActivity {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String TAG = "OVTransactionMonth";
 
-    private static final String ARG_ITEMS = "items";
+    public static final String ARG_ITEMS = "items";
+    public static final String TITLE = "title";
 
     // TODO: Rename and change types of parameters
 
@@ -107,15 +111,6 @@ public class OVTransactionMonth extends Fragment {
 
     private List<TransactionEntity> mItems = new ArrayList<>();
 
-//
-//    private List<Float> mYDataEx = new ArrayList<>();
-//
-//    private List<String> mXDataEx = new ArrayList<>();
-
-//    private List<Float> mYDataIn = new ArrayList<>();
-//
-//    private List<String> mXDataIn = new ArrayList<>();
-
     private final OnChartValueSelectedListener mPiechartExListener = new OnChartValueSelectedListener() {
         @Override
         public void onValueSelected(Entry e, Highlight h) {
@@ -148,53 +143,57 @@ public class OVTransactionMonth extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static OVTransactionMonth newInstance(List<TransactionEntity> transactions) {
-        OVTransactionMonth fragment = new OVTransactionMonth();
-        Bundle args = new Bundle();
-        assert transactions != null;
-        args.putParcelable(ARG_ITEMS, Parcels.wrap(transactions));
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        setContentView(R.layout.fragment_ov_transaction_month);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getIntent().hasExtra(ARG_ITEMS)) {
 
-            mItems =( List<TransactionEntity> )Parcels.unwrap(getArguments().getParcelable(ARG_ITEMS));
+            mItems = (List<TransactionEntity>) Parcels.unwrap(getIntent().getParcelableExtra(ARG_ITEMS));
         }
+
+        if(getIntent().hasExtra(TITLE))
+        {
+            setTitle(getIntent().getStringExtra(TITLE));
+        }
+
+        addControls();
+
+        onBindView();
+
+        initEvents();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_ov_transaction_month, container, false);
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
 
-        mMoneyIncome = view.findViewById(R.id.txtIncome);
-        mMoneyExpenses = view.findViewById(R.id.txtExpenses);
-        mMoneyIncomeNet = view.findViewById(R.id.txtIncomeNet);
+    private void addControls() {
+        mMoneyIncome = findViewById(R.id.txtIncome);
+        mMoneyExpenses = findViewById(R.id.txtExpenses);
+        mMoneyIncomeNet = findViewById(R.id.txtIncomeNet);
 
-        mImageExMax = view.findViewById(R.id.imgItemExMax);
-        mLabelExMax = view.findViewById(R.id.txtLableExMax);
-        mTradingExMax = view.findViewById(R.id.txtTrandingExMax);
+        mImageExMax = findViewById(R.id.imgItemExMax);
+        mLabelExMax = findViewById(R.id.txtLableExMax);
+        mTradingExMax = findViewById(R.id.txtTrandingExMax);
 
-        mImageExMin = view.findViewById(R.id.imgItemExMin);
-        mLabelExMin = view.findViewById(R.id.txtLableExMin);
-        mTradingExMin = view.findViewById(R.id.txtTrandingExMin);
+        mImageExMin = findViewById(R.id.imgItemExMin);
+        mLabelExMin = findViewById(R.id.txtLableExMin);
+        mTradingExMin = findViewById(R.id.txtTrandingExMin);
 
-        mImageInMax = view.findViewById(R.id.imgItemInMax);
-        mLabelInMax = view.findViewById(R.id.txtLableInMax);
-        mTradingInMax = view.findViewById(R.id.txtTrandingInMax);
+        mImageInMax = findViewById(R.id.imgItemInMax);
+        mLabelInMax = findViewById(R.id.txtLableInMax);
+        mTradingInMax = findViewById(R.id.txtTrandingInMax);
 
-        mImageInMin = view.findViewById(R.id.imgItemInMin);
-        mLabelInMin = view.findViewById(R.id.txtLableInMin);
-        mTradingInMin = view.findViewById(R.id.txtTrandingInMin);
+        mImageInMin = findViewById(R.id.imgItemInMin);
+        mLabelInMin = findViewById(R.id.txtLableInMin);
+        mTradingInMin = findViewById(R.id.txtTrandingInMin);
 
-        mPiechartEx = view.findViewById(R.id.piechartExpenses);
+        mPiechartEx = findViewById(R.id.piechartExpenses);
 
         mPiechartEx.setRotationEnabled(true);
         mPiechartEx.getDescription().setText("Biểu đồ thống kê giao dịch");
@@ -209,7 +208,7 @@ public class OVTransactionMonth extends Fragment {
         mPiechartEx.setDrawEntryLabels(false); // To remove labels from piece of pie
         mPiechartEx.getDescription().setEnabled(false);
 
-        mPiechartIn = view.findViewById(R.id.piechartIncome);
+        mPiechartIn = findViewById(R.id.piechartIncome);
         mPiechartEx.getDescription().setText("Biểu đồ thống kê giao dịch");
         ;
         mPiechartIn.setHoleRadius(35f);
@@ -224,22 +223,15 @@ public class OVTransactionMonth extends Fragment {
         mPiechartIn.getDescription().setEnabled(false);
 
 
-        mLayout1 = view.findViewById(R.id.layout_ov1);
-        mLayout2 = view.findViewById(R.id.layout_ov2);
-        mLayout3 = view.findViewById(R.id.layout_ov3);
-        mLayout4 = view.findViewById(R.id.layout_ov4);
-
-        onBindView();
-
-        initEvents();
-
-        return view;
+        mLayout1 = findViewById(R.id.layout_ov1);
+        mLayout2 = findViewById(R.id.layout_ov2);
+        mLayout3 = findViewById(R.id.layout_ov3);
+        mLayout4 = findViewById(R.id.layout_ov4);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.over_view_month));
     }
 
     private void initEvents() {
@@ -248,84 +240,66 @@ public class OVTransactionMonth extends Fragment {
         mPiechartIn.setOnChartValueSelectedListener(mPiechartInListener);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void onBindView() {
 
         float moneyEx = 0;
         float moneyIn = 0;
 
-
-        float money1 = 0, money5 = 0, money13 = 0, money18 = 0,
-                money23 = 0, money24 = 0, money27 = 0, money28 = 0,
-                money33 = 0, money37 = 0, money42 = 0, money49 = 0, money51 = 0,
-                money53 = 0, money56 = 0;
-
-
         List<TransactionEntity> itemsEx = new ArrayList<>();
         List<TransactionEntity> itemsIn = new ArrayList<>();
 
+
+        List<Pair<Float, String>> totalDataEx = new ArrayList<>();
+        List<Pair<Float, String>> totalDataIn = new ArrayList<>();
+
+        SparseArray<Float> listSumAmount = new SparseArray<>();
         for (TransactionEntity tran : mItems) {
+            int parentID = tran.getCategoryId();
+            CategoryEntity categoryEntity = CategoryManager.getInstance().getCategoryById(parentID);
+            try {
+                parentID = categoryEntity.getParentId();
+            } catch (NullPointerException ex) {
 
-            if (tran.getCategoryId() == 1) {
-
-                money1 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 5) {
-
-                money5 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 13) {
-
-                money13 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 18) {
-
-                money18 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 23) {
-
-                money23 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 24) {
-
-                money24 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 27) {
-
-                money27 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 28) {
-
-                money28 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 33) {
-
-                money33 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 37) {
-
-                money37 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 42) {
-
-                money42 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 49) {
-
-                money49 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 51) {
-
-                money51 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 53) {
-
-                money53 += Math.abs(tran.getTransactionAmount());
-            } else if (tran.getCategoryId() == 56) {
-
-                money56 += Math.abs(tran.getTransactionAmount());
             }
+            float value = listSumAmount.get(parentID) != null ? listSumAmount.get(parentID) : 0;
+            float new_value = value + (float) Math.abs(tran.getTransactionAmount());
+
+            listSumAmount.put(parentID, new_value);
 
             if (tran.getTransactionAmount() < 0) {
 
                 moneyEx += Math.abs(tran.getTransactionAmount());
                 itemsEx.add(tran);
-
-            }
-
-            if (tran.getTransactionAmount() >= 0) {
+            } else {
 
                 moneyIn += Math.abs(tran.getTransactionAmount());
                 itemsIn.add(tran);
             }
         }
+
+        ICategoriesDAO categoriesDAO = new CategoriesDAOImpl(this);
+
+
+        List<CategoryEntity> listCateExpress = categoriesDAO.getCategoriesByType(TransactionTypes.EXPENSE.getValue());
+        listCateExpress.addAll(categoriesDAO.getCategoriesByType(TransactionTypes.LOAN.getValue()));
+
+        for (CategoryEntity categoryEntity : listCateExpress) {
+
+            if (listSumAmount.indexOfKey(categoryEntity.getCategoryId()) >= 0 && listSumAmount.get(categoryEntity.getCategoryId()) > 0) {
+
+                totalDataEx.add(new Pair<>(listSumAmount.get(categoryEntity.getCategoryId()), categoryEntity.getCategoryName()));
+            }
+        }
+
+        List<CategoryEntity> listCateIncome = categoriesDAO.getCategoriesByType(TransactionTypes.INCOME.getValue());
+        listCateIncome.addAll(categoriesDAO.getCategoriesByType(TransactionTypes.DEBIT.getValue()));
+
+        for (CategoryEntity categoryEntity : listCateIncome) {
+
+            if (listSumAmount.indexOfKey(categoryEntity.getCategoryId()) >= 0 && listSumAmount.get(categoryEntity.getCategoryId()) > 0)
+                totalDataIn.add(new Pair<>(listSumAmount.get(categoryEntity.getCategoryId()), categoryEntity.getCategoryName()));
+        }
+
 
         float moneyIncomeNet = moneyIn - moneyEx;
 
@@ -365,46 +339,6 @@ public class OVTransactionMonth extends Fragment {
             mLayout4.setVisibility(View.GONE);
         }
 
-        List<Pair<Float, String>> totalCategory = new ArrayList<>();
-
-        totalCategory.add(new Pair<>(money1, "Ăn uống"));
-        totalCategory.add(new Pair<>(money5, "Hóa đơn & Tiện ích"));
-        totalCategory.add(new Pair<>(money13, "Di chuyển"));
-        totalCategory.add(new Pair<>(money18, "Mua sắm"));
-        totalCategory.add(new Pair<>(money23, "Bạn bè & Người yêu"));
-        totalCategory.add(new Pair<>(money24, "Giải trí"));
-        totalCategory.add(new Pair<>(money27, "Du lịch"));
-        totalCategory.add(new Pair<>(money28, "Sức khỏe"));
-        totalCategory.add(new Pair<>(money33, "Quà tặng & Khuyên góp"));
-        totalCategory.add(new Pair<>(money37, "Gia đình"));
-        totalCategory.add(new Pair<>(money42, "Giáo dục"));
-        totalCategory.add(new Pair<>(money49, "Khoản chi khác"));
-        totalCategory.add(new Pair<>(money51, "Thưởng"));
-        totalCategory.add(new Pair<>(money53, "Lương"));
-        totalCategory.add(new Pair<>(money56, "Khoản thu khác"));
-
-        List<Pair<Float, String>> totalDataEx = new ArrayList<>();
-        List<Pair<Float, String>> totalDataIn = new ArrayList<>();
-
-        for (int i = 0; i < totalCategory.size(); i++) {
-
-            if (totalCategory.get(i).first > 0) {
-
-                if (totalCategory.get(i).second.equalsIgnoreCase("Thưởng") || totalCategory.get(i).second.equalsIgnoreCase("Lương") || totalCategory.get(i).second.equalsIgnoreCase("Khoản thu khác")) {
-
-                    totalDataIn.add(new Pair<>(totalCategory.get(i).first, totalCategory.get(i).second));
-//                    mYDataIn.add(totalCategory.get(i).first);
-//                    mXDataIn.add(totalCategory.get(i).second);
-
-                } else {
-
-                    totalDataEx.add(new Pair<>(totalCategory.get(i).first, totalCategory.get(i).second));
-//                    mYDataEx.add(totalCategory.get(i).first);
-//                    mXDataEx.add(totalCategory.get(i).second);
-
-                }
-            }
-        }
         addDataSet(mPiechartEx, totalDataEx);
         addDataSet(mPiechartIn, totalDataIn);
     }
@@ -471,14 +405,13 @@ public class OVTransactionMonth extends Fragment {
         pieChart.invalidate();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void onBindViewExMax(final List<TransactionEntity> itemsEx) {
 
         // lấy item có properties trading lớn nhất
         TransactionEntity transaction = Collections.max(itemsEx, new Comparator<TransactionEntity>() {
             @Override
             public int compare(TransactionEntity o1, TransactionEntity o2) {
-                if(o1.getTransactionAmount() == o2.getTransactionAmount()) return 0;
+                if (o1.getTransactionAmount() == o2.getTransactionAmount()) return 0;
                 return (o1.getTransactionAmount() > o2.getTransactionAmount()) ? 1 : -1;
             }
         });
@@ -490,13 +423,12 @@ public class OVTransactionMonth extends Fragment {
         mImageExMax.setImageDrawable(ResourceUtils.getCategoryIcon(category.getCategoryIcon()));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void onBindViewExMin(List<TransactionEntity> itemsEx) {
 
         TransactionEntity transaction = Collections.min(itemsEx, new Comparator<TransactionEntity>() {
             @Override
             public int compare(TransactionEntity o1, TransactionEntity o2) {
-                if(o1.getTransactionAmount() == o2.getTransactionAmount()) return 0;
+                if (o1.getTransactionAmount() == o2.getTransactionAmount()) return 0;
                 return (o1.getTransactionAmount() < o2.getTransactionAmount()) ? 1 : -1;
             }
         });
@@ -507,37 +439,35 @@ public class OVTransactionMonth extends Fragment {
         mImageExMin.setImageDrawable(ResourceUtils.getCategoryIcon(category.getCategoryIcon()));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void onBindViewInMax(List<TransactionEntity> itemsIn) {
 
         TransactionEntity transaction = Collections.max(itemsIn, new Comparator<TransactionEntity>() {
             @Override
             public int compare(TransactionEntity o1, TransactionEntity o2) {
-                if(o1.getTransactionAmount() == o2.getTransactionAmount()) return 0;
+                if (o1.getTransactionAmount() == o2.getTransactionAmount()) return 0;
                 return (o1.getTransactionAmount() > o2.getTransactionAmount()) ? 1 : -1;
             }
         });
         CategoryEntity category = CategoryManager.getInstance().getCategoryById(transaction.getCategoryId());
         mLabelInMax.setText(category.getCategoryName());
-        mTradingInMax.setText(String.valueOf( transaction.getTransactionAmount()));
+        mTradingInMax.setText(String.valueOf(transaction.getTransactionAmount()));
         mTradingInMax.setTextColor(getResources().getColor(R.color.colorMoneyTradingPositive));
 
         mImageInMax.setImageDrawable(ResourceUtils.getCategoryIcon(category.getCategoryIcon()));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void onBindViewInMin(List<TransactionEntity> itemsIn) {
 
         TransactionEntity transaction = Collections.min(itemsIn, new Comparator<TransactionEntity>() {
             @Override
             public int compare(TransactionEntity o1, TransactionEntity o2) {
-                if(o1.getTransactionAmount() == o2.getTransactionAmount()) return 0;
+                if (o1.getTransactionAmount() == o2.getTransactionAmount()) return 0;
                 return (o1.getTransactionAmount() < o2.getTransactionAmount()) ? 1 : -1;
             }
         });
         CategoryEntity category = CategoryManager.getInstance().getCategoryById(transaction.getCategoryId());
         mLabelInMin.setText(category.getCategoryName());
-        mTradingInMin.setText(String.valueOf( transaction.getTransactionAmount()));
+        mTradingInMin.setText(String.valueOf(transaction.getTransactionAmount()));
         mTradingInMin.setTextColor(getResources().getColor(R.color.colorMoneyTradingPositive));
 
         mImageInMin.setImageDrawable(ResourceUtils.getCategoryIcon(category.getCategoryIcon()));

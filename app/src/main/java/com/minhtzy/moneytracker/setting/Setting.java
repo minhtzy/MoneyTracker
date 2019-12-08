@@ -1,9 +1,9 @@
 package com.minhtzy.moneytracker.setting;
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,7 +15,6 @@ import com.minhtzy.moneytracker.changelanguage.ChangeLanguageActivity;
 import com.minhtzy.moneytracker.model.Constants;
 import com.minhtzy.moneytracker.databinding.ActivitySettingBinding;
 import com.minhtzy.moneytracker.utilities.LanguageUtils;
-import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

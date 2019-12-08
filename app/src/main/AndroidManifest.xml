@@ -113,6 +113,9 @@
             android:name=".sync.SyncActivity"
             android:label="@string/sync"
             android:theme="@style/AppTheme" />
+        <activity android:name=".statistical.OVTransactionMonth"
+            android:label="@string/over_view"
+            android:theme="@style/AppTheme"/>
 
         <receiver android:name=".sync.NetworkMonitor">
             <intent-filter>

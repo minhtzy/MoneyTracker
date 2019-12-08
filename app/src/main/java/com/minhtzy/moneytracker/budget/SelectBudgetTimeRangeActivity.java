@@ -1,14 +1,14 @@
 package com.minhtzy.moneytracker.budget;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.adapter.TimeRangeListAdapter;
+import com.minhtzy.moneytracker.view.adapter.TimeRangeListAdapter;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.utilities.DateUtils;
 

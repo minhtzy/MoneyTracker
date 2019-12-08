@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Parcel;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -110,7 +112,7 @@ public class DetailBudgetActivity extends AppCompatActivity {
                         mBudget.getCategoryId(),
                         mBudget.getPeriod());
                 Intent intent = new Intent(DetailBudgetActivity.this,ViewTransactionListActivity.class);
-                intent.putExtra(ViewTransactionListActivity.BUNDLE_LIST_ITEM, (ArrayList<TransactionEntity>) transactions);
+                intent.putExtra(ViewTransactionListActivity.BUNDLE_LIST_ITEM, Parcels.wrap(transactions));
                 startActivity(intent);
 
             }
@@ -163,9 +165,9 @@ public class DetailBudgetActivity extends AppCompatActivity {
             spent_days -= remainDays;
         }
         if(spent_days == 0) spent_days = total_days;
-        double recommended= mBudget.getBudgetAmount() / total_days;
-        double projected = mBudget.getSpent() * total_days / spent_days;
-        double actual = mBudget.getSpent() / spent_days;
+        double recommended= Math.abs(mBudget.getBudgetAmount()) / total_days;
+        double projected = Math.abs(mBudget.getSpent()) * total_days / spent_days;
+        double actual = Math.abs(mBudget.getSpent()) / spent_days;
         textAmountRecomended.setText(String.valueOf(recommended));
         textAmountProjected.setText(String.valueOf(projected));
         textAmountActual.setText(String.valueOf(actual));
@@ -240,7 +242,7 @@ public class DetailBudgetActivity extends AppCompatActivity {
         for(TransactionEntity t : transactions) {
             long current = t.getTransactionTime().getTime();
             int index = (int) Math.ceil((current - start) / 24 / 60/60/1000.0f);
-            entries.get(index).setY(entries.get(index).getY() + (float)t.getTransactionAmount());
+            entries.get(index).setY(entries.get(index).getY() + (float)Math.abs(t.getTransactionAmount()));
 
         }
 

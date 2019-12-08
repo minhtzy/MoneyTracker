@@ -7,9 +7,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,18 +20,15 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.adapter.WalletListAdapter;
+import com.minhtzy.moneytracker.wallet.adapter.WalletListAdapter;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
@@ -49,6 +48,7 @@ import com.google.firebase.auth.FirebaseUser;
 import org.parceler.Parcels;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -61,7 +61,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_EVENT = 4;
     public static final int REQUEST_PLACE_PICKER = 5;
     public static final String EXTRA_TRANSACTION = "com.minhtzy.moneytracker.extra.transaction";
-    private static final Object IMAGE_DIRECTORY = "images";
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 6;
 
     private CurrencyEditText mTextMoney;
     private EditText mTextCategory;
@@ -85,7 +85,6 @@ public class AddTransactionActivity extends AppCompatActivity {
     private TextView mTextEvent;
     private ImageView mImgEvent;
 
-    PlaceDetectionClient mPlaceDetectionClient;
     Place mCurrentPlace = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +137,6 @@ public class AddTransactionActivity extends AppCompatActivity {
         mListWallet = iWalletsDAO.getAllWalletByUser(mCurrentUser.getUid());
         mCurrentWallet = WalletsManager.getInstance(this).getCurrentWallet();
         mTextPlace = findViewById(R.id.location_name);
-        mPlaceDetectionClient = Places.getPlaceDetectionClient(this);
     }
 
     private void addEvents() {
@@ -190,17 +188,30 @@ public class AddTransactionActivity extends AppCompatActivity {
                 onClickLocation();
             }
         });
+
+        findViewById(R.id.clear_location).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClearLocation();
+            }
+        });
+    }
+
+    private void onClearLocation() {
+        mCurrentPlace = null;
+        mTextPlace.setText("");
+        findViewById(R.id.clear_location).setVisibility(View.INVISIBLE);
     }
 
     private void onClickLocation() {
-        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-        try {
-            startActivityForResult(builder.build(AddTransactionActivity.this),REQUEST_PLACE_PICKER);
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
+        if(!Places.isInitialized())
+        {
+            Places.initialize(getApplicationContext(),getString(R.string.google_api_key));
         }
+
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID,Place.Field.NAME);
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN,fields).build(this);
+        startActivityForResult(intent,REQUEST_PLACE_PICKER);
     }
 
     private void onClearEvent() {
@@ -257,6 +268,10 @@ public class AddTransactionActivity extends AppCompatActivity {
         transaction.setTransactionNote(note);
         transaction.setMediaUri(mMediaUri);
 
+        if(mCurrentPlace != null)
+        {
+            transaction.setLocationId(mCurrentPlace.getId());
+        }
         if(mEvent != null)
         {
             transaction.setEventId(mEvent.getEventId());
@@ -334,12 +349,12 @@ public class AddTransactionActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(resultCode == RESULT_OK) {
-            if(requestCode == REQUEST_CODE_CATEGORY) {
-                mCurrentCategory =(CategoryEntity) Parcels.unwrap(data.getParcelableExtra(SelectCategoryActivity.EXTRA_CATEGORY));
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE_CATEGORY) {
+                mCurrentCategory = (CategoryEntity) Parcels.unwrap(data.getParcelableExtra(SelectCategoryActivity.EXTRA_CATEGORY));
                 updateUI();
-            }
-            else if(requestCode == REQUEST_CODE_GALLERY) {
+            } else if (requestCode == REQUEST_CODE_GALLERY) {
                 if (data != null) {
                     Uri contentURI = data.getData();
                     try {
@@ -352,26 +367,21 @@ public class AddTransactionActivity extends AppCompatActivity {
                         Toast.makeText(AddTransactionActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
                     }
                 }
-            }
-            else if(requestCode == REQUEST_CODE_CAMERA) {
+            } else if (requestCode == REQUEST_CODE_CAMERA) {
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 mCurrentImage = thumbnail;
                 updateImagePreView(thumbnail);
-            }
-            else if(requestCode == REQUEST_CODE_EVENT)
-            {
+            } else if (requestCode == REQUEST_CODE_EVENT) {
                 mEvent = Parcels.unwrap(data.getParcelableExtra(SelectEventActivity.EXTRA_EVENT));
-                if(mEvent != null)
-                {
+                if (mEvent != null) {
                     mTextEvent.setText(mEvent.getEventName());
                     mImgEvent.setImageDrawable(ResourceUtils.getCategoryIcon(mEvent.getEventIcon()));
                     findViewById(R.id.clear_event).setVisibility(View.VISIBLE);
                 }
-            }
-            else if(requestCode == REQUEST_PLACE_PICKER)
-            {
-                mCurrentPlace = PlacePicker.getPlace(this,data);
+            } else if (requestCode == REQUEST_PLACE_PICKER) {
+                mCurrentPlace = Autocomplete.getPlaceFromIntent(data);
                 mTextPlace.setText(mCurrentPlace.getName());
+                findViewById(R.id.clear_location).setVisibility(View.VISIBLE);
             }
         }
     }

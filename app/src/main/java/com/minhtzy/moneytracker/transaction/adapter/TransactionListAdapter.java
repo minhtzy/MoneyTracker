@@ -1,4 +1,4 @@
-package com.minhtzy.moneytracker.adapter;
+package com.minhtzy.moneytracker.transaction.adapter;
 
 import android.content.Context;
 import android.util.Pair;

@@ -22,13 +22,13 @@
         android:background="@color/g_400"
         android:layout_below="@+id/piechartItems"/>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recycleViewOV"
         android:layout_below="@+id/text1"
         android:layout_marginTop="20dp">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>

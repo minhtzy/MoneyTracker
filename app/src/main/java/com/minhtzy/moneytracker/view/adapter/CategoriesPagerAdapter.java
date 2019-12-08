@@ -1,13 +1,12 @@
-package com.minhtzy.moneytracker.adapter;
+package com.minhtzy.moneytracker.view.adapter;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.CategoriesDAOImpl;
-import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.model.CategoryExpandableGroup;
 import com.minhtzy.moneytracker.wallet.ListCategoryFragment;
 

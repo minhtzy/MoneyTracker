@@ -1,4 +1,4 @@
-package com.minhtzy.moneytracker.adapter;
+package com.minhtzy.moneytracker.view.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

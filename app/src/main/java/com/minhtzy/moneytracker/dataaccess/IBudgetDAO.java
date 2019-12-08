@@ -10,6 +10,6 @@ public interface IBudgetDAO {
     public boolean updateBudget(BudgetEntity budget);
     public boolean deleteBudget(BudgetEntity budget);
     public List<BudgetEntity> getAllBudget();
-    public List<BudgetEntity> getAllBudget(long walletId);
+    public List<BudgetEntity> getAllBudget(String walletId);
     public void updateBudgetSpent(BudgetEntity budget);
 }

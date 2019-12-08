@@ -3,8 +3,8 @@ package com.minhtzy.moneytracker.budget;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +18,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.adapter.WalletListAdapter;
+import com.minhtzy.moneytracker.wallet.adapter.WalletListAdapter;
 import com.minhtzy.moneytracker.dataaccess.BudgetDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.IBudgetDAO;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
@@ -168,6 +168,7 @@ public class AddBudgetActivity extends AppCompatActivity {
             return;
         }
         BudgetEntity budget = new BudgetEntity();
+        budget.setBudgetName(mCurrentCategory.getCategoryName());
         budget.setWalletId(mCurrentWallet.getWalletId());
         budget.setCategoryId(mCurrentCategory.getCategoryId());
         budget.setBudgetAmount((float) mTextAmount.getCleanDoubleValue());
@@ -245,13 +246,14 @@ public class AddBudgetActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE_CATEGORY) {
                 mCurrentCategory = (CategoryEntity) Parcels.unwrap(data.getParcelableExtra(SelectCategoryActivity.EXTRA_CATEGORY));
                 updateUI();
             }
-            if(requestCode == REQUEST_CODE_TIME_RANGE) {
-                mDateRange =  (DateRange) data.getSerializableExtra(SelectBudgetTimeRangeActivity.EXTRA_BUDGET_TIME_RANGE);
+            if (requestCode == REQUEST_CODE_TIME_RANGE) {
+                mDateRange = (DateRange) data.getSerializableExtra(SelectBudgetTimeRangeActivity.EXTRA_BUDGET_TIME_RANGE);
                 updateUI();
             }
         }

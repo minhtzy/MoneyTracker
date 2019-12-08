@@ -3,7 +3,7 @@ package com.minhtzy.moneytracker.sync;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.Parcel;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
@@ -13,7 +13,6 @@ import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.utilities.SharedPrefs;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
-import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

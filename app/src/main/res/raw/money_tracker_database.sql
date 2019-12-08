@@ -163,7 +163,8 @@ CREATE TABLE IF NOT EXISTS tbl_budgets (
     timeStart integer  NOT NULL,
     timeEnd integer  NOT NULL,
     repeat integer,
-    icon TEXT
+    icon TEXT,
+    status TEXT
 );
 
 CREATE TABLE tbl_currency_format(

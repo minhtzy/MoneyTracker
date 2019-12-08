@@ -1,16 +1,15 @@
 package com.minhtzy.moneytracker.changelanguage;
 
 
-import android.databinding.DataBindingUtil;
-import android.databinding.ObservableField;
-import android.support.v7.widget.RecyclerView;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ObservableField;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.utilities.LanguageUtils;
-import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.minhtzy.moneytracker.view.ItemClickListener;
 import com.minhtzy.moneytracker.databinding.ItemLanguageBinding;
 import com.minhtzy.moneytracker.model.Language;

@@ -12,13 +12,13 @@
         android:orientation="vertical"
         >
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
             >
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="?android:actionBarSize"
                 >
@@ -31,8 +31,8 @@
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
                     />
-            </android.support.v7.widget.Toolbar>
-        </android.support.design.widget.AppBarLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="107dp"

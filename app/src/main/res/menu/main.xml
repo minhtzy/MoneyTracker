@@ -2,21 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/search_transaction_by_date"
+        android:id="@+id/search_transaction"
         android:orderInCategory="100"
-        android:title="@string/search_by_date"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/search_transaction_by_time"
-        android:orderInCategory="100"
-        android:title="@string/search_by_time"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/search_transaction_by_items"
-        android:orderInCategory="100"
-        android:title="@string/search_by_items"
+        android:title="@string/search"
         app:showAsAction="never"
         />
     <item android:id="@+id/action_sync"
@@ -28,4 +16,10 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/notify"
+        android:icon="@drawable/ic_notifications_white"
+        app:showAsAction="ifRoom"
+        android:title="@string/notify">
+    </item>
 </menu>

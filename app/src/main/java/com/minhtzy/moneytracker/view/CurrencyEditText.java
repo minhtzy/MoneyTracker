@@ -1,17 +1,12 @@
 package com.minhtzy.moneytracker.view;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 
-import com.minhtzy.moneytracker.entity.CurrencyFormat;
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
-
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.Locale;
 
 public class CurrencyEditText extends AppCompatEditText {
 

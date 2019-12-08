@@ -3,16 +3,16 @@ package com.minhtzy.moneytracker;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import androidx.annotation.Nullable;
+import com.google.android.material.navigation.NavigationView;
+import androidx.fragment.app.Fragment;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,14 +26,11 @@ import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.event.EventFragment;
-import com.minhtzy.moneytracker.event.EventListFragment;
 import com.minhtzy.moneytracker.setting.Setting;
 
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 
 import com.minhtzy.moneytracker.statistical.FragmentTendency;
-import com.minhtzy.moneytracker.statistical.OVTransactionMonth;
-import com.minhtzy.moneytracker.statistical.StatisticalTabFragment;
 import com.minhtzy.moneytracker.transaction.TransactionListSearch;
 import com.minhtzy.moneytracker.transaction.TransactionTabFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -124,74 +121,76 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, Setting.class);
             startActivityForResult(intent,REQUEST_SETTING_CODE);
             return true;
-        }else if (id == R.id.search_transaction_by_date){
-            final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
-            View mView = getLayoutInflater().inflate(R.layout.dialog_search_transactions,null);
-            final EditText txtdateSelect = (EditText)mView.findViewById(R.id.txtdateSelect);
-            Button btnok = (Button)mView.findViewById(R.id.btnOK);
-            mBuilder.setView(mView);
-
-            final AlertDialog mDialog = mBuilder.create();
-            mDialog.show();
-
-            txtdateSelect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                            calendar.set(Calendar.YEAR,year);
-                            calendar.set(Calendar.MONTH,month);
-                            calendar.set(Calendar.DATE,dayOfMonth);
-
-                            txtdateSelect.setText(sdf.format(calendar.getTime()));
-                        }
-                    };
-
-                    DatePickerDialog mDatePickerDialog = new DatePickerDialog(
-                            MainActivity.this,
-                            callback,
-                            calendar.get(calendar.YEAR),
-                            calendar.get(calendar.MONTH),
-                            calendar.get(calendar.DATE)
-                    );
-                    mDatePickerDialog.show();
-                }
-            });
-                btnok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mDialog.dismiss();
-                        String txtdateStart = txtdateSelect.getText().toString()+ " 00:00";
-                        String txtdateEnd = txtdateSelect.getText().toString()+" 23:59";
-                        if (txtdateStart.isEmpty()){
-                            txtdateSelect.setError("Không được để trống");
-                            txtdateSelect.requestFocus();
-                            return;
-                        }
-                        else {
-                            try {
-
-                                Date mDateStart = sdf1.parse(String.valueOf(txtdateStart));
-                                Date mDateEnd = sdf1.parse(txtdateEnd);
-                                long milisStart = mDateStart.getTime();
-                                long milisEnd = mDateEnd.getTime();
-//                                Toast.makeText(MainActivity.this, "" + milis, Toast.LENGTH_LONG).show();
-                                List<TransactionEntity> listtrans = new ArrayList<>();
-
-                                TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
-                                List list = trans.getAllTransactionDataByDate(milisStart,milisEnd);
-                                listtrans.addAll(list);
-                                TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
-                                getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,transactionListFragment).addToBackStack(null).commit();
-
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
-        }else if (id == R.id.search_transaction_by_time){
+        }
+//        else if (id == R.id.search_transaction_by_date){
+//            final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+//            View mView = getLayoutInflater().inflate(R.layout.dialog_search_transactions,null);
+//            final EditText txtdateSelect = (EditText)mView.findViewById(R.id.txtdateSelect);
+//            Button btnok = (Button)mView.findViewById(R.id.btnOK);
+//            mBuilder.setView(mView);
+//
+//            final AlertDialog mDialog = mBuilder.create();
+//            mDialog.show();
+//
+//            txtdateSelect.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
+//                        @Override
+//                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//                            calendar.set(Calendar.YEAR,year);
+//                            calendar.set(Calendar.MONTH,month);
+//                            calendar.set(Calendar.DATE,dayOfMonth);
+//
+//                            txtdateSelect.setText(sdf.format(calendar.getTime()));
+//                        }
+//                    };
+//
+//                    DatePickerDialog mDatePickerDialog = new DatePickerDialog(
+//                            MainActivity.this,
+//                            callback,
+//                            calendar.get(calendar.YEAR),
+//                            calendar.get(calendar.MONTH),
+//                            calendar.get(calendar.DATE)
+//                    );
+//                    mDatePickerDialog.show();
+//                }
+//            });
+//                btnok.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        mDialog.dismiss();
+//                        String txtdateStart = txtdateSelect.getText().toString()+ " 00:00";
+//                        String txtdateEnd = txtdateSelect.getText().toString()+" 23:59";
+//                        if (txtdateStart.isEmpty()){
+//                            txtdateSelect.setError("Không được để trống");
+//                            txtdateSelect.requestFocus();
+//                            return;
+//                        }
+//                        else {
+//                            try {
+//
+//                                Date mDateStart = sdf1.parse(String.valueOf(txtdateStart));
+//                                Date mDateEnd = sdf1.parse(txtdateEnd);
+//                                long milisStart = mDateStart.getTime();
+//                                long milisEnd = mDateEnd.getTime();
+////                                Toast.makeText(MainActivity.this, "" + milis, Toast.LENGTH_LONG).show();
+//                                List<TransactionEntity> listtrans = new ArrayList<>();
+//
+//                                TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
+//                                List list = trans.getAllTransactionDataByDate(milisStart,milisEnd);
+//                                listtrans.addAll(list);
+//                                TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
+//                                getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,transactionListFragment).addToBackStack(null).commit();
+//
+//                            } catch (ParseException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+//                });
+//        }
+        else if (id == R.id.search_transaction){
             try {
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
                 View mView = getLayoutInflater().inflate(R.layout.fragment_search_transaction,null);
@@ -293,75 +292,75 @@ public class MainActivity extends AppCompatActivity
                 ex.printStackTrace();
             }
         }
-        else if (id == R.id.search_transaction_by_items){
-            AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
-            View mView = getLayoutInflater().inflate(R.layout.dialog_search_items,null);
-            Button btnIncome = (Button)mView.findViewById(R.id.btnIncome);
-            Button btnExpense = (Button)mView.findViewById(R.id.btnExpense);
-            Button btnLoan = (Button)mView.findViewById(R.id.btnLoan);
-            Button btnBorrowing = (Button)mView.findViewById(R.id.btnBorrowing);
-
-            mBuilder.setView(mView);
-            final AlertDialog mDialog = mBuilder.create();
-            mDialog.show();
-
-            btnIncome.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mDialog.dismiss();
-                    List<TransactionEntity> listtrans = new ArrayList<>();
-
-                    TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
-                    List list = trans.getAllTransactionDataByType(2);
-                    listtrans.addAll(list);
-                    TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
-
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
-                }
-            });
-            btnBorrowing.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mDialog.dismiss();
-                    List<TransactionEntity> listtrans = new ArrayList<>();
-
-                    TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
-                    List list = trans.getAllTransactionDataByType(4);
-                    listtrans.addAll(list);
-                    TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
-
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
-                }
-            });
-            btnExpense.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mDialog.dismiss();
-                    List<TransactionEntity> listtrans = new ArrayList<>();
-
-                    TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
-                    List list = trans.getAllTransactionDataByType(1);
-                    listtrans.addAll(list);
-                    TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
-
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
-                }
-            });
-            btnLoan.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mDialog.dismiss();
-                    List<TransactionEntity> listtrans = new ArrayList<>();
-
-                    TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
-                    List list = trans.getAllTransactionDataByType(3);
-                    listtrans.addAll(list);
-                    TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
-
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
-                }
-            });
-        }
+//        else if (id == R.id.search_transaction_by_items){
+//            AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+//            View mView = getLayoutInflater().inflate(R.layout.dialog_search_items,null);
+//            Button btnIncome = (Button)mView.findViewById(R.id.btnIncome);
+//            Button btnExpense = (Button)mView.findViewById(R.id.btnExpense);
+//            Button btnLoan = (Button)mView.findViewById(R.id.btnLoan);
+//            Button btnBorrowing = (Button)mView.findViewById(R.id.btnBorrowing);
+//
+//            mBuilder.setView(mView);
+//            final AlertDialog mDialog = mBuilder.create();
+//            mDialog.show();
+//
+//            btnIncome.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mDialog.dismiss();
+//                    List<TransactionEntity> listtrans = new ArrayList<>();
+//
+//                    TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
+//                    List list = trans.getAllTransactionDataByType(2);
+//                    listtrans.addAll(list);
+//                    TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
+//
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
+//                }
+//            });
+//            btnBorrowing.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mDialog.dismiss();
+//                    List<TransactionEntity> listtrans = new ArrayList<>();
+//
+//                    TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
+//                    List list = trans.getAllTransactionDataByType(4);
+//                    listtrans.addAll(list);
+//                    TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
+//
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
+//                }
+//            });
+//            btnExpense.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mDialog.dismiss();
+//                    List<TransactionEntity> listtrans = new ArrayList<>();
+//
+//                    TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
+//                    List list = trans.getAllTransactionDataByType(1);
+//                    listtrans.addAll(list);
+//                    TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
+//
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
+//                }
+//            });
+//            btnLoan.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mDialog.dismiss();
+//                    List<TransactionEntity> listtrans = new ArrayList<>();
+//
+//                    TransactionsDAOImpl trans = new TransactionsDAOImpl(MainActivity.this);
+//                    List list = trans.getAllTransactionDataByType(3);
+//                    listtrans.addAll(list);
+//                    TransactionListSearch transactionListFragment = new TransactionListSearch().newInstance(listtrans);
+//
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, transactionListFragment).addToBackStack(null).commit();
+//                }
+//            });
+//        }
 
         return super.onOptionsItemSelected(item);
     }

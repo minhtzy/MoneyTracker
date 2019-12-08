@@ -5,9 +5,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -17,11 +17,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
 
-import com.minhtzy.moneytracker.adapter.TransactionListAdapter;
+import com.minhtzy.moneytracker.statistical.OVTransactionMonth;
+import com.minhtzy.moneytracker.transaction.adapter.TransactionListAdapter;
 import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
@@ -29,7 +29,6 @@ import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView;
-import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.minhtzy.moneytracker.view.CurrencyTextView;
 
 
@@ -133,11 +132,19 @@ public class TransactionListFragment extends Fragment {
             }
             @Override
             public void onHeaderClick(AdapterView<?> adapterView, View view, int section, long id) {
-
+                onClickHeader();
             }
         });
         new loadTransactions(this.getActivity()).execute();
         return view;
+    }
+
+    private void onClickHeader() {
+        Intent intent = new Intent(getActivity(), OVTransactionMonth.class);
+        intent.putExtra(OVTransactionMonth.ARG_ITEMS,Parcels.wrap(mItems));
+        String title = String.format("%d/%d", mDateRange.getDateFrom().getMonth() + 1, mDateRange.getDateFrom().getYear());
+        intent.putExtra(OVTransactionMonth.TITLE,title);
+        startActivity(intent);
     }
 
     @Override

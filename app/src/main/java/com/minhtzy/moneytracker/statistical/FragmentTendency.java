@@ -1,14 +1,19 @@
 package com.minhtzy.moneytracker.statistical;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.minhtzy.moneytracker.R;
@@ -16,6 +21,9 @@ import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
+import com.minhtzy.moneytracker.model.DateRange;
+import com.minhtzy.moneytracker.model.MTDate;
+import com.minhtzy.moneytracker.utilities.DateUtils;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 
 import java.util.ArrayList;
@@ -28,11 +36,28 @@ public class FragmentTendency extends Fragment {
 
     private Spinner mSpinnerSelect;
 
+    private RelativeLayout mTimeStart;
+
+    private RelativeLayout mTimeEnd;
+
+    private Spinner mSpinnerTimeStart;
+
+    private Spinner mSpinnerTimeEnd;
+
     private int mSpItemsClick;
 
     private int mSpSelectClick;
 
     private List<TransactionEntity> mListTransaction = new ArrayList<>();
+
+    private MTDate mDateStart;
+
+    private MTDate mDateEnd;
+
+
+    private TextView mTextFromDate;
+
+    private TextView mTextEndDate;
 
     private final AdapterView.OnItemSelectedListener mSpinnerItemsListener = new AdapterView.OnItemSelectedListener() {
         @Override
@@ -63,14 +88,10 @@ public class FragmentTendency extends Fragment {
         }
     };
 
-
-//    private Spinner mTimeStart;
-//
-//    private Spinner mTimeEnd;
-
     public FragmentTendency() {
         // Required empty public constructor
     }
+
 
 
     // TODO: Rename and change types and number of parameters
@@ -82,14 +103,17 @@ public class FragmentTendency extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tendency, container, false);
         mSpinnerItems = view.findViewById(R.id.spinnerItems);
         mSpinnerSelect = view.findViewById(R.id.spinnerSelect);
-//        mTimeStart = view.findViewById(R.id.spinnerTimeStart);
-//        mTimeEnd = view.findViewById(R.id.spinnerTimeEnd);
+        mTimeStart = view.findViewById(R.id.layout_time_start);
+        mTimeEnd = view.findViewById(R.id.layout_time_end);
 
-        ArrayAdapter<CharSequence> adapterItems = ArrayAdapter.createFromResource(getContext(), R.array.spinnerItems, android.R.layout.simple_spinner_item);
+        mTextFromDate = view.findViewById(R.id.text_time_start);
+        mTextEndDate = view.findViewById(R.id.text_time_end);
+
+        ArrayAdapter<CharSequence> adapterItems = ArrayAdapter.createFromResource(view.getContext(), R.array.spinnerItems, android.R.layout.simple_spinner_item);
         adapterItems.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerItems.setAdapter(adapterItems);
 
-        ArrayAdapter<CharSequence> adapterSelect = ArrayAdapter.createFromResource(getContext(), R.array.spinnerSelect, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapterSelect = ArrayAdapter.createFromResource(view.getContext(), R.array.spinnerSelect, android.R.layout.simple_spinner_item);
         adapterSelect.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerSelect.setAdapter(adapterSelect);
 
@@ -106,9 +130,18 @@ public class FragmentTendency extends Fragment {
     }
 
     private void initData() {
+
+        DateRange monthRange = new DateUtils().getDateRangeForPeriod(getContext(),R.string.current_month);
+        mDateStart = monthRange.getDateFrom();
+        mDateEnd = monthRange.getDateTo();
+
         ITransactionsDAO iTransactionsDAO = new TransactionsDAOImpl(getContext());
         WalletEntity wallet = WalletsManager.getInstance(getContext()).getCurrentWallet();
-        mListTransaction = iTransactionsDAO.getAllTransactionByWalletId(wallet.getWalletId());
+        mListTransaction = iTransactionsDAO.getAllTransactionByPeriod(wallet.getWalletId(),monthRange);
+
+        mTextFromDate.setText(mDateStart.toIsoDateString());
+
+        mTextEndDate.setText(mDateEnd.toIsoDateString());
     }
 
     private void initEvents() {
@@ -116,8 +149,59 @@ public class FragmentTendency extends Fragment {
         mSpinnerItems.setOnItemSelectedListener(mSpinnerItemsListener);
         mSpinnerSelect.setOnItemSelectedListener(mSpinnerSelectedListener);
 
+        mTimeStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickTimeStart(v);
+            }
+        });
+
+        mTimeEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickTimeEnd(v);
+            }
+        });
     }
 
+    private void onClickTimeStart(View v) {
+
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                if(mDateStart.getYear() == year && mDateStart.getMonth() == month && mDateStart.getDayOfMonth() == dayOfMonth) return;
+                mDateStart.setYear(year);
+                mDateStart.setMonth(month);
+                mDateStart.setDate(dayOfMonth);
+                mTextFromDate.setText(mDateStart.toIsoDateString());
+                notifyDateChange();
+            }
+        };
+        new DatePickerDialog(v.getContext(), dateSetListener, mDateStart.getYear(), mDateStart.getMonth(), mDateStart.getDayOfMonth()).show();
+    }
+
+    private void onClickTimeEnd(View v) {
+
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                if(mDateEnd.getYear() == year && mDateEnd.getMonth() == month && mDateEnd.getDayOfMonth() == dayOfMonth) return;
+                mDateEnd.setYear(year);
+                mDateEnd.setMonth(month);
+                mDateEnd.setDate(dayOfMonth);
+                mTextEndDate.setText(mDateEnd.toIsoDateString());
+                notifyDateChange();
+            }
+        };
+        new DatePickerDialog(v.getContext(), dateSetListener, mDateEnd.getYear(), mDateEnd.getMonth(), mDateEnd.getDayOfMonth()).show();
+    }
+
+    private void notifyDateChange() {
+        ITransactionsDAO iTransactionsDAO = new TransactionsDAOImpl(getContext());
+        WalletEntity wallet = WalletsManager.getInstance(getContext()).getCurrentWallet();
+        mListTransaction = iTransactionsDAO.getAllTransactionByPeriod(wallet.getWalletId(),new DateRange(mDateStart,mDateEnd));
+        handleItemClick();
+    }
 
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private void handleItemClick() {

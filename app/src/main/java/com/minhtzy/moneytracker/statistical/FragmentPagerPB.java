@@ -10,18 +10,16 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 
-import android.os.Parcelable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.Transaction;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.CategoriesDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.ICategoriesDAO;
@@ -166,21 +164,7 @@ public class FragmentPagerPB extends Fragment {
             CategoryEntity category = iCategoriesDAO.getCategoryById(59);
             String icon = category.getCategoryIcon();
 
-            // lấy ảnh
-            String path_icon = "category/";
-
-            InputStream ins = null;
-            AssetManager assetManager = Objects.requireNonNull(getContext()).getAssets();
-            try {
-                ins = assetManager.open(path_icon + icon);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (ins != null) {
-
-                Bitmap bitmap = BitmapFactory.decodeStream(ins);
-                mImgCategory.setImageBitmap(bitmap);
-            }
+            mImgCategory.setImageDrawable(ResourceUtils.getCategoryIcon(icon));
 
 
         } else if (mNumberID == 57) {

@@ -1,10 +1,10 @@
 package com.minhtzy.moneytracker.view;
 
 import android.content.Intent;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.tabs.TabLayout;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.minhtzy.moneytracker.R;
 
-import com.minhtzy.moneytracker.adapter.CategoriesPagerAdapter;
+import com.minhtzy.moneytracker.view.adapter.CategoriesPagerAdapter;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.wallet.ListCategoryFragment;
 

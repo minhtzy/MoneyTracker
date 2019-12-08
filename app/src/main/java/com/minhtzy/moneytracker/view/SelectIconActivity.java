@@ -1,14 +1,13 @@
 package com.minhtzy.moneytracker.view;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.minhtzy.moneytracker.R;
-import com.minhtzy.moneytracker.adapter.CategoryIconListAdapter;
+import com.minhtzy.moneytracker.view.adapter.CategoryIconListAdapter;
 
 public class SelectIconActivity extends AppCompatActivity implements OnIconInteractionListener {
 
