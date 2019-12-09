@@ -1,15 +1,20 @@
 package com.minhtzy.moneytracker.event;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.core.EventManager;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.EventDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.IEventDAO;
@@ -20,8 +25,10 @@ import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.EventStatus;
 import com.minhtzy.moneytracker.model.MTDate;
+import com.minhtzy.moneytracker.transaction.ViewTransactionDetailActivity;
 import com.minhtzy.moneytracker.transaction.ViewTransactionListActivity;
 import com.minhtzy.moneytracker.utilities.ResourceUtils;
+import com.minhtzy.moneytracker.utilities.TransactionsManager;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 
 import org.parceler.Parcels;
@@ -146,5 +153,45 @@ public class EventDetailActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.meunu_edit_delete,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.action_edit:
+                editEvent();
+                break;
+            case R.id.action_delete:
+                deleteEvent();
+                break;
+        }
+        return true;
+    }
+
+    private void deleteEvent() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("Xóa giao dịch")
+                .setMessage("Bạn có chắc chắn xóa giao dịch này?")
+                .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new EventDAOImpl(EventDetailActivity.this).deleteEvent(mEventEntity.getEventId());
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .setIcon(R.drawable.ic_input_warning)
+                .show();
+    }
+
+    private void editEvent() {
     }
 }

@@ -26,7 +26,6 @@ public class BudgetDAOImpl implements IBudgetDAO {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = budget.getContentValues();
         values.remove(BudgetEntity.BUDGET_ID);
-        values.remove(BudgetEntity.STATUS);
         int id = (int) db.insert(TABLE_BUDGET,BudgetEntity.BUDGET_ID,values);
         budget.setBudgetId(id);
         db.close();

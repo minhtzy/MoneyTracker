@@ -42,7 +42,7 @@
             android:layout_alignWithParentIfMissing="true"
             style="@style/TextAppearance.AppCompat.Body1"/>
 
-        <TextView
+        <com.minhtzy.moneytracker.view.CurrencyTextView
             android:id="@+id/spent_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

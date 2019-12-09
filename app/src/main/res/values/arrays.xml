@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string-array name="planets_array">
-    <item>Tất cả</item>
-    <item>Khoản chi</item>
-    <item>Khoản thu</item>
-    <item>Thu nhập ròng</item>
-  </string-array>
-  <string-array name="planets_array2">
-    <item>Theo thời gian</item>
-    <item>Theo nhóm</item>
-  </string-array>
-  <string-array name="spinnerItems">
-    <item>Khoản chi</item>
-    <item>Khoản thu</item>
-    <item>Tất cả các khoản</item>
-  </string-array>
-  <string-array name="spinnerSelect">
-    <item>Theo nhóm</item>
-    <item>Theo thời gian</item>
-  </string-array>
+    <string-array name="planets_array">
+        <item>Tất cả</item>
+        <item>Khoản chi</item>
+        <item>Khoản thu</item>
+        <item>Thu nhập ròng</item>
+    </string-array>
+    <string-array name="planets_array2">
+        <item>Theo thời gian</item>
+        <item>Theo nhóm</item>
+    </string-array>
+    <string-array name="spinnerItems">
+        <item>Khoản chi</item>
+        <item>Khoản thu</item>
+        <item>Tất cả các khoản</item>
+    </string-array>
+    <string-array name="spinnerSelect">
+        <item>Theo nhóm</item>
+        <item>Theo thời gian</item>
+    </string-array>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
+    </string-array>
 </resources>

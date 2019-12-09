@@ -19,6 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.entity.CurrencyFormat;
+import com.minhtzy.moneytracker.entity.WalletType;
+import com.minhtzy.moneytracker.utilities.CurrencyUtils;
+import com.minhtzy.moneytracker.view.adapter.CurrencyFormatAdapter;
 import com.minhtzy.moneytracker.wallet.adapter.WalletListAdapter;
 import com.minhtzy.moneytracker.dataaccess.EventDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.IEventDAO;
@@ -47,6 +51,8 @@ public class CreateEventActivity extends AppCompatActivity {
 
     private MTDate mTimeEnd;
     private String mIconSrc;
+    private List<CurrencyFormat> mListCurrencyFormat;
+    private CurrencyFormat mCurrencyFormat = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +97,19 @@ public class CreateEventActivity extends AppCompatActivity {
         mTimeEnd = new MTDate();
 
         mListWallet = WalletsManager.getInstance(this).getAllWallet();
+
+        float totalAmount = 0;
+        for (WalletEntity wallet : mListWallet)
+        {
+            totalAmount += wallet.getCurrentBalance();
+        }
+        WalletEntity allWallet = WalletEntity.create("",getString(R.string.all_wallet),0, WalletType.BASIC_WALLET,"icon.png",mListWallet.get(0).getCurrencyCode(),"");
+        allWallet.setCurrentBalance(totalAmount);
+        mCurrentWallet = allWallet;
+        mListWallet.add(0, allWallet);
+        mListCurrencyFormat = CurrencyUtils.getInstance().getAllAvailableCurrency();
         mIconSrc = "";
+        updateUI();
     }
 
     private void addEvents() {
@@ -115,12 +133,46 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.pageSelectCurrency).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickedCurrency(v);
+            }
+        });
+
         mImageIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickedIcon(v);
             }
         });
+
+
+    }
+
+    private void onClickedCurrency(View v) {
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(this);
+        builderSingle.setIcon(R.drawable.ic_currency);
+        builderSingle.setTitle("Chọn đơn vị tiền tệ");
+
+        final ArrayAdapter arrayAdapter = new CurrencyFormatAdapter(this, R.layout.custom_item_currency,mListCurrencyFormat);
+
+        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mCurrencyFormat = mListCurrencyFormat.get(which);
+                updateUI();
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
     }
 
     private void onClickedIcon(View v) {
@@ -130,11 +182,30 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private void onClickedAdd() {
+        if(mIconSrc.isEmpty())
+        {
+            mImageIcon.requestFocus();
+            return;
+        }
+        if(mTextName.getText().toString().isEmpty())
+        {
+            mTextName.setError("Nhập tên sự kiện");
+            mTextName.requestFocus();
+            return;
+        }
+        if(mCurrencyFormat == null)
+        {
+            mTextCurrency.setError("Chọn đơn vị tiền tệ");
+            mTextCurrency.requestFocus();
+            return;
+        }
         EventEntity entity = new EventEntity();
         entity.setEventName(mTextName.getText().toString());
         entity.setTimeExpire(mTimeEnd);
         entity.setEventIcon(mIconSrc);
-        entity.setLockWallet(mCurrentWallet.getWalletId());
+        if(mCurrentWallet.getWalletId().isEmpty())
+            entity.setLockWallet(mCurrentWallet.getWalletId());
+        entity.setCurrencyCode(mCurrencyFormat.getCurrencyCode());
         IEventDAO eventDAO = new EventDAOImpl(this);
         boolean inserted = eventDAO.insert(entity);
         if(inserted)
@@ -204,10 +275,9 @@ public class CreateEventActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == RC_REQUEST_CATEGORY_ICON)
-        {
-            if(resultCode == RESULT_OK)
-            {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_REQUEST_CATEGORY_ICON) {
+            if (resultCode == RESULT_OK) {
                 mIconSrc = data.getStringExtra(SelectIconActivity.EXTRA_ICON_PATH);
                 updateUI();
             }
@@ -222,6 +292,11 @@ public class CreateEventActivity extends AppCompatActivity {
         }
         if(!mIconSrc.isEmpty()) {
             mImageIcon.setImageDrawable(ResourceUtils.getCategoryIcon(mIconSrc));
+        }
+
+        if(mCurrencyFormat != null)
+        {
+            mTextCurrency.setText(mCurrencyFormat.getCurrencyName());
         }
     }
 }

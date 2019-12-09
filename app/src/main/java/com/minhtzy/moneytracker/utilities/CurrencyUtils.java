@@ -20,7 +20,7 @@ public class CurrencyUtils {
     private static final CurrencyUtils ourInstance = new CurrencyUtils();
 
 
-    List<CurrencyFormat> availbleCurrencies;
+    List<CurrencyFormat> availableCurrencies;
 
     public static CurrencyUtils getInstance()
     {
@@ -30,7 +30,7 @@ public class CurrencyUtils {
     private CurrencyUtils()
     {
         ICurrencyFormatDAO icfDAO = new CurrencyFormatDAOImpl(App.self());
-        availbleCurrencies = icfDAO.getAllCurrencyAvailable();
+        availableCurrencies = icfDAO.getAllCurrencyAvailable();
     }
 
     public static String formatCurrency(String price, String currencyCode) {
@@ -42,7 +42,7 @@ public class CurrencyUtils {
 
     public CurrencyFormat getCurrrencyFormat(String currencyCode)
     {
-        for(CurrencyFormat currency : availbleCurrencies)
+        for(CurrencyFormat currency : availableCurrencies)
         {
             if(currency.getCurrencyCode().compareTo(currencyCode) == 0)
             {
@@ -68,5 +68,9 @@ public class CurrencyUtils {
             }
         }
         return 0.0;
+    }
+
+    public List<CurrencyFormat> getAllAvailableCurrency() {
+        return availableCurrencies;
     }
 }

@@ -1,10 +1,13 @@
 package com.minhtzy.moneytracker.event;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
@@ -16,6 +19,7 @@ import com.minhtzy.moneytracker.event.adapter.EventPagerAdapter;
 
 public class EventFragment extends Fragment {
 
+    private static final int RC_ADD_EVENT = 10 ;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private FloatingActionButton mFabAddEvent;
@@ -56,7 +60,7 @@ public class EventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(),CreateEventActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,RC_ADD_EVENT);
             }
         });
     }
@@ -69,5 +73,17 @@ public class EventFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RC_ADD_EVENT)
+        {
+            if(resultCode == Activity.RESULT_OK)
+            {
+             //   mAdapter.notifyDataSetChanged();
+            }
+        }
     }
 }

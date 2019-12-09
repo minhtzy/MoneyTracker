@@ -258,6 +258,13 @@ public class AddTransactionActivity extends AppCompatActivity {
         }
 
         float money = (float) ((CurrencyEditText)mTextMoney).getCleanDoubleValue() * mCurrentCategory.getRate();
+
+        if(money == 0)
+        {
+            mTextMoney.setError("Số tiền phải lớn hơn 0");
+            mTextMoney.requestFocus();
+        }
+
         String note = mTextNote.getText().toString();
         Date date = mCalendar.getTime();
         TransactionEntity transaction = new TransactionEntity();

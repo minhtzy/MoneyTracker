@@ -207,6 +207,24 @@
     <string name="select_location">Chọn địa điểm</string>
     <string name="over_view">Báo cáo chi tiết</string>
     <string name="notify" />
+    <string name="show_as_wallet">Hiển thị với ví</string>
+    <string name="all_wallet">Tất cả ví</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+    <string name="signature_title">Your signature</string>
+
+    <!-- Preference Titles -->
+    <string name="reply_title">Default reply action</string>
+    <string name="sync_title">Sync email periodically</string>
+
+    <!-- Messages Preferences -->
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+
+    <!-- Sync Preferences -->
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string-array name="language_names">
         <item>@string/language_vietnamese</item>
         <item>@string/language_english</item>

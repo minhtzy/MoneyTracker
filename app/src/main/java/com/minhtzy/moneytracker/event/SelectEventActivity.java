@@ -11,6 +11,7 @@ import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.EventDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.IEventDAO;
 import com.minhtzy.moneytracker.entity.EventEntity;
+import com.minhtzy.moneytracker.event.adapter.EventRecyclerViewAdapter;
 
 import org.parceler.Parcels;
 

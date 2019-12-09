@@ -56,7 +56,7 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.meunu_transaction_detail,menu);
+        getMenuInflater().inflate(R.menu.meunu_edit_delete,menu);
         return true;
     }
 

@@ -10,9 +10,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".event.SelectEventActivity"
+        <activity
+            android:name=".setting.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
+        <activity
+            android:name=".event.SelectEventActivity"
             android:label="@string/select_event"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".wallet.DetailWalletActivity"
             android:label="@string/detail_wallet"
@@ -113,24 +117,28 @@
             android:name=".sync.SyncActivity"
             android:label="@string/sync"
             android:theme="@style/AppTheme" />
-        <activity android:name=".statistical.OVTransactionMonth"
+        <activity
+            android:name=".statistical.OVTransactionMonth"
             android:label="@string/over_view"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+
+        <meta-data
+            android:name="com.google.android.geo.api_key"
+            android:value="@string/google_api_key" />
 
         <receiver android:name=".sync.NetworkMonitor">
             <intent-filter>
                 <action android:name="android.net.conn.CONECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <meta-data
-            android:name="com.google.android.geo.api_key"
-            android:value="@string/google_api_key"/>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
 </manifest>

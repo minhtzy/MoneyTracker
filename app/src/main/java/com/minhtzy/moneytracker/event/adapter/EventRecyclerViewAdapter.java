@@ -1,4 +1,4 @@
-package com.minhtzy.moneytracker.event;
+package com.minhtzy.moneytracker.event.adapter;
 
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,8 +9,10 @@ import android.widget.TextView;
 
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.entity.EventEntity;
+import com.minhtzy.moneytracker.event.OnEventItemInteractionListener;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.utilities.ResourceUtils;
+import com.minhtzy.moneytracker.view.CurrencyTextView;
 
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(mValues.get(position).getEventName());
         int remainDate = getRemainDate(mValues.get(position).getTimeExpire());
+        holder.mSpentAmount.setCurrrencyCode(mValues.get(position).getCurrencyCode());
         holder.mSpentAmount.setText(String.valueOf(mValues.get(position).getSpentAmount()));
         holder.mIcon.setImageDrawable(ResourceUtils.getCategoryIcon(mValues.get(position).getEventIcon()));
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +71,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mNameView;
-        public final TextView mSpentAmount;
+        public final CurrencyTextView mSpentAmount;
         public final ImageView mIcon;
         public EventEntity mItem;
 

@@ -165,7 +165,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_72_horizontal"
-                        android:hint="@string/select_wallet"
+                        android:hint="@string/show_as_wallet"
                         android:layout_centerVertical="true"
                         android:paddingStart="0dp"
                         android:paddingEnd="@dimen/spacing_medium" />

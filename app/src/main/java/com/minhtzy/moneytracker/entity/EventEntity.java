@@ -18,7 +18,9 @@ public class EventEntity extends EntityBase {
     public static final String EVENT_ICON = "icon";
     public static final String EVENT_TIME_EXPIRE = "timeExpire";
     public static final String EVENT_STATUS = "status";
+    public static final String CURRENCY_CODE = "currencyCode";
     public static final String LOCK_WALLET = "lockWallet";
+    public static final String SPENT_AMOUNT = "spent";
 
     public EventEntity() {
         super();
@@ -90,14 +92,26 @@ public class EventEntity extends EntityBase {
     }
 
     public double getSpentAmount() {
-        return 0;
+        return getDouble(SPENT_AMOUNT);
     }
 
+    public void setSpentAmount(double spent)
+    {
+        setDouble(SPENT_AMOUNT,spent);
+    }
     public void setLockWallet(String walletId) {
         setString(LOCK_WALLET,walletId);
     }
 
     public String getLockWallet() {
         return getString(LOCK_WALLET);
+    }
+
+    public String getCurrencyCode() {
+        return getString(CURRENCY_CODE);
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        setString(CURRENCY_CODE,currencyCode);
     }
 }

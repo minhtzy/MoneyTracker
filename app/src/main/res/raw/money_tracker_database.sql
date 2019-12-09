@@ -140,6 +140,7 @@ CREATE TABLE IF NOT EXISTS tbl_events (
     name TEXT NOT NULL,
     icon TEXT NOT NULL,
     timeExpire INTEGER NOT NULL,
+    currencyCode TEXT NOT NULL,
     status TEXT NOT NULL,
     lockWallet TEXT
 );
