@@ -30,6 +30,7 @@ import com.minhtzy.moneytracker.setting.Setting;
 
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 
+import com.minhtzy.moneytracker.setting.SettingsActivity;
 import com.minhtzy.moneytracker.statistical.FragmentTendency;
 import com.minhtzy.moneytracker.transaction.TransactionListSearch;
 import com.minhtzy.moneytracker.transaction.TransactionTabFragment;
@@ -379,7 +380,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_chart) {
             fragmentClass = FragmentTendency.class;
         } else if (id == R.id.nav_manage) {
-            Intent intent = new Intent(MainActivity.this, Setting.class);
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
             finish();
             return true;
