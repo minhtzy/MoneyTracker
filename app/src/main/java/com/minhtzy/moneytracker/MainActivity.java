@@ -1,6 +1,7 @@
 package com.minhtzy.moneytracker;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -16,15 +17,19 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.minhtzy.moneytracker.account.AccountManagerFragment;
 import com.minhtzy.moneytracker.budget.BudgetFragment;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.event.EventFragment;
 import com.minhtzy.moneytracker.setting.Setting;
 
@@ -36,7 +41,10 @@ import com.minhtzy.moneytracker.transaction.TransactionListSearch;
 import com.minhtzy.moneytracker.transaction.TransactionTabFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.minhtzy.moneytracker.utilities.WalletsManager;
+import com.minhtzy.moneytracker.view.CurrencyTextView;
 import com.minhtzy.moneytracker.wallet.WalletFragment;
+import com.minhtzy.moneytracker.wallet.adapter.WalletListAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,6 +62,12 @@ public class MainActivity extends AppCompatActivity
     Calendar calendar = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
     SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+
+
+    List<WalletEntity> mListWallet;
+    LinearLayout mLayoutWallet;
+    TextView mTextWalletName;
+    CurrencyTextView mTextWalletBalance;
     @Override
     protected void onStart() {
         super.onStart();
@@ -74,7 +88,22 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_transaction));
+
+        View headerView = navigationView.getHeaderView(0);
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,AccountManagerFragment.class.newInstance()).addToBackStack(null).commit();
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         IWalletsDAO iWalletsDAO = new WalletsDAOImpl(this);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -90,7 +119,66 @@ public class MainActivity extends AppCompatActivity
             if(txtEmail != null) txtEmail.setText(user.getEmail());
         }
 
+        mLayoutWallet = findViewById(R.id.layout_wallet);
 
+        mLayoutWallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onChangeWallet();
+            }
+        });
+        mTextWalletName = mLayoutWallet.findViewById(R.id.txt_name_wallet);
+        mTextWalletBalance = mLayoutWallet.findViewById(R.id.txt_current_balance);
+
+
+        // start with transaction tab
+        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_transaction));
+    }
+
+    private void onChangeWallet() {
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(this);
+        builderSingle.setIcon(R.drawable.ic_account_balance_wallet_black_24dp);
+        builderSingle.setTitle("Chọn ví của bạn");
+
+        mListWallet = WalletsManager.getInstance(this).getAllWallet();
+        final ArrayAdapter arrayAdapter = new WalletListAdapter(this, R.layout.custom_item_wallet,mListWallet);
+
+        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                WalletEntity selectWallet = mListWallet.get(which);
+                WalletEntity currentWallet = WalletsManager.getInstance(MainActivity.this).getCurrentWallet();
+                if(currentWallet.getWalletId().equals(selectWallet.getWalletId())) return;
+                WalletsManager.getInstance(MainActivity.this).switchWallet(selectWallet.getWalletId());
+                updateWalletUI();
+                try {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,TransactionTabFragment.class.newInstance()).addToBackStack(null).commit();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                }
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
+    }
+
+    private void updateWalletUI() {
+        WalletEntity currentWallet = WalletsManager.getInstance(this).getCurrentWallet();
+        mTextWalletName.setText(currentWallet.getName());
+        mTextWalletBalance.setCurrrencyCode(currentWallet.getCurrencyCode());
+        mTextWalletBalance.setText(String.valueOf(currentWallet.getCurrentBalance()));
+    }
+
+    private void updateUI() {
     }
 
     @Override
@@ -99,7 +187,8 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            // do nothing
+            //super.onBackPressed();
         }
     }
 
@@ -373,6 +462,8 @@ public class MainActivity extends AppCompatActivity
         //NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         //int checkedId = navigationView.getCheckedItem().getItemId();
         //if(checkedId == id) ;
+        findViewById(R.id.layout_wallet).setVisibility(View.GONE);
+
         Fragment fragment;
         Class fragmentClass = null;
         if (id == R.id.nav_transaction) {
@@ -412,6 +503,12 @@ public class MainActivity extends AppCompatActivity
                 // item.setChecked(true);
                 // Set action bar title
                 setTitle(item.getTitle());
+            }
+            if(fragmentClass == TransactionTabFragment.class)
+            {
+                findViewById(R.id.layout_wallet).setVisibility(View.VISIBLE);
+                setTitle(null);
+                updateWalletUI();
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();

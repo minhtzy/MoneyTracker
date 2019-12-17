@@ -224,6 +224,7 @@
 
     <!-- Sync Preferences -->
     <string name="attachment_summary_off">Đồng bộ cập nhập $(time)</string>
+    <string name="information_account">Thông tin tài khoản</string>
     <string-array name="language_names">
         <item>@string/language_vietnamese</item>
         <item>@string/language_english</item>

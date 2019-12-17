@@ -31,10 +31,10 @@
                 android:title="@string/event"
                 android:icon="@drawable/ic_event_black_24dp"
                 />
-            <item
-                android:id="@+id/nav_periodic_transaction"
-                android:title="@string/periodic_transaction"
-                android:icon="@drawable/ic_update_black"/>
+<!--            <item-->
+<!--                android:id="@+id/nav_periodic_transaction"-->
+<!--                android:title="@string/periodic_transaction"-->
+<!--                android:icon="@drawable/ic_update_black"/>-->
         </menu>
     </item>
     <item

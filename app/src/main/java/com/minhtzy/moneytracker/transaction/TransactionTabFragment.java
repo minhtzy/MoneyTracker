@@ -46,10 +46,10 @@ public class TransactionTabFragment extends Fragment {
     private TransactionPagerAdapter mAdapter;
 
     private FloatingActionButton mFabAddTransaction;
-    List<Pair<String, Fragment>> mTabFragment;
-    WalletEntity mCurrentWallet = null;
+    private List<Pair<String, Fragment>> mTabFragment;
+    private WalletEntity mCurrentWallet = null;
 
-    DateUtils dateUtils;
+    private DateUtils dateUtils;
 
     @Nullable
     @Override

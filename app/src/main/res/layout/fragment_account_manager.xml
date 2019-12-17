@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".account.AccountManagerFragment">
+
+    <ImageView
+        android:id="@+id/imgView1"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/logo"
+
+        />
+
+    <TextView
+        android:id="@+id/txtFirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imgView1"
+        android:layout_alignTop="@+id/imgView1"
+        android:layout_alignRight="@+id/imgView1"
+        android:layout_alignBottom="@+id/imgView1"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:hint="A"
+        android:textColor="#fff"
+        android:textSize="25dp"
+        android:textStyle="normal"
+        android:textAllCaps="true"/>
+
+    <TextView
+        android:id="@+id/txtText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-10dp"
+        android:background="@color/g_500"
+        android:paddingLeft="20dp"
+        android:paddingTop="5dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="5dp"
+        android:text="Tài Khoản Miễn Phí"
+        android:textAllCaps="true"
+        android:textColor="#fff" />
+
+    <TextView
+        android:id="@+id/txtNameEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtText1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:hint="@string/name_account"
+        android:textSize="17dp"
+        android:textStyle="normal"
+        android:textColor="#000"/>
+
+    <TextView
+        android:id="@+id/txtEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtNameEmail"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/email"
+        android:textSize="12dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:id="@+id/btnLogout"
+        android:text="Đăng xuất"
+        android:textColor="@color/colorTextSecondary" />
+
+
+</RelativeLayout>
