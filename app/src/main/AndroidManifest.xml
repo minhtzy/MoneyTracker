@@ -44,6 +44,7 @@
         <activity
             android:name=".wallet.EditWalletActivity"
             android:label="@string/edit_wallet"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".view.SelectCategoryActivity"
@@ -52,6 +53,7 @@
         <activity
             android:name=".wallet.CreateBasicWalletActivity"
             android:label="@string/add_wallet"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".account.ForgotPasswordActivity"
@@ -71,6 +73,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".transaction.AddTransactionActivity"
+            android:windowSoftInputMode="stateHidden"
             android:label="@string/add_transaction_name"
             android:theme="@style/AppTheme" />
         <activity
@@ -101,6 +104,7 @@
         <activity
             android:name=".budget.AddBudgetActivity"
             android:label="@string/add_budget"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".budget.DetailBudgetActivity"
@@ -108,9 +112,11 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".budget.SelectBudgetTimeRangeActivity"
-            android:label="@string/time_empty" />
+            android:label="@string/time_empty"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".transaction.EditTransactionActivity"
+            android:windowSoftInputMode="stateHidden"
             android:label="@string/edit_transaction"
             android:theme="@style/AppTheme" />
         <activity
@@ -138,7 +144,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
 </manifest>

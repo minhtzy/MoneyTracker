@@ -11,6 +11,7 @@ import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.TransactionTypes;
+import com.minhtzy.moneytracker.sync.SyncCloudFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,6 +65,7 @@ public class TransactionsManager {
         {
             WalletsManager.getInstance(mContext).notifyChanged(transaction.getWalletId());
             BudgetsManager.getInstance(mContext).notifyChanged();
+
         }
 
         return inserted;

@@ -99,6 +99,7 @@ public class EventEntity extends EntityBase {
     {
         setDouble(SPENT_AMOUNT,spent);
     }
+
     public void setLockWallet(String walletId) {
         setString(LOCK_WALLET,walletId);
     }

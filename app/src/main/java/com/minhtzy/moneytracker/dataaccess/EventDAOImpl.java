@@ -88,6 +88,7 @@ public class EventDAOImpl implements IEventDAO {
             do {
                 EventEntity event = new EventEntity();
                 event.loadFromCursor(cursor);
+                updateEventSpent(event);
                 eventEntities.add(event);
             }while (cursor.moveToNext());
         }
@@ -99,5 +100,24 @@ public class EventDAOImpl implements IEventDAO {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(TABLE_EVENT_NAME,"id = ?",new String[]{String.valueOf(eventId)});
         db.close();
+    }
+
+    public EventEntity getEventById(int eventId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_EVENT_NAME +
+                " WHERE " + EventEntity.EVENT_ID + " = ?";
+        Cursor cursor = db.rawQuery(query,new String[]{String.valueOf(eventId)});
+        if(cursor != null && cursor.getCount() > 0)
+        {
+
+            cursor.moveToFirst();
+
+            EventEntity event = new EventEntity();
+            event.loadFromCursor(cursor);
+            updateEventSpent(event);
+            return  event;
+        }
+        db.close();
+        return null;
     }
 }

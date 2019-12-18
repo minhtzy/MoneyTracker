@@ -10,20 +10,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.libraries.places.widget.Autocomplete;
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.dataaccess.EventDAOImpl;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
+import com.minhtzy.moneytracker.entity.EventEntity;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
+import com.minhtzy.moneytracker.event.SelectEventActivity;
+import com.minhtzy.moneytracker.model.Constants;
 import com.minhtzy.moneytracker.model.MTDate;
 import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.CategoryManager;
 import com.minhtzy.moneytracker.utilities.TransactionsManager;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
+import com.minhtzy.moneytracker.view.CurrencyTextView;
 
 import org.parceler.Parcels;
+
+import static com.minhtzy.moneytracker.transaction.AddTransactionActivity.REQUEST_PLACE_PICKER;
 
 public class ViewTransactionDetailActivity extends AppCompatActivity {
 
@@ -39,6 +48,9 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
     private static final int REQUEST_EDIT_TRANSACTION = 1;
 
     private TransactionEntity mTransaction;
+    private TextView mTextEvent;
+    private ImageView mImgEvent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,6 +162,17 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
             if(mTransaction.getMediaUri() != null && !mTransaction.getMediaUri().isEmpty() ) {
                 updateImagePreView(mTransaction.getMediaUri());
             }
+
+            if(mTransaction.getEventId() != Constants.NOT_SET) {
+                EventEntity mEvent = new EventDAOImpl(this).getEventById(mTransaction.getEventId());
+                mTextEvent.setText(mEvent.getEventName());
+                mImgEvent.setImageDrawable(ResourceUtils.getCategoryIcon(mEvent.getEventIcon()));
+            }
+            if(mTransaction.getP)(requestCode == REQUEST_PLACE_PICKER) {
+            mCurrentPlace = Autocomplete.getPlaceFromIntent(data);
+            mTextPlace.setText(mCurrentPlace.getName());
+            findViewById(R.id.clear_location).setVisibility(View.VISIBLE);
+        }
         }
     }
     private void updateImagePreView(String uri) {

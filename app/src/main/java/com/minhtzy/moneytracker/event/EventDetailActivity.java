@@ -77,6 +77,9 @@ public class EventDetailActivity extends AppCompatActivity {
             }
 
             mImageIcon.setImageDrawable(ResourceUtils.getCategoryIcon(mEventEntity.getEventIcon()));
+
+            int id = (mEventEntity.getStatus() == EventStatus.START) ? R.string.event_menu_mark_as_finished : R.string.event_menu_mark_not_finished;
+            mBtnMarkFinished.setText(id);
         }
     }
 
@@ -148,6 +151,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
         mEventEntity = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_EVENT));
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {

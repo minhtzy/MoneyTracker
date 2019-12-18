@@ -56,8 +56,9 @@ public class SyncCloudFirestore {
 
 
     public boolean onSync(WalletEntity wallet) {
-        onPullTransactions(wallet);
         onPushSync(wallet);
+        //onPullWallet();
+        onPullTransactions(wallet);
         return true;
     }
 
