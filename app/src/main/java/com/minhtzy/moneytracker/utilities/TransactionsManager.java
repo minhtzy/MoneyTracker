@@ -70,7 +70,7 @@ public class TransactionsManager {
 
         return inserted;
     }
-    public boolean updateTransaction(TransactionEntity transaction, TransactionEntity oldTransaction) {
+    public boolean updateTransaction(TransactionEntity transaction) {
         if(transaction == null) return  false;
         boolean updated = iTransactionsDAO.updateTransaction(transaction);
         if(updated)

@@ -33,9 +33,39 @@
                     android:orientation="vertical"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="30dp">
+                    <RelativeLayout
+                        android:id="@+id/layout_wallet"
+                        android:layout_marginTop="1dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
+                        <ImageView
+                            android:id="@+id/image_transaction_wallet"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/ic_account_balance_wallet_black_24dp" />
+
+                        <TextView
+                            android:id="@+id/text_transaction_wallet"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="8dp"
+                            android:layout_toEndOf="@id/image_transaction_wallet"
+                            android:focusable="false"
+                            android:textSize="24sp" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/text0"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/g_400" />
                     <Spinner
                         android:id="@+id/spinnerItems"
+                        android:layout_marginTop="2dp"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         >
@@ -70,19 +100,11 @@
 
                         <RelativeLayout
                             android:id="@+id/layout_time_start"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="20dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
-
-                            <Spinner
-                                android:id="@+id/spinnerTimeStart"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:gravity="left">
-
-                            </Spinner>
 
                             <TextView
                                 android:id="@+id/text_time_start"
@@ -90,33 +112,37 @@
                                 android:gravity="center"
                                 android:layout_height="40dp" />
 
+                            <ImageView
+                                android:src="@drawable/ic_arrow_drop_down_black_24dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:paddingLeft="@dimen/spacing_16"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
 
                         </RelativeLayout>
 
 
                         <RelativeLayout
                             android:id="@+id/layout_time_end"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
-
-                            <Spinner
-                                android:id="@+id/spinnerTimeEnd"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:gravity="left">
-
-                            </Spinner>
 
                             <TextView
                                 android:id="@+id/text_time_end"
                                 android:layout_width="match_parent"
                                 android:gravity="center"
                                 android:layout_height="40dp" />
-
-
+                            <ImageView
+                                android:src="@drawable/ic_arrow_drop_down_black_24dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:paddingLeft="@dimen/spacing_16"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
                         </RelativeLayout>
 
                     </LinearLayout>

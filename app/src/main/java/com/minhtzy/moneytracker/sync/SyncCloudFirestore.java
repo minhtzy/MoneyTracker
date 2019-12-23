@@ -6,6 +6,7 @@ import android.os.Parcel;
 import androidx.annotation.NonNull;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
@@ -55,23 +56,26 @@ public class SyncCloudFirestore {
     }
 
 
-    public boolean onSync(WalletEntity wallet) {
-        onPushSync(wallet);
-        //onPullWallet();
-        onPullTransactions(wallet);
+    public boolean onSync() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        onPushSync(userId);
+        onPullSync(userId);
         return true;
     }
 
-    public void onPullSync(WalletEntity wallet) {
-        onPullWallet(wallet);
-        onPullTransactions(wallet);
+    public void onPullSync(String userId) {
+        onPullWallet(userId);
+        onPullTransactions(userId);
     }
 
     public void onPullWallet(String uid) {
+
+        long time_pull = SharedPrefs.getInstance().get(SharedPrefs.KEY_PULL_TIME,0L);
         final IWalletsDAO iWalletsDAO = new WalletsDAOImpl(context);
         db.collection("users")
                 .document(uid)
                 .collection("wallets")
+                .whereGreaterThan("timestamp",new Timestamp(new Date(time_pull)))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -97,13 +101,11 @@ public class SyncCloudFirestore {
                 });
     }
 
-    public void onPullTransactions(WalletEntity wallet) {
+    public void onPullTransactions(String userId) {
 
-        long time_pull = SharedPrefs.getInstance().get(SharedPrefs.KEY_PULL_TIME,0);
+        long time_pull = SharedPrefs.getInstance().get(SharedPrefs.KEY_PULL_TIME,0L);
         db.collection("users")
-                .document(wallet.getUserId())
-                .collection("wallets")
-                .document("wallet_" + wallet.getWalletId())
+                .document(userId)
                 .collection("transactions")
                 .whereGreaterThan("timestamp",new Timestamp(new Date(time_pull)))
                 .get()
@@ -131,70 +133,19 @@ public class SyncCloudFirestore {
                 });
     }
 
-
-    public void onPullWallet(WalletEntity wallet) {
-        db.collection("users")
-                .document(wallet.getUserId())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Log.d(TAG_LOG, "DocumentSnapshot data: " + document.getData());
-                            } else {
-                                Log.d(TAG_LOG, "No such document");
-                            }
-                        } else {
-                            Log.d(TAG_LOG, "get failed with ", task.getException());
-                        }
-                    }
-                });
-
+    public void onPushSync(String userId) {
+        onPushWallets(userId);
+        onPushTransactions(userId);
     }
 
-    public void onPushSync(WalletEntity wallet) {
-        addWallet(wallet);
-        addTransactions(wallet);
+    private void onPushTransactions(String userId) {
 
-
-//        WalletsManager.getInstance(context).updateTimestamp(wallet.getWalletId(),timestamp);
-//        for(Transaction transaction : transactions) {
-//            TransactionsManager.getInstance(context).updateTimestamp(transaction.getTransactionId(), timestamp);
-//        }
-    }
-
-    public void addWallet(WalletEntity wallet) {
-        db.collection("users").document(wallet.getUserId())
-                .collection("wallets")
-                .document("wallet_"+ wallet.getWalletId())
-                .set(fromContentValue(wallet.getContentValues()))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG_LOG,"Add wallet success");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG_LOG,"Add wallet failure");
-                        Log.d(TAG_LOG,e.getMessage());
-                    }
-                });
-    }
-
-    public void addTransactions(WalletEntity wallet) {
-
-        long time_pull = SharedPrefs.getInstance().get(SharedPrefs.KEY_PUSH_TIME,0);
-        List<TransactionEntity> transactions = new TransactionsDAOImpl(context).getAllSyncTransaction(wallet.getWalletId(), time_pull);
+        Long time_pull = SharedPrefs.getInstance().get(SharedPrefs.KEY_PUSH_TIME,0L);
+        List<TransactionEntity> transactions = new TransactionsDAOImpl(context).getAllSyncTransaction(userId, time_pull);
         WriteBatch writeBatch = db.batch();
 
         CollectionReference transactionsRef = db.collection("users")
-                .document(wallet.getUserId())
-                .collection("wallets")
-                .document("wallet_" + wallet.getWalletId())
+                .document(userId)
                 .collection("transactions");
 
         for(TransactionEntity transaction : transactions) {
@@ -206,14 +157,42 @@ public class SyncCloudFirestore {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG_LOG,"Add transactions success");
-                // update push time
-                long timestamp = Timestamp.now().toDate().getTime();
-                SharedPrefs.getInstance().put(SharedPrefs.KEY_PUSH_TIME,timestamp);
+
+                // update time push
+                SharedPrefs.getInstance().put(SharedPrefs.KEY_PUSH_TIME,Timestamp.now().toDate().getTime());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG_LOG,"Add transactions failure");
+                Log.d(TAG_LOG,e.getMessage());
+            }
+        });
+    }
+
+    private void onPushWallets(String userId) {
+        Long time_pull = SharedPrefs.getInstance().get(SharedPrefs.KEY_PUSH_TIME,0L);
+        List<WalletEntity> listWallet = new WalletsDAOImpl(this.context).getAllWalletNeedSync(userId,time_pull);
+        WriteBatch writeBatch = db.batch();
+
+        CollectionReference transactionsRef = db.collection("users")
+                .document(userId)
+                .collection("wallets");
+
+        for(WalletEntity walletEntity : listWallet) {
+            DocumentReference documentRef = transactionsRef.document("wallet_" + walletEntity.getWalletId());
+            writeBatch.set(documentRef,fromContentValue(walletEntity.getContentValues()));
+        }
+
+        writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG_LOG,"Add wallet success");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG_LOG,"Add wallet failure");
                 Log.d(TAG_LOG,e.getMessage());
             }
         });

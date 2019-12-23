@@ -17,8 +17,10 @@ import android.widget.TextView;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.EventDAOImpl;
+import com.minhtzy.moneytracker.dataaccess.LocationDAOImpl;
 import com.minhtzy.moneytracker.entity.CategoryEntity;
 import com.minhtzy.moneytracker.entity.EventEntity;
+import com.minhtzy.moneytracker.entity.LocationEntity;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.event.SelectEventActivity;
@@ -50,6 +52,7 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
     private TransactionEntity mTransaction;
     private TextView mTextEvent;
     private ImageView mImgEvent;
+    private TextView mTextPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +131,9 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
         mTextDate = findViewById(R.id.text_transaction_date);
         mTextWallet = findViewById(R.id.text_transaction_wallet);
         mImgPreview = findViewById(R.id.image_preview);
+        mTextEvent = findViewById(R.id.event_name);
+        mImgEvent = findViewById(R.id.icon_event);
+        mTextPlace = findViewById(R.id.location_name);
     }
 
     private void addEvents() {
@@ -167,12 +173,13 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
                 EventEntity mEvent = new EventDAOImpl(this).getEventById(mTransaction.getEventId());
                 mTextEvent.setText(mEvent.getEventName());
                 mImgEvent.setImageDrawable(ResourceUtils.getCategoryIcon(mEvent.getEventIcon()));
+                findViewById(R.id.layout_event).setVisibility(View.VISIBLE);
             }
-            if(mTransaction.getP)(requestCode == REQUEST_PLACE_PICKER) {
-            mCurrentPlace = Autocomplete.getPlaceFromIntent(data);
-            mTextPlace.setText(mCurrentPlace.getName());
-            findViewById(R.id.clear_location).setVisibility(View.VISIBLE);
-        }
+            if(mTransaction.getLocationId() != null && !mTransaction.getLocationId().isEmpty()) {
+                LocationEntity location = new LocationDAOImpl(this).getLocationById(mTransaction.getLocationId());
+                mTextPlace.setText(location.getName());
+                findViewById(R.id.layout_location).setVisibility(View.VISIBLE);
+            }
         }
     }
     private void updateImagePreView(String uri) {
@@ -184,7 +191,7 @@ public class ViewTransactionDetailActivity extends AppCompatActivity {
             mImgPreview.setVisibility(View.VISIBLE);
         }
         else {
-            mImgPreview.setVisibility(View.INVISIBLE);
+            mImgPreview.setVisibility(View.GONE);
         }
     }
 

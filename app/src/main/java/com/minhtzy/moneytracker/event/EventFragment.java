@@ -82,7 +82,7 @@ public class EventFragment extends Fragment {
         {
             if(resultCode == Activity.RESULT_OK)
             {
-             //   mAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
             }
         }
     }

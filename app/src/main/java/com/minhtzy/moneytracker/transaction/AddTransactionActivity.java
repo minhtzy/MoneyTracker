@@ -28,6 +28,8 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.dataaccess.LocationDAOImpl;
+import com.minhtzy.moneytracker.entity.LocationEntity;
 import com.minhtzy.moneytracker.wallet.adapter.WalletListAdapter;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
@@ -278,6 +280,11 @@ public class AddTransactionActivity extends AppCompatActivity {
         if(mCurrentPlace != null)
         {
             transaction.setLocationId(mCurrentPlace.getId());
+
+            LocationEntity location = new LocationEntity();
+            location.setId(mCurrentPlace.getId());
+            location.setName(mCurrentPlace.getName());
+            new LocationDAOImpl(this).insertLocation(location);
         }
         if(mEvent != null)
         {

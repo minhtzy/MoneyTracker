@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,14 +30,14 @@ import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.event.EventFragment;
-import com.minhtzy.moneytracker.setting.Setting;
 
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 
 import com.minhtzy.moneytracker.setting.SettingsActivity;
 import com.minhtzy.moneytracker.statistical.FragmentTendency;
+import com.minhtzy.moneytracker.sync.SyncCloudFirestore;
 import com.minhtzy.moneytracker.transaction.TransactionListSearch;
-import com.minhtzy.moneytracker.transaction.TransactionTabFragment;
+import com.minhtzy.moneytracker.transaction.TransactionFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
@@ -159,7 +158,7 @@ public class MainActivity extends AppCompatActivity
                 WalletsManager.getInstance(MainActivity.this).switchWallet(selectWallet.getWalletId());
                 updateWalletUI();
                 try {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout,TransactionTabFragment.class.newInstance()).addToBackStack(null).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame_layout, TransactionFragment.class.newInstance()).addToBackStack(null).commit();
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (InstantiationException e) {
@@ -208,10 +207,15 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(MainActivity.this, Setting.class);
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivityForResult(intent,REQUEST_SETTING_CODE);
             return true;
         }
+        else if (id == R.id.action_sync)
+        {
+            new SyncCloudFirestore(this).onSync();
+        }
+
 //        else if (id == R.id.search_transaction_by_date){
 //            final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
 //            View mView = getLayoutInflater().inflate(R.layout.dialog_search_transactions,null);
@@ -467,7 +471,7 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment;
         Class fragmentClass = null;
         if (id == R.id.nav_transaction) {
-            fragmentClass = TransactionTabFragment.class;
+            fragmentClass = TransactionFragment.class;
         } else if (id == R.id.nav_chart) {
             fragmentClass = FragmentTendency.class;
         } else if (id == R.id.nav_manage) {
@@ -504,7 +508,7 @@ public class MainActivity extends AppCompatActivity
                 // Set action bar title
                 setTitle(item.getTitle());
             }
-            if(fragmentClass == TransactionTabFragment.class)
+            if(fragmentClass == TransactionFragment.class)
             {
                 findViewById(R.id.layout_wallet).setVisibility(View.VISIBLE);
                 setTitle(null);
@@ -530,5 +534,11 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == REQUEST_SETTING_CODE && resultCode == RESULT_OK){
             MainActivity.recreateAppMain(this);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateWalletUI();
     }
 }

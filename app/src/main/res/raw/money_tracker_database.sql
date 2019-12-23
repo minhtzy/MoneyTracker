@@ -147,6 +147,7 @@ CREATE TABLE IF NOT EXISTS tbl_events (
 
 CREATE TABLE IF NOT EXISTS tbl_locations (
     _id TEXT PRIMARY KEY,
+    name TEXT,
     country TEXT,
     city TEXT,
     district TEXT,

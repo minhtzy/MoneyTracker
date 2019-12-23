@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.WelcomeActivity;
+import com.minhtzy.moneytracker.utilities.SharedPrefs;
 
 public class AccountManagerFragment extends Fragment {
 
@@ -101,6 +102,7 @@ public class AccountManagerFragment extends Fragment {
         if (mAuth != null) {
 
             mAuth.signOut();
+            SharedPrefs.getInstance().clear();
             Intent intent = new Intent(getContext(), WelcomeActivity.class);
             startActivity(intent);
         }

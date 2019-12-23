@@ -1,8 +1,14 @@
 package com.minhtzy.moneytracker.statistical;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
+import android.media.Image;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +16,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.minhtzy.moneytracker.MainActivity;
 import com.minhtzy.moneytracker.R;
 import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
@@ -23,8 +31,11 @@ import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 import com.minhtzy.moneytracker.model.MTDate;
+import com.minhtzy.moneytracker.transaction.TransactionFragment;
 import com.minhtzy.moneytracker.utilities.DateUtils;
+import com.minhtzy.moneytracker.utilities.ResourceUtils;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
+import com.minhtzy.moneytracker.wallet.adapter.WalletListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +98,10 @@ public class FragmentTendency extends Fragment {
 
         }
     };
+    private TextView mTextWallet;
+    private ImageView mImgWallet;
+    private List<WalletEntity> mListWallet;
+    WalletEntity mCurrentWallet;
 
     public FragmentTendency() {
         // Required empty public constructor
@@ -108,6 +123,8 @@ public class FragmentTendency extends Fragment {
 
         mTextFromDate = view.findViewById(R.id.text_time_start);
         mTextEndDate = view.findViewById(R.id.text_time_end);
+        mTextWallet = view.findViewById(R.id.text_transaction_wallet);
+        mImgWallet = view.findViewById(R.id.image_transaction_wallet);
 
         ArrayAdapter<CharSequence> adapterItems = ArrayAdapter.createFromResource(view.getContext(), R.array.spinnerItems, android.R.layout.simple_spinner_item);
         adapterItems.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -119,9 +136,43 @@ public class FragmentTendency extends Fragment {
 
         initData();
 
-        initEvents();
+        initEvents(view);
 
         return view;
+    }
+
+    private void onSelectWallet() {
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(this.getContext());
+        builderSingle.setIcon(R.drawable.ic_account_balance_wallet_black_24dp);
+        builderSingle.setTitle("Chọn ví của bạn");
+
+        mListWallet = WalletsManager.getInstance(this.getContext()).getAllWallet();
+        final ArrayAdapter arrayAdapter = new WalletListAdapter(this.getActivity(), R.layout.custom_item_wallet,mListWallet);
+
+        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                WalletEntity selectWallet = mListWallet.get(which);
+                if(mCurrentWallet.getWalletId().equals(selectWallet.getWalletId()));
+                mCurrentWallet = selectWallet;
+                updateWalletUI();
+                notifyDataChange();
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
+    }
+
+    private void updateWalletUI() {
+        mTextWallet.setText(mCurrentWallet.getName());
+        mImgWallet.setImageDrawable(ResourceUtils.getWalletIcon(mCurrentWallet.getIcon()));
     }
 
     @Override
@@ -136,27 +187,35 @@ public class FragmentTendency extends Fragment {
         mDateEnd = monthRange.getDateTo();
 
         ITransactionsDAO iTransactionsDAO = new TransactionsDAOImpl(getContext());
-        WalletEntity wallet = WalletsManager.getInstance(getContext()).getCurrentWallet();
-        mListTransaction = iTransactionsDAO.getAllTransactionByPeriod(wallet.getWalletId(),monthRange);
+        mCurrentWallet = WalletsManager.getInstance(getContext()).getCurrentWallet();
+        updateWalletUI();
+        mListTransaction = iTransactionsDAO.getAllTransactionByPeriod(mCurrentWallet.getWalletId(),monthRange);
 
         mTextFromDate.setText(mDateStart.toIsoDateString());
 
         mTextEndDate.setText(mDateEnd.toIsoDateString());
     }
 
-    private void initEvents() {
+    private void initEvents(View view) {
 
         mSpinnerItems.setOnItemSelectedListener(mSpinnerItemsListener);
         mSpinnerSelect.setOnItemSelectedListener(mSpinnerSelectedListener);
 
-        mTimeStart.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.layout_wallet).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSelectWallet();
+            }
+        });
+
+        view.findViewById(R.id.layout_time_start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickTimeStart(v);
             }
         });
 
-        mTimeEnd.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.layout_time_end).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickTimeEnd(v);
@@ -174,7 +233,7 @@ public class FragmentTendency extends Fragment {
                 mDateStart.setMonth(month);
                 mDateStart.setDate(dayOfMonth);
                 mTextFromDate.setText(mDateStart.toIsoDateString());
-                notifyDateChange();
+                notifyDataChange();
             }
         };
         new DatePickerDialog(v.getContext(), dateSetListener, mDateStart.getYear(), mDateStart.getMonth(), mDateStart.getDayOfMonth()).show();
@@ -190,16 +249,15 @@ public class FragmentTendency extends Fragment {
                 mDateEnd.setMonth(month);
                 mDateEnd.setDate(dayOfMonth);
                 mTextEndDate.setText(mDateEnd.toIsoDateString());
-                notifyDateChange();
+                notifyDataChange();
             }
         };
         new DatePickerDialog(v.getContext(), dateSetListener, mDateEnd.getYear(), mDateEnd.getMonth(), mDateEnd.getDayOfMonth()).show();
     }
 
-    private void notifyDateChange() {
+    private void notifyDataChange() {
         ITransactionsDAO iTransactionsDAO = new TransactionsDAOImpl(getContext());
-        WalletEntity wallet = WalletsManager.getInstance(getContext()).getCurrentWallet();
-        mListTransaction = iTransactionsDAO.getAllTransactionByPeriod(wallet.getWalletId(),new DateRange(mDateStart,mDateEnd));
+        mListTransaction = iTransactionsDAO.getAllTransactionByPeriod(mCurrentWallet.getWalletId(),new DateRange(mDateStart,mDateEnd));
         handleItemClick();
     }
 
@@ -288,10 +346,7 @@ public class FragmentTendency extends Fragment {
                         break;
 
                 }
-
                 break;
-
-
         }
 
     }

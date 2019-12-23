@@ -1,6 +1,7 @@
 package com.minhtzy.moneytracker.utilities;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -20,7 +21,7 @@ import java.util.Calendar;
 
 public class ResourceUtils {
 
-    private static final String IMAGE_DIRECTORY = "/money_tracker_media";
+    private static final String IMAGE_DIRECTORY = "money_tracker_media";
 
     // convert from bitmap to byte array
     public static byte[] getBytes(Bitmap bitmap) {
@@ -35,11 +36,11 @@ public class ResourceUtils {
 
     public static String saveImage(Context context,Bitmap myBitmap) {
         byte[] datas = getBytes(myBitmap);
-        File wallpaperDirectory = new File(
-                Environment.getExternalStorageDirectory().toString() + IMAGE_DIRECTORY);
+        ContextWrapper cw = new ContextWrapper(context);
+        File wallpaperDirectory = cw.getDir(IMAGE_DIRECTORY,Context.MODE_PRIVATE);
         // have the object build the directory structure, if needed.
         if (!wallpaperDirectory.exists()) {
-            wallpaperDirectory.mkdirs();
+            wallpaperDirectory.mkdir();
         }
 
         try {

@@ -2,6 +2,7 @@ package com.minhtzy.moneytracker.entity;
 
 import android.content.ContentValues;
 
+import com.minhtzy.moneytracker.model.Constants;
 import com.minhtzy.moneytracker.model.MTDate;
 
 import org.parceler.Parcel;
@@ -52,7 +53,7 @@ public class TransactionEntity extends EntityBase implements ITransactionEntity 
     }
 
     public int getEventId() {
-        return getInt(EVENT_ID);
+        return  (getInt(EVENT_ID) == null ? Constants.NOT_SET : getInt(EVENT_ID));
     }
 
     public String getLocationId() {

@@ -45,9 +45,7 @@ public class SyncActivity extends AppCompatActivity implements SyncEvents {
     @Override
     protected void onStart() {
         super.onStart();
-
         onSync();
-
     }
 
     private void onSync() {
@@ -66,7 +64,7 @@ public class SyncActivity extends AppCompatActivity implements SyncEvents {
         if(iWalletsDAO.hasWallet(user.getUid()) ) {
             SyncCloudFirestore syncCloudFirestore = new SyncCloudFirestore(this);
             syncCloudFirestore.setSyncEvents(this);
-            syncCloudFirestore.onPullTransactions(WalletsManager.getInstance(this).getCurrentWallet());
+            syncCloudFirestore.onPullTransactions(user.getUid());
         }
         else {
             Intent intent = new Intent(SyncActivity.this, SelectWalletTypeActivity.class);

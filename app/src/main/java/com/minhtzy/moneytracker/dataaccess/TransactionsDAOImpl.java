@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.minhtzy.moneytracker.entity.TransactionEntity;
+import com.minhtzy.moneytracker.entity.WalletEntity;
 import com.minhtzy.moneytracker.model.DateRange;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
         }
         transaction.setTimestamp(com.google.firebase.Timestamp.now().toDate().getTime());
         ContentValues values = transaction.getContentValues();
-        long inserted = db.insert(TABLE_TRANSACTION_NAME, TransactionEntity.LOCATION_ID, values);
+        long inserted = db.replace(TABLE_TRANSACTION_NAME, TransactionEntity.LOCATION_ID, values);
         db.close();
         return inserted != -1;
     }
@@ -273,8 +274,8 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
     }
 
     @Override
-    public List<TransactionEntity> getAllSyncTransaction(String walletId, long timestamp) {
-        Cursor data = getAllSyncTransactionData(walletId,timestamp);
+    public List<TransactionEntity> getAllSyncTransaction(String userId, long timestamp) {
+        Cursor data = getAllSyncTransactionData(userId,timestamp);
         List<TransactionEntity> list_result = new ArrayList<>();
         if (data != null && data.getCount() > 0) {
             data.moveToFirst();
@@ -305,12 +306,14 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
         return list_result;
     }
 
-    private Cursor getAllSyncTransactionData(String walletId, long timestamp) {
+    private Cursor getAllSyncTransactionData(String userId, long timestamp) {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_TRANSACTION_NAME +
-                " WHERE " + TransactionEntity.WALLET_ID + " = ?" +
-                " AND (" + TransactionEntity.TIMESTAMP + " > ?" + " OR " + TransactionEntity.TIMESTAMP + " IS NULL)";
-        return db.rawQuery(query, new String[]{String.valueOf(walletId),String.valueOf(timestamp)});
+        String query = "SELECT * FROM " + TABLE_TRANSACTION_NAME + " AS tblt" +
+                " INNER JOIN " + WalletsDAOImpl.TABLE_WALLET_NAME + " AS tblw" +
+                " WHERE " + " tblt.walletId = tblw._id" +
+                " AND " + " tblw.userId = ?" +
+                " AND " + " tblt.timestamp " + " > ?";
+        return db.rawQuery(query, new String[]{String.valueOf(userId),String.valueOf(timestamp)});
     }
 }

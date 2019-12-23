@@ -72,7 +72,7 @@ public class WalletsDAOImpl implements IWalletsDAO {
         }
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         wallet.setTimeStamp(com.google.firebase.Timestamp.now().toDate().getTime());
-        long insertId = db.insert(TABLE_WALLET_NAME, null, wallet.getContentValues());
+        long insertId = db.replace(TABLE_WALLET_NAME, null, wallet.getContentValues());
         db.close();
         return insertId != -1;
     }
@@ -109,4 +109,23 @@ public class WalletsDAOImpl implements IWalletsDAO {
     }
 
 
+    public List<WalletEntity> getAllWalletNeedSync(String userId,long timestamp) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_WALLET_NAME +
+                " WHERE " + WalletEntity.USER_ID + " = ?" +
+                " AND " + WalletEntity.TIME_STAMP + " > ?";
+        Cursor data = db.rawQuery(query,new String[]{userId,String.valueOf(timestamp)});
+        List<WalletEntity> list_wallet = new ArrayList<>();
+        if (data != null && data.getCount() > 0) {
+            data.moveToFirst();
+            do {
+                WalletEntity wallet = new WalletEntity();
+                wallet.loadFromCursor(data);
+                list_wallet.add(wallet);
+            }
+            while (data.moveToNext());
+        }
+        db.close();
+        return list_wallet;
+    }
 }

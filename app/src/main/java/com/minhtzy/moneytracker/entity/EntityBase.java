@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 
+import com.minhtzy.moneytracker.model.Constants;
 import com.minhtzy.moneytracker.model.MTDate;
 
 import org.parceler.Parcel;

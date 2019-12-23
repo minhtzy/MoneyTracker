@@ -38,7 +38,7 @@ import java.util.Date;
 
 import java.util.List;
 
-public class TransactionTabFragment extends Fragment {
+public class TransactionFragment extends Fragment {
 
     public static final int FAB_ADD_TRANSACTION_REQUEST_CODE = 0;
     private TabLayout mTabLayout;
@@ -205,18 +205,18 @@ public class TransactionTabFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TransactionTabFragment.class.getSimpleName(), "On Activity Result");
+        Log.d(TransactionFragment.class.getSimpleName(), "On Activity Result");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FAB_ADD_TRANSACTION_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                // do nothing
+                scrollToCurrentMonth();
             }
         }
     }
 
     @Override
     public void onResume() {
-        Log.d(TransactionTabFragment.class.getSimpleName(), "On Resume");
+        Log.d(TransactionFragment.class.getSimpleName(), "On Resume");
         super.onResume();
         new loadTabs(this.getActivity()).execute();
     }
@@ -272,8 +272,8 @@ public class TransactionTabFragment extends Fragment {
 
             } catch (Exception e) {
                 // TODO: handle exception
-                Log.d(TransactionTabFragment.class.getSimpleName(),e.getMessage());
-                Log.d(TransactionTabFragment.class.getSimpleName(), "Update adapter failed");
+                Log.d(TransactionFragment.class.getSimpleName(),e.getMessage());
+                Log.d(TransactionFragment.class.getSimpleName(), "Update adapter failed");
             }
 
         }

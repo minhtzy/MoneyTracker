@@ -37,6 +37,7 @@ public class EventDAOImpl implements IEventDAO {
                 eventEntities.add(event);
             }while (cursor.moveToNext());
         }
+        db.close();
         return eventEntities;
     }
 
@@ -62,6 +63,7 @@ public class EventDAOImpl implements IEventDAO {
         entity.getContentValues().remove(EventEntity.EVENT_ID);
         long inserted = db.insert(TABLE_EVENT_NAME,EventEntity.LOCK_WALLET,entity.getContentValues());
         entity.setEventId((int)inserted);
+        db.close();
         return inserted != -1;
     }
 
@@ -71,6 +73,7 @@ public class EventDAOImpl implements IEventDAO {
         ContentValues values = new ContentValues();
         values.put(EventEntity.EVENT_STATUS,eventStatus.getValue());
         int updated = db.update(TABLE_EVENT_NAME,values,EventEntity.EVENT_ID + " = ? ",new String[]{String.valueOf(eventId)});
+        db.close();
         return updated > 0;
     }
 
@@ -80,7 +83,8 @@ public class EventDAOImpl implements IEventDAO {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_EVENT_NAME +
                 " WHERE " + EventEntity.LOCK_WALLET + " = ?" +
-                " OR " + EventEntity.LOCK_WALLET + " IS NULL";
+                " OR " + EventEntity.LOCK_WALLET + " IS NULL" +
+                " OR " + EventEntity.LOCK_WALLET + " = ''";
         Cursor cursor = db.rawQuery(query,new String[]{mWalletId});
         if(cursor!= null && cursor.getCount() > 0)
         {
@@ -92,13 +96,14 @@ public class EventDAOImpl implements IEventDAO {
                 eventEntities.add(event);
             }while (cursor.moveToNext());
         }
+        db.close();
         return eventEntities;
     }
 
 
     public void deleteEvent(int eventId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete(TABLE_EVENT_NAME,"id = ?",new String[]{String.valueOf(eventId)});
+        db.delete(TABLE_EVENT_NAME,"_id = ?",new String[]{String.valueOf(eventId)});
         db.close();
     }
 

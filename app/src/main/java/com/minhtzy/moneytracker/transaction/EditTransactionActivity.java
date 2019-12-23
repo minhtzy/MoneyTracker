@@ -18,9 +18,18 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.minhtzy.moneytracker.R;
+import com.minhtzy.moneytracker.dataaccess.LocationDAOImpl;
+import com.minhtzy.moneytracker.entity.EventEntity;
+import com.minhtzy.moneytracker.entity.LocationEntity;
+import com.minhtzy.moneytracker.event.SelectEventActivity;
 import com.minhtzy.moneytracker.wallet.adapter.WalletListAdapter;
 import com.minhtzy.moneytracker.dataaccess.ITransactionsDAO;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
@@ -42,6 +51,7 @@ import com.google.firebase.auth.FirebaseUser;
 import org.parceler.Parcels;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -49,12 +59,13 @@ import java.util.List;
 
 public class EditTransactionActivity extends AppCompatActivity {
 
-
     public static final int REQUEST_CODE_CATEGORY = 1;
     private static final int REQUEST_CODE_GALLERY = 2;
-    private static final int REQUEST_CODE_CAMERA = 3;
+    private static final int REQUEST_CODE_CAMERA = 3 ;
+    public static final int REQUEST_CODE_EVENT = 4;
+    public static final int REQUEST_PLACE_PICKER = 5;
     public static final String EXTRA_TRANSACTION = "com.minhtzy.moneytracker.extra.transaction";
-    private static final Object IMAGE_DIRECTORY = "images";
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 6;
 
     private CurrencyEditText mTextMoney;
     private EditText mTextCategory;
@@ -65,15 +76,20 @@ public class EditTransactionActivity extends AppCompatActivity {
     private ImageView mImgPicture;
     private ImageView mImgPreView;
     private Calendar mCalendar;
+    private TextView mTextPlace;
 
     private FirebaseUser mCurrentUser;
     private IWalletsDAO iWalletsDAO;
-    private ITransactionsDAO iTransactionsDAO;
     private List<WalletEntity> mListWallet;
-    private CategoryEntity mCurrentCategory = null;
+    private CategoryEntity mCurrentCategory =null;
     private WalletEntity mCurrentWallet = null;
     private Bitmap mCurrentImage = null;
+    private EventEntity mEvent = null;
 
+    private TextView mTextEvent;
+    private ImageView mImgEvent;
+
+    Place mCurrentPlace = null;
     TransactionEntity oldTransaction = null;
 
     @Override
@@ -126,6 +142,7 @@ public class EditTransactionActivity extends AppCompatActivity {
     }
 
     private void addControls() {
+
         mTextMoney = findViewById(R.id.text_transaction_money);
         mTextCategory = findViewById(R.id.text_transaction_category);
         mTextNote = findViewById(R.id.text_transaction_note);
@@ -134,11 +151,14 @@ public class EditTransactionActivity extends AppCompatActivity {
         mImgCamera = findViewById(R.id.image_capture_picture);
         mImgPicture = findViewById(R.id.image_choose_picture);
         mImgPreView = findViewById(R.id.image_preview);
+        mImgEvent = findViewById(R.id.icon_event);
+        mTextEvent = findViewById(R.id.event_name);
         mCalendar = Calendar.getInstance();
-        iWalletsDAO = new WalletsDAOImpl(this);
-        iTransactionsDAO = new TransactionsDAOImpl(this);
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        iWalletsDAO = new WalletsDAOImpl(this);
         mListWallet = iWalletsDAO.getAllWalletByUser(mCurrentUser.getUid());
+        mCurrentWallet = WalletsManager.getInstance(this).getCurrentWallet();
+        mTextPlace = findViewById(R.id.location_name);
     }
 
     private void addEvents() {
@@ -172,7 +192,67 @@ public class EditTransactionActivity extends AppCompatActivity {
                 choosePhotoFromGallary();
             }
         });
+
+        findViewById(R.id.layout_event).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickEvent();
+            }
+        });
+        findViewById(R.id.clear_event).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClearEvent();
+            }
+        });
+        findViewById(R.id.layout_location).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickLocation();
+            }
+        });
+
+        findViewById(R.id.clear_location).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClearLocation();
+            }
+        });
     }
+
+    private void onClearLocation() {
+        mCurrentPlace = null;
+        mTextPlace.setText("");
+        findViewById(R.id.clear_location).setVisibility(View.INVISIBLE);
+    }
+
+    private void onClickLocation() {
+        if(!Places.isInitialized())
+        {
+            Places.initialize(getApplicationContext(),getString(R.string.google_api_key));
+        }
+
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID,Place.Field.NAME);
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN,fields).build(this);
+        startActivityForResult(intent,REQUEST_PLACE_PICKER);
+    }
+
+    private void onClearEvent() {
+        mTextEvent.setText("");
+        mImgEvent.setImageResource(R.drawable.ic_event_black_24dp);
+        mEvent = null;
+        findViewById(R.id.clear_event).setVisibility(View.INVISIBLE);
+    }
+
+    private void onClickEvent() {
+        Intent intent = new Intent(EditTransactionActivity.this, SelectEventActivity.class);
+        if(mCurrentWallet != null)
+        {
+            intent.putExtra(SelectEventActivity.EXTRA_WALLET,mCurrentWallet.getWalletId());
+        }
+        startActivityForResult(intent,REQUEST_CODE_EVENT);
+    }
+
 
     private void takePhotoFromCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -212,7 +292,22 @@ public class EditTransactionActivity extends AppCompatActivity {
         entity.setTransactionNote(note);
         entity.setMediaUri(mMediaUri);
 
-        boolean updated = TransactionsManager.getInstance(this).updateTransaction(entity,oldTransaction);
+        if(mCurrentPlace != null)
+        {
+            entity.setLocationId(mCurrentPlace.getId());
+
+            LocationEntity location = new LocationEntity();
+            location.setId(mCurrentPlace.getId());
+            location.setName(mCurrentPlace.getName());
+            new LocationDAOImpl(this).insertLocation(location);
+        }
+        if(mEvent != null)
+        {
+            entity.setEventId(mEvent.getEventId());
+        }
+
+
+        boolean updated = TransactionsManager.getInstance(this).updateTransaction(entity);
 
         if(!updated)
         {
@@ -314,6 +409,17 @@ public class EditTransactionActivity extends AppCompatActivity {
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 mCurrentImage = thumbnail;
                 updateImagePreView(thumbnail);
+            } else if (requestCode == REQUEST_CODE_EVENT) {
+                mEvent = Parcels.unwrap(data.getParcelableExtra(SelectEventActivity.EXTRA_EVENT));
+                if (mEvent != null) {
+                    mTextEvent.setText(mEvent.getEventName());
+                    mImgEvent.setImageDrawable(ResourceUtils.getCategoryIcon(mEvent.getEventIcon()));
+                    findViewById(R.id.clear_event).setVisibility(View.VISIBLE);
+                }
+            } else if (requestCode == REQUEST_PLACE_PICKER) {
+                mCurrentPlace = Autocomplete.getPlaceFromIntent(data);
+                mTextPlace.setText(mCurrentPlace.getName());
+                findViewById(R.id.clear_location).setVisibility(View.VISIBLE);
             }
         }
 

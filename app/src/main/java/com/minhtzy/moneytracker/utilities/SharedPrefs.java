@@ -55,10 +55,10 @@ public class SharedPrefs {
             return (T) Boolean.valueOf(mSharedPreferences.getBoolean(key, (Boolean) defaultValue));
         } else if (defaultValue instanceof Float) {
             return (T) Float.valueOf(mSharedPreferences.getFloat(key, (Float) defaultValue));
-        } else if (defaultValue instanceof Integer) {
-            return (T) Integer.valueOf(mSharedPreferences.getInt(key, (Integer) defaultValue));
         } else if (defaultValue instanceof Long) {
             return (T) Long.valueOf(mSharedPreferences.getLong(key, (Long) defaultValue));
+        } else if (defaultValue instanceof Integer) {
+            return (T) Integer.valueOf(mSharedPreferences.getInt(key, (Integer) defaultValue));
         } else {
             return defaultValue;
         }
