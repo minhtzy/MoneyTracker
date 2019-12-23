@@ -29,6 +29,7 @@ public class BudgetDAOImpl implements IBudgetDAO {
         int id = (int) db.insert(TABLE_BUDGET,BudgetEntity.BUDGET_ID,values);
         budget.setBudgetId(id);
         db.close();
+        updateBudgetSpent(budget);
         return id != -1;
     }
 

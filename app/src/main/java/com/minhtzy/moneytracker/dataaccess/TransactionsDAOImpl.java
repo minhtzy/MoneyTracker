@@ -309,7 +309,10 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
     private Cursor getAllSyncTransactionData(String userId, long timestamp) {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_TRANSACTION_NAME + " AS tblt" +
+        String query = "SELECT " +
+                " tblt._id AS " + TransactionEntity.TRANSACTION_ID + ", " + TransactionEntity.CATEGORY_ID + ", " + TransactionEntity.TRANSACTION_AMOUNT +
+                ", tblt.note AS " + TransactionEntity.TRANSACTION_NOTE + ", " + TransactionEntity.WALLET_ID + ", " + TransactionEntity.TRANSACTION_TIME + ", tblt.timestamp AS " + TransactionEntity.TIMESTAMP +
+                " FROM " + TABLE_TRANSACTION_NAME + " AS tblt" +
                 " INNER JOIN " + WalletsDAOImpl.TABLE_WALLET_NAME + " AS tblw" +
                 " WHERE " + " tblt.walletId = tblw._id" +
                 " AND " + " tblw.userId = ?" +
