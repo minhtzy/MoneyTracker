@@ -65,17 +65,17 @@ public class SyncCloudFirestore {
 
     public void onPullSync(String userId) {
         onPullWallet(userId);
-        onPullTransactions(userId);
+        //onPullTransactions(userId);
     }
 
-    public void onPullWallet(String uid) {
+    public void onPullWallet(final String uid) {
 
         long time_pull = SharedPrefs.getInstance().get(SharedPrefs.KEY_PULL_TIME,0L);
         final IWalletsDAO iWalletsDAO = new WalletsDAOImpl(context);
         db.collection("users")
                 .document(uid)
                 .collection("wallets")
-                .whereGreaterThan("timestamp",new Timestamp(new Date(time_pull)))
+                //.whereGreaterThan("timestamp",time_pull)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -84,17 +84,28 @@ public class SyncCloudFirestore {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG_LOG, document.getId() + " => " + document.getData());
 
-                                iWalletsDAO.insertWallet(new WalletEntity(fromData(document)));
-                                //onPullTransactions(wallet);
+                                WalletEntity wallet = new WalletEntity(fromData(document));
+                                if(iWalletsDAO.getWalletById(wallet.getWalletId()) == null)
+                                {
+                                    wallet.setCurrentBalance(0);
+                                    iWalletsDAO.insertWallet(wallet);
+
+                                }
+                                else
+                                {
+                                    wallet.getContentValues().remove(WalletEntity.CURRENT_BALANCE);
+                                    iWalletsDAO.updateWallet(wallet);
+                                }
                             }
-                            if(syncEvents != null) {
-                                syncEvents.onPullWalletComplete();
-                            }
+                            if(iWalletsDAO.hasWallet(uid))
+                                onPullTransactions(uid);
+                            else if (syncEvents != null)
+                                syncEvents.onPullCompleted();
 
                         } else {
                             Log.d(TAG_LOG, "Error getting documents: ", task.getException());
                             if(syncEvents != null) {
-                                syncEvents.onPullWalletFailure();
+                                syncEvents.onPullFailed();
                             }
                         }
                     }
@@ -107,7 +118,7 @@ public class SyncCloudFirestore {
         db.collection("users")
                 .document(userId)
                 .collection("transactions")
-                .whereGreaterThan("timestamp",new Timestamp(new Date(time_pull)))
+                //.whereGreaterThan("timestamp",time_pull)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -116,17 +127,17 @@ public class SyncCloudFirestore {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG_LOG, document.getId() + " => " + document.getData());
                                 TransactionEntity transaction = new TransactionEntity(fromData(document));
-                                TransactionsManager.getInstance(context).addTransaction(transaction);
+                                TransactionsManager.getInstance(context).insertOrUpdate(transaction);
                             }
                             long timestamp = Timestamp.now().toDate().getTime();
                             SharedPrefs.getInstance().put(SharedPrefs.KEY_PULL_TIME,timestamp);
                             if(syncEvents != null) {
-                                syncEvents.onPullTransactionComplete();
+                                syncEvents.onPullCompleted();
                             }
                         } else {
                             Log.d(TAG_LOG, "Error getting documents: ", task.getException());
                             if(syncEvents != null) {
-                                syncEvents.onPullTransactionFailure();
+                                syncEvents.onPullFailed();
                             }
                         }
                     }
@@ -181,6 +192,7 @@ public class SyncCloudFirestore {
 
         for(WalletEntity walletEntity : listWallet) {
             DocumentReference documentRef = transactionsRef.document("wallet_" + walletEntity.getWalletId());
+            walletEntity.getContentValues().remove(WalletEntity.CURRENT_BALANCE);
             writeBatch.set(documentRef,fromContentValue(walletEntity.getContentValues()));
         }
 

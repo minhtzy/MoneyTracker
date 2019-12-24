@@ -58,6 +58,19 @@ public class TransactionsManager {
 
     }
 
+    public boolean insertOrUpdate(TransactionEntity transaction)
+    {
+        if(transaction == null) return false;
+        if(iTransactionsDAO.getTransactionById(transaction.getTransactionId()) == null)
+        {
+            return addTransaction(transaction);
+        }
+        else
+        {
+            return updateTransaction(transaction);
+        }
+    }
+
     public boolean addTransaction(TransactionEntity transaction) {
         if(transaction == null) return  false;
         boolean inserted = iTransactionsDAO.insertTransaction(transaction);
@@ -65,7 +78,6 @@ public class TransactionsManager {
         {
             WalletsManager.getInstance(mContext).notifyChanged(transaction.getWalletId());
             BudgetsManager.getInstance(mContext).notifyChanged();
-
         }
 
         return inserted;

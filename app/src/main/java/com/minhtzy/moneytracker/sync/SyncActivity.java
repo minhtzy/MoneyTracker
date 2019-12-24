@@ -58,13 +58,12 @@ public class SyncActivity extends AppCompatActivity implements SyncEvents {
     }
 
     @Override
-    public void onPullWalletComplete() {
+    public void onPullCompleted() {
         IWalletsDAO iWalletsDAO = new WalletsDAOImpl(this);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(iWalletsDAO.hasWallet(user.getUid()) ) {
-            SyncCloudFirestore syncCloudFirestore = new SyncCloudFirestore(this);
-            syncCloudFirestore.setSyncEvents(this);
-            syncCloudFirestore.onPullTransactions(user.getUid());
+            Intent intent = new Intent(SyncActivity.this, MainActivity.class);
+            startActivity(intent);
         }
         else {
             Intent intent = new Intent(SyncActivity.this, SelectWalletTypeActivity.class);
@@ -73,19 +72,7 @@ public class SyncActivity extends AppCompatActivity implements SyncEvents {
     }
 
     @Override
-    public void onPullWalletFailure() {
-        textTryAgain.setVisibility(View.VISIBLE);
-        textOnSync.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void onPullTransactionComplete() {
-        Intent intent = new Intent(SyncActivity.this, MainActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onPullTransactionFailure() {
+    public void onPullFailed() {
         textTryAgain.setVisibility(View.VISIBLE);
         textOnSync.setVisibility(View.INVISIBLE);
     }

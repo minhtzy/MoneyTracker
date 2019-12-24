@@ -44,7 +44,7 @@ public class TransactionsDAOImpl implements ITransactionsDAO {
         }
         transaction.setTimestamp(com.google.firebase.Timestamp.now().toDate().getTime());
         ContentValues values = transaction.getContentValues();
-        long inserted = db.replace(TABLE_TRANSACTION_NAME, TransactionEntity.LOCATION_ID, values);
+        long inserted = db.insert(TABLE_TRANSACTION_NAME, TransactionEntity.LOCATION_ID, values);
         db.close();
         return inserted != -1;
     }

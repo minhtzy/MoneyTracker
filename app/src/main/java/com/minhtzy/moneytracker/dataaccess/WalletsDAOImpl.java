@@ -72,7 +72,7 @@ public class WalletsDAOImpl implements IWalletsDAO {
         }
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         wallet.setTimeStamp(com.google.firebase.Timestamp.now().toDate().getTime());
-        long insertId = db.replace(TABLE_WALLET_NAME, null, wallet.getContentValues());
+        long insertId = db.insert(TABLE_WALLET_NAME, null, wallet.getContentValues());
         db.close();
         return insertId != -1;
     }

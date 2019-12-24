@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS tbl_wallets(
     _id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     initBalance REAL NOT NULL,
-    currentBalance REAL NOT NULL,
+    currentBalance REAL,
     currencyCode TEXT NOT NULL,
     walletType TEXT NOT null,
     userId TEXT NOT null,

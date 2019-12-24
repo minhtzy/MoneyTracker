@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.minhtzy.moneytracker.account.AccountManagerFragment;
 import com.minhtzy.moneytracker.budget.BudgetFragment;
@@ -36,6 +37,7 @@ import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 import com.minhtzy.moneytracker.setting.SettingsActivity;
 import com.minhtzy.moneytracker.statistical.FragmentTendency;
 import com.minhtzy.moneytracker.sync.SyncCloudFirestore;
+import com.minhtzy.moneytracker.sync.SyncEvents;
 import com.minhtzy.moneytracker.transaction.TransactionListSearch;
 import com.minhtzy.moneytracker.transaction.TransactionFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -213,7 +215,26 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.action_sync)
         {
-            new SyncCloudFirestore(this).onSync();
+            SyncCloudFirestore sync = new SyncCloudFirestore(this);
+            sync.setSyncEvents(new SyncEvents() {
+                @Override
+                public void onPullCompleted() {
+
+                    Toast.makeText(getApplicationContext(),"Đồng bộ thành công",Toast.LENGTH_SHORT).show();
+
+                    // reload with transaction tab
+
+                    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_transaction));
+                }
+
+                @Override
+                public void onPullFailed() {
+                    Toast.makeText(getApplicationContext(),"Đã có lỗi xảy ra vui lòng kiểm tra và đồng bộ lại sau",Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            sync.onSync();
         }
 
 //        else if (id == R.id.search_transaction_by_date){
