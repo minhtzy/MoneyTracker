@@ -75,6 +75,10 @@ public class EventDetailActivity extends AppCompatActivity {
                 mTextWallet.setText(wallet.getName());
                 mImageWallet.setImageDrawable(ResourceUtils.getWalletIcon(wallet.getIcon()));
             }
+            else
+            {
+                mTextWallet.setText(R.string.all_wallet);
+            }
 
             mImageIcon.setImageDrawable(ResourceUtils.getCategoryIcon(mEventEntity.getEventIcon()));
 

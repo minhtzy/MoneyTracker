@@ -64,7 +64,14 @@ public class CurrencyUtils {
                 Log.d("Currency Utils","Parse currency failed");
                 return Double.parseDouble(price);
             } catch (NumberFormatException ex) {
-                Log.d("Currency Utils","Parse double failed");
+                String cleanString = price.replaceAll("[^0-9]+", "");
+                try {
+                    return Double.parseDouble(cleanString);
+                }
+                catch (NumberFormatException eex)
+                {
+                    Log.d("Currency Utils","Parse double failed");
+                }
             }
         }
         return 0.0;

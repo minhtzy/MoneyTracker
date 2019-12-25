@@ -8,6 +8,10 @@ import android.util.AttributeSet;
 
 import com.minhtzy.moneytracker.utilities.CurrencyUtils;
 
+import java.io.Console;
+import java.text.NumberFormat;
+import java.text.ParseException;
+
 public class CurrencyEditText extends AppCompatEditText {
 
     private String current = "";
@@ -42,6 +46,7 @@ public class CurrencyEditText extends AppCompatEditText {
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (!s.toString().equals(current)) {
+
                     editText.removeTextChangedListener(this);
 
                     double value = getCleanDoubleValue();
@@ -49,18 +54,27 @@ public class CurrencyEditText extends AppCompatEditText {
                     try {
                         String formatted = CurrencyUtils.formatCurrency(String.valueOf(value),currencyCode);
                         editText.setText(formatted);
-                        editText.setSelection(formatted.length());
+                        int selection = formatted.length();
+                        for(int k = formatted.length() - 1; k >= 0; --k)
+                        {
+                            if(formatted.charAt(k) >= '0' && formatted.charAt(k) <= '9')
+                            {
+                                selection = k + 1;
+                                break;
+                            }
+                        }
+
+                        editText.setSelection(selection);
+                        current = formatted;
                     } catch (NumberFormatException e) {
 
                     }
-
                     editText.addTextChangedListener(this);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
     }

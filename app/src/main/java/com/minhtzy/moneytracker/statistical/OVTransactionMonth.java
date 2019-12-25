@@ -412,7 +412,7 @@ public class OVTransactionMonth extends AppCompatActivity {
             @Override
             public int compare(TransactionEntity o1, TransactionEntity o2) {
                 if (o1.getTransactionAmount() == o2.getTransactionAmount()) return 0;
-                return (o1.getTransactionAmount() > o2.getTransactionAmount()) ? 1 : -1;
+                return (Math.abs(o1.getTransactionAmount()) > Math.abs(o2.getTransactionAmount())) ? 1 : -1;
             }
         });
         CategoryEntity category = CategoryManager.getInstance().getCategoryById(transaction.getCategoryId());
@@ -429,7 +429,7 @@ public class OVTransactionMonth extends AppCompatActivity {
             @Override
             public int compare(TransactionEntity o1, TransactionEntity o2) {
                 if (o1.getTransactionAmount() == o2.getTransactionAmount()) return 0;
-                return (o1.getTransactionAmount() < o2.getTransactionAmount()) ? 1 : -1;
+                return (Math.abs(o1.getTransactionAmount()) > Math.abs(o2.getTransactionAmount())) ? 1 : -1;
             }
         });
         CategoryEntity category = CategoryManager.getInstance().getCategoryById(transaction.getCategoryId());
@@ -462,7 +462,7 @@ public class OVTransactionMonth extends AppCompatActivity {
             @Override
             public int compare(TransactionEntity o1, TransactionEntity o2) {
                 if (o1.getTransactionAmount() == o2.getTransactionAmount()) return 0;
-                return (o1.getTransactionAmount() < o2.getTransactionAmount()) ? 1 : -1;
+                return (o1.getTransactionAmount() > o2.getTransactionAmount()) ? 1 : -1;
             }
         });
         CategoryEntity category = CategoryManager.getInstance().getCategoryById(transaction.getCategoryId());
