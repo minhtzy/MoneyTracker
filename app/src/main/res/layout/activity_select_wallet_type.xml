@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f3ffffff"
-    tools:context=".wallet.SelectWalletTypeActivity">
+    tools:context=".view.wallet.SelectWalletTypeActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -5,18 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/AppTheme.NoActionBar"
-    tools:context=".transaction.TransactionListFragment">
+    tools:context=".view.transaction.TransactionListFragment">
 
     <!--<include layout="@layout/header_transaction_statistics" />-->
 
-    <com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView
+    <com.minhtzy.moneytracker.view.pinnedlistview.PinnedHeaderListView
         android:id="@+id/list_view_transaction"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="50dp"
         android:clipToPadding="false">
 
-    </com.minhtzy.moneytracker.pinnedlistview.PinnedHeaderListView>
+    </com.minhtzy.moneytracker.view.pinnedlistview.PinnedHeaderListView>
 
     <LinearLayout
         android:id="@+id/layout_transaction_empty"

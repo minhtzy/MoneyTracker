@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.minhtzy.moneytracker.budget.BudgetFragment;
 import com.minhtzy.moneytracker.entity.BudgetEntity;
 
 import java.util.ArrayList;

@@ -6,7 +6,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    tools:context=".budget.AddBudgetActivity">
+    tools:context=".view.budget.AddBudgetActivity">
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="fill_parent"

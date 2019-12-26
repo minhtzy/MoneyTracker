@@ -24,28 +24,28 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.minhtzy.moneytracker.account.AccountManagerFragment;
-import com.minhtzy.moneytracker.budget.BudgetFragment;
+import com.minhtzy.moneytracker.view.account.AccountManagerFragment;
+import com.minhtzy.moneytracker.view.budget.BudgetFragment;
 import com.minhtzy.moneytracker.dataaccess.IWalletsDAO;
 import com.minhtzy.moneytracker.dataaccess.TransactionsDAOImpl;
 import com.minhtzy.moneytracker.entity.TransactionEntity;
 import com.minhtzy.moneytracker.entity.WalletEntity;
-import com.minhtzy.moneytracker.event.EventFragment;
+import com.minhtzy.moneytracker.view.event.EventFragment;
 
 import com.minhtzy.moneytracker.dataaccess.WalletsDAOImpl;
 
-import com.minhtzy.moneytracker.setting.SettingsActivity;
-import com.minhtzy.moneytracker.statistical.FragmentTendency;
-import com.minhtzy.moneytracker.sync.SyncCloudFirestore;
-import com.minhtzy.moneytracker.sync.SyncEvents;
-import com.minhtzy.moneytracker.transaction.TransactionListSearch;
-import com.minhtzy.moneytracker.transaction.TransactionFragment;
+import com.minhtzy.moneytracker.view.setting.SettingsActivity;
+import com.minhtzy.moneytracker.view.statistical.FragmentTendency;
+import com.minhtzy.moneytracker.view.sync.SyncCloudFirestore;
+import com.minhtzy.moneytracker.view.sync.SyncEvents;
+import com.minhtzy.moneytracker.view.transaction.TransactionListSearch;
+import com.minhtzy.moneytracker.view.transaction.TransactionFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
 import com.minhtzy.moneytracker.view.CurrencyTextView;
-import com.minhtzy.moneytracker.wallet.WalletFragment;
-import com.minhtzy.moneytracker.wallet.adapter.WalletListAdapter;
+import com.minhtzy.moneytracker.view.wallet.WalletFragment;
+import com.minhtzy.moneytracker.view.wallet.adapter.WalletListAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

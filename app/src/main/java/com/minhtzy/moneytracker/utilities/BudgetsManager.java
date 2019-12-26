@@ -5,7 +5,7 @@ import android.content.Context;
 import com.minhtzy.moneytracker.dataaccess.BudgetDAOImpl;
 import com.minhtzy.moneytracker.dataaccess.IBudgetDAO;
 import com.minhtzy.moneytracker.entity.BudgetEntity;
-import com.minhtzy.moneytracker.notifications.BudgetNotifications;
+import com.minhtzy.moneytracker.view.notifications.BudgetNotifications;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".event.EventDetailActivity">
+    tools:context=".view.event.EventDetailActivity">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

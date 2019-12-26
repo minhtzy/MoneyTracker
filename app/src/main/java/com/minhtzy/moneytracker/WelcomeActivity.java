@@ -7,11 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.minhtzy.moneytracker.account.LoginActivity;
+import com.minhtzy.moneytracker.view.account.LoginActivity;
 import com.minhtzy.moneytracker.utilities.LanguageUtils;
 import com.minhtzy.moneytracker.utilities.SharedPrefs;
 import com.minhtzy.moneytracker.utilities.WalletsManager;
-import com.minhtzy.moneytracker.wallet.SelectWalletTypeActivity;
+import com.minhtzy.moneytracker.view.wallet.SelectWalletTypeActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
 

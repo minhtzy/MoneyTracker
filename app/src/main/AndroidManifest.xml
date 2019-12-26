@@ -11,60 +11,60 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".setting.SettingsActivity"
+            android:name=".view.setting.SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
         <activity
-            android:name=".event.SelectEventActivity"
+            android:name=".view.event.SelectEventActivity"
             android:label="@string/select_event"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".wallet.DetailWalletActivity"
+            android:name=".view.wallet.DetailWalletActivity"
             android:label="@string/detail_wallet"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".wallet.WalletFragment"
+            android:name=".view.wallet.WalletFragment"
             android:label="@string/wallets"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".wallet.SelectWalletTypeActivity"
+            android:name=".view.wallet.SelectWalletTypeActivity"
             android:label="@string/select_wallet_type"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".event.EventDetailActivity"
+            android:name=".view.event.EventDetailActivity"
             android:label="@string/event_detail"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".view.SelectIconActivity"
+            android:name=".view.category.SelectIconActivity"
             android:label="@string/select_category_icon"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".event.CreateEventActivity"
+            android:name=".view.event.CreateEventActivity"
             android:label="@string/create_event"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".wallet.EditWalletActivity"
+            android:name=".view.wallet.EditWalletActivity"
             android:label="@string/edit_wallet"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".view.SelectCategoryActivity"
+            android:name=".view.category.SelectCategoryActivity"
             android:label="@string/select_category_name"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".wallet.CreateBasicWalletActivity"
+            android:name=".view.wallet.CreateBasicWalletActivity"
             android:label="@string/add_wallet"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".account.ForgotPasswordActivity"
+            android:name=".view.account.ForgotPasswordActivity"
             android:label="@string/forgor_password_name"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".account.RegistrationActivity"
+            android:name=".view.account.RegistrationActivity"
             android:label="@string/register_name"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".account.LoginActivity"
+            android:name=".view.account.LoginActivity"
             android:label="@string/login_name"
             android:theme="@style/AppTheme" />
         <activity
@@ -72,7 +72,7 @@
             android:label="Main Activity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".transaction.AddTransactionActivity"
+            android:name=".view.transaction.AddTransactionActivity"
             android:windowSoftInputMode="stateHidden"
             android:label="@string/add_transaction_name"
             android:theme="@style/AppTheme" />
@@ -86,45 +86,45 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".setting.Setting"
+            android:name=".view.setting.Setting"
             android:label="@string/action_settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".changelanguage.ChangeLanguageActivity"
+            android:name=".view.changelanguage.ChangeLanguageActivity"
             android:label="@string/change_language"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".transaction.ViewTransactionDetailActivity"
+            android:name=".view.transaction.ViewTransactionDetailActivity"
             android:label="@string/transaction_detail"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".transaction.ViewTransactionListActivity"
+            android:name=".view.transaction.ViewTransactionListActivity"
             android:label="@string/budget_detail_list_transactions_title"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".budget.AddBudgetActivity"
+            android:name=".view.budget.AddBudgetActivity"
             android:label="@string/add_budget"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".budget.DetailBudgetActivity"
+            android:name=".view.budget.DetailBudgetActivity"
             android:label="@string/budget"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".budget.SelectBudgetTimeRangeActivity"
+            android:name=".view.budget.SelectBudgetTimeRangeActivity"
             android:label="@string/time_empty"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".transaction.EditTransactionActivity"
+            android:name=".view.transaction.EditTransactionActivity"
             android:windowSoftInputMode="stateHidden"
             android:label="@string/edit_transaction"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".sync.SyncActivity"
+            android:name=".view.sync.SyncActivity"
             android:label="@string/sync"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".statistical.OVTransactionMonth"
+            android:name=".view.statistical.OVTransactionMonth"
             android:label="@string/over_view"
             android:theme="@style/AppTheme" />
 
@@ -132,7 +132,7 @@
             android:name="com.google.android.geo.api_key"
             android:value="@string/google_api_key" />
 
-        <receiver android:name=".sync.NetworkMonitor">
+        <receiver android:name=".view.sync.NetworkMonitor">
             <intent-filter>
                 <action android:name="android.net.conn.CONECTIVITY_CHANGE" />
             </intent-filter>

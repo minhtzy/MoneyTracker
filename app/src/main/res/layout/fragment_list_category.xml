@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".wallet.ListCategoryFragment">
+    tools:context=".view.wallet.ListCategoryFragment">
     <!--<ProgressBar-->
         <!--android:layout_centerHorizontal="true"-->
         <!--android:layout_width="25dp"-->

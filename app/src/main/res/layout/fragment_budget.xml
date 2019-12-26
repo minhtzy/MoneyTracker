@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackgroundPrimary"
-    tools:context=".budget.BudgetFragment">
+    tools:context=".view.budget.BudgetFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_budget"

@@ -3,7 +3,7 @@
     <data>
         <variable
             name="main"
-            type="com.minhtzy.moneytracker.setting.Setting"
+            type="com.minhtzy.moneytracker.view.setting.Setting"
             />
     </data>
     <LinearLayout

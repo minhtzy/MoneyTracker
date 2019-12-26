@@ -11,5 +11,5 @@
     android:clipToPadding="false"
     android:padding="@dimen/elevation_12"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".event.EventListFragment"
+    tools:context=".view.event.EventListFragment"
     tools:listitem="@layout/fragment_event_item" />

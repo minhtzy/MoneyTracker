@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".event.CreateEventActivity">
+    tools:context=".view.event.CreateEventActivity">
 
     <ScrollView
         android:id="@+id/scroll_view"
